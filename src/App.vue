@@ -1,28 +1,30 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <h1>로또 번호 추첨기</h1>
+    <button @click="generateNumbers">번호 추첨</button>
+    <ul>
+      <li v-for="number in lottoNumbers" :key="number">{{ number }}</li>
+    </ul>
   </div>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+@Component
+export default class App extends Vue {
+  lottoNumbers: number[] = [];
+
+  generateNumbers() {
+    const numbers = new Set<number>();
+    while (numbers.size < 6) {
+      const randomNum = Math.floor(Math.random() * 45) + 1;
+      numbers.add(randomNum);
+    }
+    this.lottoNumbers = Array.from(numbers);
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
