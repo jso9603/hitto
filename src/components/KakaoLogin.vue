@@ -15,6 +15,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { db } from '../../src/config/firebaseConfig'
+import { collection, addDoc, query, where, getDocs } from 'firebase/firestore'
 
 @Component
 export default class KakaoLogin extends Vue {
@@ -46,6 +48,9 @@ export default class KakaoLogin extends Vue {
             console.log(response)
             
             this.email = response.kakao_account.email
+
+            // DB: insert or Ignore
+            await this.saveUsers(response.kakao_account.email)
           },
           fail: async (error: any) => {
             console.log(error)
@@ -56,6 +61,28 @@ export default class KakaoLogin extends Vue {
         console.log(error)
       },
     })
+  }
+
+  async saveUsers(email: string) {
+    try {
+        // 기존 이메일 확인
+        const q = query(collection(db, 'users'), where('email', '==', email));
+        const querySnapshot = await getDocs(q)
+
+        if (querySnapshot.empty) {
+          // 이메일이 존재하지 않으면 추가
+          const user = {
+            email,
+            uid: `uid_${Date.now()}` // 고유한 uid 생성
+          };
+          const docRef = await addDoc(collection(db, 'users'), user)
+          console.log('이메일이 없어서 추가됨!! ', docRef.id)
+        } else {
+          console.log('이미 이메일이 있음!!')
+        }
+      } catch (e) {
+        console.error('Error adding document: ', e);
+      }
   }
 }
 </script>
