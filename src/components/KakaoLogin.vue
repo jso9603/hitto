@@ -15,6 +15,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import Cookies from 'js-cookie'
 import { db } from '../../src/config/firebaseConfig'
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore'
 
@@ -36,7 +37,6 @@ export default class KakaoLogin extends Vue {
       window.Kakao.Auth.setAccessToken(undefined)
     }
 
-
     window.Kakao.Auth.login({
       success: async () => {
         window.Kakao.API.request({
@@ -51,6 +51,7 @@ export default class KakaoLogin extends Vue {
 
             // DB: insert or Ignore
             await this.saveUsers(response.kakao_account.email)
+            Cookies.set('email', this.email)
           },
           fail: async (error: any) => {
             console.log(error)
