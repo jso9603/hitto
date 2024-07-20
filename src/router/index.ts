@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Home from '@/views/Home.vue'
+import Backup from '@/views/Backup.vue'
 import Recent from '@/views/Recent.vue'
 import Router from 'vue-router'
 
@@ -10,6 +11,11 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/backup',
+    name: 'Backup',
+    component: Backup,
   },
   {
     path: '/recent',

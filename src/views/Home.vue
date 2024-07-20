@@ -1,139 +1,125 @@
 <template>
-<div>
-  <div class="random__lotto">
-    <h1>로또 번호 추첨기</h1>
-    <button @click="generateNumbers">번호 추첨</button>
-    <li v-for="(numbers, index) in lottoNumbers" :key="index">
-      {{ index + 1 }}회차: {{ numbers.join(', ') }}
-    </li>
+  <div class="home">
+    <div class="badge">모두의 희망</div>
+    <div class="title">일주일의<br/>행복한 기다림</div>
+    <div class="desc">행운의 숫자로 꿈꾸는 로또 당첨!</div>
 
-    <textarea v-model="winningMsg" row="2" cols="30" placeholder="당첨 메시지를 적어라잉" />
-    <button @click="saveLottoNumbers">당첨 메시지와 로또번호 저장하기</button>
-  </div>
+    <div class="boxes">
+      <div class="box">
+        <img src="https://img.icons8.com/?size=100&id=mhjz7OcdWFZz&format=png&color=000000" />
+        <div class="text">GTP가 분석해주는<br/><span>AI 번호 생성</span></div>
+      </div>
+      <div class="box">
+        <img src="https://img.icons8.com/?size=100&id=16079&format=png&color=000000" />
+        <div class="text">조상신이 점지해주는<br/><span>꿈해몽 생성</span></div>
+      </div>
+      <div class="box">
+        <img src="https://img.icons8.com/?size=100&id=HshIQgiZ35nI&format=png&color=000000" />
+        <div class="text">통계는 거짓말 안해<br/><span>통계 생성</span></div>
+      </div>
+      <div class="box">
+        <img src="https://img.icons8.com/?size=100&id=1S1netqOMZ4h&format=png&color=000000" />
+        <div class="text">매일 매일 우주의 기운<br/><span>복권 긁기</span></div>
+      </div>
+    </div>
 
-  <div class="kakao__login">
-    <KakaoLogin />
+    <div class="floating">
+      <div class="participation">5,230명이 당첨 소망에 참여했어요</div>
+      <button class="primary">AI 로또 번호 뽑기</button>
+    </div>
   </div>
-
-  <div class="high-probability">
-    <div>확률 높은 번호 추첨</div>
-    <button @click="generateHighNumbers">확률 높은 번호 추첨</button>
-    <li v-for="(set, index) in lotterySets" :key="index">
-      {{ index + 1 }}회차: {{ set.join(', ') }}
-    </li>
-  </div>
-</div>
-  
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import Cookies from 'js-cookie'
-import KakaoLogin from '../components/KakaoLogin.vue'
-import { db } from '../config/firebaseConfig'
-import { collection, addDoc, query, where, getDocs } from 'firebase/firestore'
 
-@Component({
-  components: {
-    KakaoLogin
-  }
-})
+@Component
 export default class Home extends Vue {
-  lottoNumbers: number[][] = []
-  winningMsg: string = ''
-
-  // 확률 높은 숫자를 숫자 번대로 2개씩 선택
-  highProbNumbers: number[] = [1, 3, 12, 17, 26, 27, 33, 34, 42, 45]
-  lotterySets: number[][] = []
-
- // Function to generate a single set of lottery numbers
-  generateLotteryNumbers(): number[] {
-    const selectedHighProbNumbers = this.getRandomNumbers(this.highProbNumbers, 3)
-    const remainingNumbers = this.getRemainingNumbers(selectedHighProbNumbers)
-    const selectedRemainingNumbers = this.getRandomNumbers(remainingNumbers, 3)
-    return selectedHighProbNumbers.concat(selectedRemainingNumbers).sort((a, b) => a - b)
-  }
-
-  // Helper function to get random numbers from an array
-  getRandomNumbers(array: number[], count: number): number[] {
-    const result = []
-    const _array = [...array]
-    for (let i = 0; i < count; i++) {
-      const index = Math.floor(Math.random() * _array.length)
-      result.push(_array.splice(index, 1)[0])
-    }
-    return result
-  }
-
-  // Helper function to get the remaining numbers
-  getRemainingNumbers(exclude: number[]): number[] {
-    const remaining = []
-    for (let i = 1; i <= 45; i++) {
-      if (!exclude.includes(i) && !this.highProbNumbers.includes(i)) {
-        remaining.push(i)
-      }
-    }
-    return remaining
-  }
-
-  // Function to generate 5 sets of lottery numbers
-  generateHighNumbers() {
-    this.lotterySets = [];
-    for (let i = 0; i < 5; i++) {
-      this.lotterySets.push(this.generateLotteryNumbers())
-    }
-  }
-
-  generateNumbers() {
-    const rounds = 5 // 5회차
-    this.lottoNumbers = []
-
-    for (let i = 0; i < rounds; i++) {
-      const numbers = new Set<number>()
-      while (numbers.size < 7) {
-        const randomNum = Math.floor(Math.random() * 45) + 1
-        numbers.add(randomNum)
-      }
-      this.lottoNumbers.push(Array.from(numbers))
-    }
-  }
-
-  async getUid() {
-    try {
-        const q = query(collection(db, 'users'), where('email', '==', Cookies.get('email')))
-        const querySnapshot = await getDocs(q)
-
-        if (!querySnapshot.empty) {
-          const userDoc = querySnapshot.docs[0]
-          return userDoc.data().uid
-        } else {
-          alert('No user found with the specified email.')
-        }
-      } catch (e) {
-        console.error('Error fetching user document: ', e)
-      }
-  }
-
-  async saveLottoNumbers() {
-    if (Cookies.get('email')) {
-      try {
-        const uid = await this.getUid()
-
-        const numbers = this.lottoNumbers.map(nums => nums.join(', '))
-
-        const docRef = await addDoc(collection(db, 'lottos'), {
-          uid,
-          winningText: this.winningMsg,
-          numbers
-        })
-        console.log('Document written with ID: ', docRef.id)
-      } catch (e) {
-        console.error('Error adding document: ', e)
-      }
-    } else {
-      window.alert('카카오 로그인 안됨')
-    }
-    
-  }
 }
 </script>
+
+<style scoped>
+.home {
+  background-color: #000;
+  height: calc(100vh - 60px);
+  text-align: center;
+}
+.badge {
+  margin: 40px auto 20px;
+  display: inline-block;
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid green;
+  color: green;
+}
+
+.title {
+  font-size: 40px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 50px;
+}
+
+.desc {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.boxes {
+  width: 100%;
+  display: grid;
+  grid-template: repeat(2, 1fr) / repeat(2, 1fr);
+  gap: 8px;
+}
+
+.box {
+  padding: 20px;
+  background-color: #393838;
+  border-radius: 10px;
+}
+
+.box  > img {
+  width: 30px;
+  height: 30px;
+  margin-bottom: 8px;
+}
+
+.text {
+  color: grey;
+  font-size: 12px;
+}
+.text > span {
+  color: #fff;
+  font-size: 16px;
+  display: inline-block;
+  margin-top: 6px;
+}
+
+.floating {
+  position:fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 100%;
+}
+
+.floating > .participation {
+  margin-bottom: 10px;
+  color: #fff;
+  font-weight: 300;
+}
+
+.floating > button {
+  width: 100%;
+  min-height: 56px;
+  background-color: green;
+  padding: 8px 8px;
+  border-radius: 24px;
+  border-style: none;
+  color: black;
+  font-size: 20px;
+  font-weight: 600;
+}
+</style>
