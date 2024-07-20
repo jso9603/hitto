@@ -21,5 +21,8 @@ export default class App extends Vue {}
 body {
   margin: 0;
   padding: 0;
+  max-width: 576px;
+  margin: 0 auto;
+  background-color: #202223;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div class="header">
-    <img src="https://img.icons8.com/?size=100&id=7IoeSMcGv2w5&format=png&color=000000" />
+    <img src="@/assets/ic-system-logo.svg" />
+    <div class="profile" />
   </div>
 </template>
 
@@ -16,12 +17,22 @@ export default class Header extends Vue {
 .header {
   display: flex;
   align-items: center;
-  height: 60px;
-  background-color: black;
+  justify-content: space-between;
+  height: 54px;
+  padding: 18px 20px;
+  background-color: #202223;
 }
 
 img {
-  width: 40px;
-  height: 40px;
+  width: auto;
+  height: 18px;
+  cursor: pointer;
+}
+
+.profile {
+  width: 32px;
+  height: 32px;
+  background-color: #414244;
+  border-radius: 50%;
 }
 </style>
