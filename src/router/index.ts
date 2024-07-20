@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Home from '@/views/Home.vue'
+import Ai from '@/views/Ai.vue'
 import Backup from '@/views/Backup.vue'
 import Recent from '@/views/Recent.vue'
 import Router from 'vue-router'
@@ -11,6 +12,11 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path:'/ai',
+    name: 'Ai',
+    component: Ai,
   },
   {
     path: '/backup',

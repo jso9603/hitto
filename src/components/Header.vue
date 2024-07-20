@@ -19,7 +19,7 @@ export default class Header extends Vue {
   align-items: center;
   justify-content: space-between;
   height: 54px;
-  padding: 18px 20px;
+  padding: 0 20px;
   background-color: #202223;
 }
 
