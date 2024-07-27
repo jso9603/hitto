@@ -3,6 +3,7 @@ import Home from '@/views/Home.vue'
 import Ai from '@/views/Ai.vue'
 import Backup from '@/views/Backup.vue'
 import Recent from '@/views/Recent.vue'
+import Random from '@/views/Random.vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -27,6 +28,11 @@ const routes = [
     path: '/recent',
     name: 'Recent',
     component: Recent
+  },
+  {
+    path: '/random',
+    name: 'Random',
+    component: Random,
   }
 ];
 
