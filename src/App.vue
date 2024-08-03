@@ -23,6 +23,6 @@ body {
   padding: 0;
   max-width: 576px;
   margin: 0 auto;
-  background-color: #202223;
+  background-color: #171717;
 }
 </style>

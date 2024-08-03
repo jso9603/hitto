@@ -23,6 +23,12 @@
       </div>
     </div>
 
+    <div class="algorithm">
+      <div class="light">✨</div>
+      <div class="title">스테판이 생성해주는 정교한 알고리즘</div>
+      <div class="desc">ai 통계기반 알고리즘을 통해<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
+    </div>
+
     <div class="floating">
       <div class="participation">
         <div class="people">
@@ -32,7 +38,7 @@
         </div>
         5,230명이 당첨 소감에 참여했어요
       </div>
-      <button class="primary">AI 로또 번호 뽑기</button>
+      <button class="primary" @click="$router.push('/ai')">AI 로또 번호 뽑기</button>
     </div>
   </div>
 </template>
@@ -52,15 +58,15 @@ export default class Home extends Vue {
 <style scoped>
 .home {
   padding: 24px 20px;
-  background-color: #202223;
+  background-color: #171717;
   height: calc(100vh - 54px);
   text-align: center;
 }
 .badge {
-  margin: 0 auto 12px;
+  margin: 0 auto 18px;
   display: inline-block;
-  padding: 6px 8px 5px;
-  border-radius: 8px;
+  padding: 6px 12px 5px;
+  border-radius: 100px;
   border: 1px solid #31E663;
   color: #31E663;
   font-size: 14px;
@@ -68,21 +74,20 @@ export default class Home extends Vue {
   line-height: 17px;
 }
 
-.title {
+.home > .title {
   margin-bottom: 12px;
-  font-size: 38px;
+  font-size: 36px;
   font-weight: 900;
-  line-height: 50px;
+  line-height: 44px;
   color: #fff;
-  line-height: 50px;
 }
 
-.desc {
+.home > .desc {
   margin-bottom: 40px;
   color: #BABCBE;
   font-size: 15px;
   font-weight: 400;
-  line-height: 22.5px;
+  line-height: 23px;
 }
 
 .boxes {
@@ -90,11 +95,12 @@ export default class Home extends Vue {
   display: grid;
   grid-template: repeat(2, 1fr) / repeat(2, 1fr);
   gap: 12px;
+  margin-bottom: 60px;
 }
 
 .box {
   padding: 30px 20px;
-  background-color: #00000033;
+  background-color: #222222;
   border-radius: 16px;
   cursor: pointer;
 }
@@ -117,6 +123,26 @@ export default class Home extends Vue {
   font-weight: 600;
   line-height: 24px;
   display: inline-block;
+}
+
+.algorithm > .light {
+  width: 32px;
+  height: 36px;
+}
+.algorithm > .title {
+  margin-bottom: 12px;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 36px;
+  color: #fff;
+}
+
+.algorithm > .desc {
+  margin-bottom: 40px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 23px;
+  color: #BABCBE;
 }
 
 .floating {

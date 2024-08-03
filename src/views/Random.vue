@@ -1,9 +1,15 @@
 <template>
-  <div>
-    <img src="@/assets/content.png" />
-    <!-- <div class="random-animation"> -->
-    <canvas ref="animationCanvas" width="260" height="260"></canvas>
-    <!-- </div> -->
+  <div class="container">
+    <!-- <img src="@/assets/content.png" /> -->
+    <div class='typing1' v-html="typedText"></div>
+    <div class="random-animation">
+      <canvas ref="animationCanvas" width="260" height="260"></canvas>
+    </div>
+
+    <div v-if="showMessage && selectedMessage" class="message" :key="selectedMessage.text">
+      <img :src="selectedMessage.icon" alt="icon" />
+      <span>{{ selectedMessage.text }}</span>
+    </div>
   </div>
 </template>
 
@@ -19,18 +25,58 @@ interface Ball {
   color: string // 색깔 속성 추가
 }
 
+interface Message {
+  text: string;
+  icon: string;
+}
+
 @Component
 export default class Random extends Vue {
+  typedText = ''
+
   private animationCanvas: HTMLCanvasElement | null = null;
   private ballCount: number = 7;
   private balls: Ball[] = [];
   private circleCenter = { x: 130, y: 130 }; // 중심점 (캔버스의 중간 지점)
-  private circleRadius: number = 130; // 원의 반지름
+  private circleRadius: number = 125; // 원의 반지름 (큰 원의 상하좌우가 잘려보임)
   private colors: string[] = ['#0070FF', '#FFC83D', '#ECEEF0', '#FE4000', '#97999B', '#4EFF92'];
   private image: HTMLImageElement | null = null;
 
+  private messages: Message[] = [
+    { text: '최근 3개월 통계를 찾아보고 있어요', icon: require('@/assets/ic-system-random-message1.svg') },
+    { text: 'AI가 선별하는 번호를 찾아보고 있어요', icon: require('@/assets/ic-system-random-message2.svg') },
+    { text: '더 좋은 번호가 있는지 찾아보고 있어요', icon: require('@/assets/ic-system-random-message3.svg') }
+  ];
+  private selectedMessage: Message | null = null;
+  private showMessage: boolean = false;
+
+  typingText() {
+    const contents = `“스테판이 ai 통계기반\n로또 번호를 생성하고 있어요"`
+    let saveInterval: any
+
+    let index = 0
+    this.typedText = ''
+    clearInterval(saveInterval) // 기존 interval 종료
+
+    saveInterval = setInterval(() => {
+      if(index >= contents.length - 1) { // index가 범위에 도달될 경우 interval 종료
+        clearInterval(saveInterval)
+      }
+
+      if(contents[index] === '\n') { // 개행문자 일 경우 <br /> 삽입
+        this.typedText += '<br />'
+        index++
+      } else {
+        this.typedText += contents[index++]
+      }
+    }, 50)
+  }
+
   mounted() {
+    this.typingText()
+
     this.animationCanvas = this.$refs.animationCanvas as HTMLCanvasElement;
+    // this.image.src = require('@/assets/ball-image.png');
 
     if (this.animationCanvas) {
       this.image = new Image();
@@ -72,6 +118,8 @@ export default class Random extends Vue {
         }
       };
     }
+
+    this.selectRandomMessageWithDelay();
   }
 
   // 처음 공
@@ -124,7 +172,8 @@ export default class Random extends Vue {
   private drawCircle(ctx: CanvasRenderingContext2D) {
     ctx.beginPath();
     ctx.arc(this.circleCenter.x, this.circleCenter.y, this.circleRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = '#ECEEF0';
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 5;
     ctx.stroke();
     ctx.closePath();
   }
@@ -213,37 +262,91 @@ export default class Random extends Vue {
     this.handleBallCollisions();
     requestAnimationFrame(() => this.animate(ctx));
   }
+
+  private selectRandomMessageWithDelay() {
+    setTimeout(() => {
+      const randomIndex = Math.floor(Math.random() * this.messages.length);
+      this.selectedMessage = this.messages[randomIndex];
+      this.showMessage = true;
+
+      // 5초 후에 /ai 페이지로 이동
+      setTimeout(() => {
+        this.$router.push('/result');
+      }, 5000);
+
+    }, 2000); // 2초 지연
+  }
 }
 </script>
 
-<style>
-img {
-  width: 100%;
-  height: 100vh;
-
-  z-index: 1;
-  position: relative;
-}
-
-.random-animation {
+<style scoped>
+.container {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   height: 100vh;
   margin: 0;
+  background-color: #171717;
+}
 
-  z-index: 100;
-  position: relative;
+.typing1 {
+  margin-bottom: 24px;
+  width: 100%;
+  color: #fff;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 33px;
+  letter-spacing: -0.5px;
+  text-align: center;
+}
+
+.random-animation {
+  /* display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; */
+  margin: 0;
+  background-color: #171717;
+  border-radius: 50%;
 }
 
 canvas {
-  width: 260px;
-  height: 260px;
-  border: 4px solid;
+  margin-bottom: 25px;
+  /* width: 260px;
+  height: 260px; */
+  /* border: 4px solid; */
+}
 
-  position: absolute;
-  z-index: 100;
-  top: 40%;
-  left: 35%;
+.message {
+  display: flex;
+  align-items: center;
+  animation: slideUp 2s ease-in-out forwards;
+  opacity: 0;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22px;
+}
+
+.message img {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.message > span {
+  margin-top: 4px;
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 </style>

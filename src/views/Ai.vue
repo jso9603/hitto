@@ -2,7 +2,7 @@
   <div class="ai">
     <img src='@/assets/ic-stefan.svg' at="character 이미지" />
     <div class='typing1' v-html="typedText"></div>
-    <button class="startBtn" v-if="showStartBtn">시작하기</button>
+    <button class="startBtn" v-if="showStartBtn" @click="$router.push('/random')">시작하기</button>
   </div>
 </template>
 
