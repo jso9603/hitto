@@ -6,6 +6,7 @@ import Recent from '@/views/Recent.vue'
 import Random from '@/views/Random.vue'
 import Result from '@/views/Result.vue'
 import SelectHope from '@/views/SelectHope.vue'
+import Dream from '@/views/Dream.vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -45,7 +46,12 @@ const routes = [
     path: '/select-hope',
     name: 'Select-Hope',
     component: SelectHope,
-  }
+  },
+  {
+    path: '/dream',
+    name: 'Dream',
+    component: Dream,
+  },
 ];
 
 const router = new Router({
