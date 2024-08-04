@@ -24,5 +24,6 @@ body {
   max-width: 576px;
   margin: 0 auto;
   background-color: #171717;
+  font-family: 'Pretendard', sans-serif;
 }
 </style>
