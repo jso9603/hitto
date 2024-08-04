@@ -39,6 +39,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { NavigationGuardNext } from 'vue-router'
 
 @Component
 export default class Result extends Vue {
@@ -65,6 +66,19 @@ export default class Result extends Vue {
 
   mounted() {
     this.generateLottoNumbers(1); // 예시로 5개의 라운드를 생성
+  }
+
+
+  static beforeRouteEnter(to: any, from: any, next: NavigationGuardNext<Vue>) {
+    if (from.path === '/random') {
+      next(vm => {
+        if (vm) {
+          vm.$root.$emit('startTransition');
+        }
+      });
+    } else {
+      next();
+    }
   }
 }
 </script>

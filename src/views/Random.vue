@@ -1,15 +1,58 @@
 <template>
   <div class="container">
-    <!-- <img src="@/assets/content.png" /> -->
-    <div class='typing1' v-html="typedText"></div>
-    <div class="random-animation">
-      <canvas ref="animationCanvas" width="260" height="260"></canvas>
-    </div>
+    <transition name="fade" mode="out-in">
+      <div class="page1" v-if="showPage1" key="page1">
+        <!-- <img src="@/assets/content.png" /> -->
+        <div class='typing1' v-html="typedText"></div>
+        <div class="random-animation">
+          <canvas ref="animationCanvas" width="260" height="260"></canvas>
+        </div>
 
-    <div v-if="showMessage && selectedMessage" class="message" :key="selectedMessage.text">
-      <img :src="selectedMessage.icon" alt="icon" />
-      <span>{{ selectedMessage.text }}</span>
-    </div>
+        <div v-if="showMessage">
+          <div v-for="(message, index) in messages" :key="index" class="message" :style="{ animationDelay: `${index * 0.5}s` }">
+            <img :src="message.icon" class="icon" />
+            <span class="text">{{ message.text }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="page2" v-else key="page2">
+        <div class='typing2'>"기운이 느껴져?<br/>한 주 동안 즐겁게 기다려보자구~"</div>
+        <div class="sub">마음에 들지 않으면 다시 생성할 수 있어요!</div>
+
+        <div class="result__box">
+          <div v-for="(round, index) in lottoNumbers" :key="index" class="round">
+            <div class="row">
+              <div v-for="number in round.slice(0, 4)" :key="number" :class="getNumberClass(number)">
+                {{ number }}
+              </div>
+            </div>
+            <div class="row">
+              <div v-for="number in round.slice(4, 6)" :key="number" :class="getNumberClass(number)">
+                {{ number }}
+              </div>
+              <div class="plus">+</div>
+              <div :class="[getNumberClass(round[6]), 'last']">
+                {{ round[6] }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="floating">
+          <div class="participation">
+            <div class="people">
+              <div class="person" />
+              <div class="person" />
+              <div class="person" />
+            </div>
+            지난 주 5,230명이 당첨됐어요
+          </div>
+          <button class="primary" @click="$router.push('/select-hope')">선택 완료</button>
+          <button class="none" @click="oneMore">다시 생성</button>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -50,6 +93,8 @@ export default class Random extends Vue {
   private selectedMessage: Message | null = null;
   private showMessage: boolean = false;
 
+  private showPage1: boolean = true;
+
   typingText() {
     const contents = `“스테판이 ai 통계기반\n로또 번호를 생성하고 있어요"`
     let saveInterval: any
@@ -72,7 +117,14 @@ export default class Random extends Vue {
     }, 50)
   }
 
-  mounted() {
+  oneMore() {
+    this.showPage1 = true
+
+    this.lottoNumbers = [];
+    this.started()
+  }
+
+  started() {
     this.typingText()
 
     this.animationCanvas = this.$refs.animationCanvas as HTMLCanvasElement;
@@ -106,9 +158,9 @@ export default class Random extends Vue {
           this.balls.push({
             x: this.circleCenter.x,
             y: this.circleCenter.y,
-            radius: 20,
-            dx: (Math.random() - 0.5) * 8, // 속도를 2배로 증가
-            dy: (Math.random() - 0.5) * 8, // 속도를 2배로 증가
+            radius: 15,
+            dx: (Math.random() - 0.5) * 9.2, // 속도를 3배로 증가
+            dy: (Math.random() - 0.5) * 9.2, // 속도를 3배로 증가
             color: color,
           });
         }
@@ -120,6 +172,10 @@ export default class Random extends Vue {
     }
 
     this.selectRandomMessageWithDelay();
+  }
+
+  mounted() {
+    this.started()
   }
 
   // 처음 공
@@ -172,8 +228,8 @@ export default class Random extends Vue {
   private drawCircle(ctx: CanvasRenderingContext2D) {
     ctx.beginPath();
     ctx.arc(this.circleCenter.x, this.circleCenter.y, this.circleRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#BABCBE';
+    ctx.lineWidth = 6;
     ctx.stroke();
     ctx.closePath();
   }
@@ -269,18 +325,51 @@ export default class Random extends Vue {
       this.selectedMessage = this.messages[randomIndex];
       this.showMessage = true;
 
-      // 5초 후에 /ai 페이지로 이동
       setTimeout(() => {
-        this.$router.push('/result');
-      }, 5000);
+        // this.$router.push('/result');
+        this.showPage1 = false;
+        this.generateLottoNumbers(1);
+      }, 3000);
 
     }, 2000); // 2초 지연
+  }
+
+  private lottoNumbers: number[][] = [];
+
+  private generateLottoNumbers(rounds: number) {
+    for (let i = 0; i < rounds; i++) {
+      const numbers = new Set<number>();
+      while (numbers.size < 7) {
+        const randomNum = Math.floor(Math.random() * 45) + 1;
+        numbers.add(randomNum);
+      }
+      this.lottoNumbers.push(Array.from(numbers).sort((a, b) => a - b));
+    }
+  }
+
+  private getNumberClass(number: number) {
+    if (number <= 10) return 'red';
+    else if (number <= 20) return 'orange';
+    else if (number <= 30) return 'green';
+    else if (number <= 40) return 'blue';
+    else return 'purple';
   }
 }
 </script>
 
 <style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 1s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
 .container {
+ padding: 0 20px;
+}
+
+/* .container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -288,9 +377,27 @@ export default class Random extends Vue {
   height: 100vh;
   margin: 0;
   background-color: #171717;
+} */
+
+.page1 {
+  margin-top: 30px;
+  background-color: #171717;
+  text-align: center;
 }
 
 .typing1 {
+  margin-bottom: 24px;
+  width: 100%;
+  color: #fff;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 33px;
+  letter-spacing: -0.5px;
+  text-align: center;
+  min-height: 66px;
+}
+
+.typing2 {
   margin-bottom: 24px;
   width: 100%;
   color: #fff;
@@ -321,12 +428,17 @@ canvas {
 .message {
   display: flex;
   align-items: center;
-  animation: slideUp 2s ease-in-out forwards;
+  justify-content: center;
+  /* animation: slideUp 2s ease-in-out forwards; */
   opacity: 0;
   color: #fff;
   font-size: 16px;
   font-weight: 400;
   line-height: 22px;
+
+  transform: translateY(100%);
+  animation: slideUp 2s forwards;
+  margin-bottom: 8px;
 }
 
 .message img {
@@ -348,5 +460,171 @@ canvas {
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+
+
+.typing1 {
+  margin-bottom: 8px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 33px;
+  letter-spacing: -0.5px;
+  text-align: center;
+  color: #fff;
+}
+
+.sub {
+  margin-bottom: 32px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: -0.5px;
+  text-align: center;
+  color: #9C9EA0;
+}
+
+.result__box {
+  padding: 32px 20px;
+  background-color: #222222;
+  border-radius: 16px;
+}
+.round {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.row > div {
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+}
+
+.plus {
+  font-size: 48px;
+  color: #fff;
+}
+
+.red {
+  border: 2px solid red !important;
+}
+
+.orange {
+  border: 2px solid orange !important;
+}
+
+.green {
+  border: 2px solid green !important;
+}
+
+.blue {
+  border: 2px solid blue !important;
+}
+
+.purpe {
+  border: 2px solid purple !important;
+}
+
+.last {
+  background-color: transparent !important;
+  border-width: 2px;
+  border-style: solid;
+  border: none;
+}
+
+.red.last {
+  background-color: red !important;
+}
+
+.orange.last {
+  background-color: orange !important;
+}
+
+.green.last {
+  background-color: green !important;
+}
+
+.blue.last {
+  background-color: blue !important;
+}
+
+.purple.last {
+  background-color: purple !important;
+}
+
+.floating {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: calc(100% - 40px);
+}
+
+.floating > .participation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  color: #fff;
+  font-weight: 300;
+}
+
+.floating > .participation > .people {
+  display: flex;
+  flex-direction: row;
+}
+
+.floating > .participation > .people > .person:not(:first-child) {
+  margin-left: -6px;
+}
+
+.floating > .participation > .people > .person {
+  width: 24px;
+  height: 24px;
+  background-color: #414244;
+  border-radius: 50%;
+  border: 1px solid #181D23;
+}
+
+.floating > button {
+  width: 100%;
+  /* max-width 사이즈에 양옆 padding 값 */
+  max-width: calc(576px - 40px);
+  min-height: 52px;
+  background-color: #4AFF81;
+  padding: 8px 8px;
+  border-radius: 24px;
+  border-style: none;
+  color: #181D23;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.floating > button.none {
+  margin-top: 8px;
+  background-color: #171717;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 18px;
 }
 </style>

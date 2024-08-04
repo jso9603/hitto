@@ -19,7 +19,7 @@ export default class Ai extends Vue {
   showStartBtn = false
 
   mounted() {
-    const contents = '안녕? 난 스테판이야.\n\n1960년대부터 1990년대까지\n단순한 행운이 아닌 체계적인\n수학적접근 방식과 전략에 기초하여\n14번이나 당첨되었던 전설적인 인물이야.\n\n자~ 이제 시작해볼까?'
+    const contents = '안녕? 난 스테판이야.\n\n단순한 행운이 아닌 체계적인\n수학적접근 방식과 전략에 기초하여\n14번이나 당첨되었던 전설적인 인물이야.\n\n자~ 이제 시작해볼까?'
     let saveInterval: any
 
     let index = 0
@@ -82,5 +82,29 @@ export default class Ai extends Vue {
   font-size: 16px;
   font-weight: 700;
   line-height: 20px;
+
+  opacity: 0;
+  /* animation: fadeIn 2s forwards;  */
+  animation: slideUp 1s ease-in-out forwards;
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(30%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>

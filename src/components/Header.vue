@@ -20,7 +20,7 @@ export default class Header extends Vue {
   justify-content: space-between;
   height: 54px;
   padding: 0 20px;
-  background-color: #202223;
+  background-color: #171717;
 }
 
 img {

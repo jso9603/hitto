@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class='typing1'>"“이제 마지막이야~소망을 선택해봐.<br/>토요일 너에게도 ✨행운이 갈거야”"</div>
+    <div class='typing1'>"이제 마지막이야~소망을 선택해봐.<br/>토요일 너에게도 ✨행운이 갈거야"</div>
 
     <div class="tab">
       <div :class="['tab-item', { active: activeTab === 'select' }]" @click="setActiveTab('select')">소망 선택</div>
@@ -188,7 +188,7 @@ export default class Result extends Vue {
   bottom: 30px;
   left: 50%;
   transform: translate(-50%, 0);
-  width: 100%;
+  width: calc(100% - 40px);
 }
 
 .floating > .participation {
