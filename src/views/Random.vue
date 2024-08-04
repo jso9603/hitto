@@ -76,12 +76,12 @@ interface Message {
 @Component
 export default class Random extends Vue {
   typedText = ''
-
   private animationCanvas: HTMLCanvasElement | null = null;
   private ballCount: number = 7;
   private balls: Ball[] = [];
   private circleCenter = { x: 130, y: 130 }; // 중심점 (캔버스의 중간 지점)
   private circleRadius: number = 125; // 원의 반지름 (큰 원의 상하좌우가 잘려보임)
+  private animationId: number = 0;
   private colors: string[] = ['#0070FF', '#FFC83D', '#ECEEF0', '#FE4000', '#97999B', '#4EFF92'];
   private image: HTMLImageElement | null = null;
 
@@ -118,41 +118,17 @@ export default class Random extends Vue {
   }
 
   oneMore() {
-    this.showPage1 = true
-
-    this.lottoNumbers = [];
-    this.started()
+    location.reload(); // 페이지 새로고침
   }
 
-  started() {
-    this.typingText()
-
+  initCanvas() {
     this.animationCanvas = this.$refs.animationCanvas as HTMLCanvasElement;
-    // this.image.src = require('@/assets/ball-image.png');
-
     if (this.animationCanvas) {
       this.image = new Image();
       this.image.src = require('@/assets/union.png'); // 사용할 이미지 경로
-      // for (let i = 0; i < this.ballCount; i++) {
-      //   const color = this.colors[i % this.colors.length]; // 색깔을 순환하여 할당
-      //   this.balls.push({
-      //     x: this.circleCenter.x,
-      //     y: this.circleCenter.y,
-      //     radius: 15,
-      //     // dx: (Math.random() - 0.5) * 12,
-      //     // dy: (Math.random() - 0.5) * 12,
-      //     // 일단 테스트를 위해 속도 줄임
-      //     dx: (Math.random() - 0.5) * 4,
-      //     dy: (Math.random() - 0.5) * 4,
-      //     color: color,
-      //   });
-      // }
-      // const ctx = this.animationCanvas.getContext('2d');
-      // if (ctx) {
-      //   this.animate(ctx);
-      // }
-      
-      this.image.onload = () => {
+
+       this.image.onload = () => {
+        this.balls = []; // 이전 상태 초기화
         for (let i = 0; i < this.ballCount; i++) {
           const color = this.colors[i % this.colors.length]; // 색깔을 순환하여 할당
           this.balls.push({
@@ -170,12 +146,36 @@ export default class Random extends Vue {
         }
       };
     }
+  }
 
-    this.selectRandomMessageWithDelay();
+  private animate(ctx: CanvasRenderingContext2D) {
+    if (this.animationCanvas) {
+      ctx.clearRect(0, 0, this.animationCanvas.width, this.animationCanvas.height);
+      this.drawCircle(ctx);
+      this.balls.forEach(ball => {
+        this.drawBall(ctx, ball);
+        this.updateBallPosition(ball);
+      });
+      this.handleBallCollisions();
+      this.animationId = requestAnimationFrame(() => this.animate(ctx));
+    }
+  }
+
+  private restartAnimation() {
+    if (this.animationCanvas) {
+      const ctx = this.animationCanvas.getContext('2d');
+      if (ctx) {
+        cancelAnimationFrame(this.animationId);
+        ctx.clearRect(0, 0, this.animationCanvas.width, this.animationCanvas.height);
+      }
+      this.initCanvas();
+    }
   }
 
   mounted() {
-    this.started()
+    this.typingText();
+    this.initCanvas();
+    this.selectRandomMessageWithDelay();
   }
 
   // 처음 공
@@ -210,7 +210,6 @@ export default class Random extends Vue {
     ctx.fill();
     ctx.closePath();
 
-    // 이미지를 그라데이션 위에 그립니다.
     if (this.image) {
       ctx.save();
       ctx.globalAlpha = 0.5; // 이미지의 투명도를 설정
@@ -218,7 +217,7 @@ export default class Random extends Vue {
       ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
       ctx.clip();
 
-      const imageSize = ball.radius * 2 * 0.5; // 이미지 크기를 0.7로 줄임
+      const imageSize = ball.radius * 2 * 0.5; // 이미지 크기를 줄임
       ctx.drawImage(this.image, ball.x - imageSize / 2, ball.y - imageSize / 2, imageSize, imageSize);
       ctx.closePath();
       ctx.restore();
@@ -308,17 +307,6 @@ export default class Random extends Vue {
     }
   }
 
-  private animate(ctx: CanvasRenderingContext2D) {
-    ctx.clearRect(0, 0, 500, 500);
-    this.drawCircle(ctx);
-    this.balls.forEach(ball => {
-      this.drawBall(ctx, ball);
-      this.updateBallPosition(ball);
-    });
-    this.handleBallCollisions();
-    requestAnimationFrame(() => this.animate(ctx));
-  }
-
   private selectRandomMessageWithDelay() {
     setTimeout(() => {
       const randomIndex = Math.floor(Math.random() * this.messages.length);
@@ -359,7 +347,7 @@ export default class Random extends Vue {
 
 <style scoped>
 .fade-enter-active, .fade-leave-active {
-  transition: opacity 1s ease;
+  transition: opacity 0.8s ease;
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
