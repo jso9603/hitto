@@ -1,7 +1,9 @@
 <template>
   <div>
     <Header />
-    <router-view />
+    <div class="content">
+      <router-view />
+    </div>
   </div>
 </template>
 
@@ -14,7 +16,23 @@ import Header from '@/components/Header.vue'
     Header,
   }
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  mounted() {
+    this.checkRoute(this.$route);
+    this.$router.beforeEach((to, from, next) => {
+      this.checkRoute(to);
+      next();
+    });
+  }
+
+  checkRoute(route: any) {
+    if (route.path === '/login') {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+}
 </script>
 
 <style>
@@ -25,5 +43,9 @@ body {
   margin: 0 auto;
   background-color: #171717;
   font-family: 'Pretendard', sans-serif;
+}
+
+.content {
+  padding-top: 54px;
 }
 </style>
