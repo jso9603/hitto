@@ -1,8 +1,10 @@
 <template>
   <div class="home">
-    <div class="badge">동행복권</div>
+    <div class="count__down">
+      <img src="@/assets/ic-system-timer.svg" />
+      {{ countdown }}</div>
     <div class="title">모두의 희망로또</div>
-    <div class="desc">통계기반 알고리즘을 통해<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
+    <div class="desc">ai 통계기반 알고리즘을 통해<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
 
     <div class="boxes">
       <div class="box" @click="onClick('ai')">
@@ -25,11 +27,19 @@
 
     <div class="algorithm">
       <div class="light">✨</div>
-      <div class="title">스테판이 생성해주는 정교한 알고리즘</div>
+      <div class="title">스테판이 생성해주는<br/>정교한 알고리즘</div>
       <div class="desc">ai 통계기반 알고리즘을 통해<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
+      <img src="@/assets/ic-system-intro-aicard.png" />
     </div>
 
-    <div class="floating">
+    <div class="dream">
+      <img class="cloud" src="@/assets/ic-system-cloud.svg" />
+      <div class="title">꿈자리를 통한<br/>이상적인 번호 조합</div>
+      <div class="desc">로또 1등 당첨자들이 가장 많이 꾼꿈을<br/>조합하여 이상적인 번호 생성을 도와드려요.</div>
+      <img class="list" src="@/assets/ic-system-list.svg" />
+    </div>
+
+    <!-- <div class="floating">
       <div class="participation">
         <div class="people">
           <div class="person" />
@@ -39,18 +49,56 @@
         5,230명이 당첨 소감에 참여했어요
       </div>
       <button class="primary" @click="$router.push('/ai')">AI 로또 번호 뽑기</button>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import dayjs from 'dayjs'
+import duration from 'dayjs/plugin/duration'
+import weekday from 'dayjs/plugin/weekday'
+
+
+dayjs.extend(duration)
+dayjs.extend(weekday)
 
 @Component
 export default class Home extends Vue {
+  countdown: string = '';
 
   onClick(type: string) {
     this.$router.push(`/${type}`)
+  }
+
+  mounted() {
+    this.updateCountdown();
+    setInterval(this.updateCountdown, 1000);
+  }
+
+  getNextSaturday(): dayjs.Dayjs {
+    const now = dayjs();
+    let nextSaturday = now.weekday(6).hour(20).minute(30).second(0);
+
+    if (now.isAfter(nextSaturday)) {
+      nextSaturday = nextSaturday.add(1, 'week');
+    }
+
+    return nextSaturday;
+  }
+
+  updateCountdown() {
+    const now = dayjs();
+    const nextSaturday = this.getNextSaturday();
+    const diff = nextSaturday.diff(now);
+    const durationObj = dayjs.duration(diff);
+
+    const days = Math.floor(durationObj.asDays());
+    const hours = durationObj.hours();
+    const minutes = durationObj.minutes();
+    const seconds = durationObj.seconds();
+
+    this.countdown = `${days}일 ${hours}시 ${minutes}분 ${seconds}초 남음`;
   }
 }
 </script>
@@ -59,19 +107,21 @@ export default class Home extends Vue {
 .home {
   padding: 24px 20px;
   background-color: #171717;
-  height: calc(100vh - 54px);
   text-align: center;
 }
-.badge {
-  margin: 0 auto 18px;
-  display: inline-block;
-  padding: 6px 12px 5px;
-  border-radius: 100px;
-  border: 1px solid #31E663;
-  color: #31E663;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 17px;
+
+.count__down {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 12px;
+  color: #4AFF81;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+  text-align: center;
+  font-variant: common-ligatures tabular-nums;
 }
 
 .home > .title {
@@ -125,13 +175,23 @@ export default class Home extends Vue {
   display: inline-block;
 }
 
+.algorithm {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
 .algorithm > .light {
+  margin-bottom: 10px;
   width: 32px;
   height: 36px;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 36px;
 }
 .algorithm > .title {
   margin-bottom: 12px;
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 900;
   line-height: 36px;
   color: #fff;
@@ -143,6 +203,43 @@ export default class Home extends Vue {
   font-weight: 400;
   line-height: 23px;
   color: #BABCBE;
+}
+
+.algorithm > img {
+  width: auto;
+  height: 82px;
+}
+
+.dream {
+  margin-top: 58px;
+  margin-bottom: 50px;
+}
+
+.dream > .cloud {
+  width: 32px;
+  height: auto;
+}
+
+.dream > .title {
+  margin-top: 12px;
+  color: #fff;
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 36px;
+}
+
+.dream > .desc {
+  margin-top: 12px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 23px;
+  color: #BABCBE;
+}
+
+.dream > .list {
+  margin-top: 40px;
+  width: auto;
+  height: 280px;
 }
 
 .floating {
