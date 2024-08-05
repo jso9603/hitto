@@ -7,6 +7,7 @@ import Random from '@/views/Random.vue'
 import Result from '@/views/Result.vue'
 import SelectHope from '@/views/SelectHope.vue'
 import Dream from '@/views/Dream.vue'
+import Login from '@/views/Login.vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -51,6 +52,11 @@ const routes = [
     path: '/dream',
     name: 'Dream',
     component: Dream,
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
   },
 ];
 

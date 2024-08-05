@@ -7,11 +7,11 @@
     <div class="desc">ai 통계기반 알고리즘을 통해<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
 
     <div class="boxes">
-      <div class="box" @click="onClick('ai')">
+      <div class="box" @click="onClick('ai', 'AI 번호 생성')">
         <img src="@/assets/ic-ai.svg" alt="ai" />
         <div class="text">GTP가 분석해주는<br/><span>AI 번호 생성</span></div>
       </div>
-      <div class="box" @click="onClick('dreams')">
+      <div class="box" @click="onClick('dreams', '꿈해몽 생성')">
         <img src="@/assets/ic-dreams.svg" alt="dreams" />
         <div class="text">조상신이 점지해주는<br/><span>꿈해몽 생성</span></div>
       </div>
@@ -58,7 +58,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import weekday from 'dayjs/plugin/weekday'
-
+import Cookies from 'js-cookie'
 
 dayjs.extend(duration)
 dayjs.extend(weekday)
@@ -67,7 +67,9 @@ dayjs.extend(weekday)
 export default class Home extends Vue {
   countdown: string = '';
 
-  onClick(type: string) {
+  onClick(type: string, menu: string) {
+    Cookies.set('menu', menu)
+
     this.$router.push(`/${type}`)
   }
 
