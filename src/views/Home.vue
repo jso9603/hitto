@@ -1,9 +1,6 @@
 <template>
   <div class="home">
-    <div class="count__down">
-      <img src="@/assets/ic-system-timer.svg" />
-      {{ countdown }}</div>
-    <div class="title">모두의 희망로또</div>
+    <img class="main" src="@/assets/ic-system-main.svg" />
     <div class="desc">ai 통계기반 알고리즘을 통해<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
 
     <div class="boxes">
@@ -15,21 +12,15 @@
         <img src="@/assets/ic-dreams.svg" alt="dreams" />
         <div class="text">조상신이 점지해주는<br/><span>꿈해몽 생성</span></div>
       </div>
-      <div class="box" @click="onClick('statistics')">
-        <img src="@/assets/ic-statistics.svg" alt="statistics" />
-        <div class="text">통계는 거짓말 안해<br/><span>통계 생성</span></div>
-      </div>
-      <div class="box" @click="onClick('lottery')">
-        <img src="@/assets/ic-Scratchticket.svg" alt="lottery" />
-        <div class="text">매일 매일 우주의 기운<br/><span>복권 긁기</span></div>
-      </div>
     </div>
 
     <div class="algorithm">
-      <div class="light">✨</div>
+      <div class="light">
+        <img src="@/assets/ic-system-star.svg" />
+      </div>
       <div class="title">스테판이 생성해주는<br/>정교한 알고리즘</div>
       <div class="desc">ai 통계기반 알고리즘을 통해<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
-      <img src="@/assets/ic-system-intro-aicard.png" />
+      <img src="@/assets/ic-system-intro-aicard.svg" />
     </div>
 
     <div class="dream">
@@ -50,6 +41,13 @@
       </div>
       <button class="primary" @click="$router.push('/ai')">AI 로또 번호 뽑기</button>
     </div> -->
+
+    <div class="floating">
+      <div class="count__down">
+        <img src="@/assets/ic-system-timer.svg" />
+        {{ countdown }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -107,9 +105,14 @@ export default class Home extends Vue {
 
 <style scoped>
 .home {
-  padding: 24px 20px;
+  padding: 32px 20px;
   background-color: #171717;
   text-align: center;
+}
+
+.main {
+  width: 240px;
+  height: 220px;
 }
 
 .count__down {
@@ -117,7 +120,6 @@ export default class Home extends Vue {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  margin-bottom: 12px;
   color: #4AFF81;
   font-size: 16px;
   font-weight: 500;
@@ -126,18 +128,10 @@ export default class Home extends Vue {
   font-variant: common-ligatures tabular-nums;
 }
 
-.home > .title {
-  margin-bottom: 12px;
-  font-size: 36px;
-  font-weight: 900;
-  line-height: 44px;
-  color: #fff;
-}
-
 .home > .desc {
   margin-bottom: 40px;
   color: #BABCBE;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 23px;
 }
@@ -145,9 +139,9 @@ export default class Home extends Vue {
 .boxes {
   width: 100%;
   display: grid;
-  grid-template: repeat(2, 1fr) / repeat(2, 1fr);
+  grid-template: repeat(1, 1fr) / repeat(2, 1fr);
   gap: 12px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 
 .box {
@@ -184,13 +178,10 @@ export default class Home extends Vue {
 }
 
 .algorithm > .light {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   width: 32px;
-  height: 36px;
-  font-size: 28px;
-  font-weight: 900;
-  line-height: 36px;
 }
+
 .algorithm > .title {
   margin-bottom: 12px;
   font-size: 26px;
@@ -213,7 +204,7 @@ export default class Home extends Vue {
 }
 
 .dream {
-  margin-top: 58px;
+  margin-top: 40px;
   margin-bottom: 50px;
 }
 
@@ -232,7 +223,7 @@ export default class Home extends Vue {
 
 .dream > .desc {
   margin-top: 12px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 23px;
   color: #BABCBE;
@@ -246,10 +237,12 @@ export default class Home extends Vue {
 
 .floating {
   position: fixed;
-  bottom: 30px;
+  bottom: 0;
   left: 50%;
   transform: translate(-50%, 0);
-  width: 100%;
+  width: calc(100% - 40px);
+  padding: 20px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 64.38%);
 }
 
 .floating > .participation {
@@ -258,8 +251,10 @@ export default class Home extends Vue {
   justify-content: center;
   gap: 8px;
   margin-bottom: 20px;
-  color: #fff;
-  font-weight: 300;
+  color: #ECEEF0;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
 }
 
 .floating > .participation > .people {

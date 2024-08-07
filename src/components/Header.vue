@@ -31,8 +31,49 @@ export default class Header extends Vue {
   isScrolled: boolean = false;
 
   share() {
-    console.log('share click!');
+  const currentUrl = window.location.href;
+
+  // Check if navigator.clipboard.writeText is available
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(currentUrl).then(() => {
+      this.$store.dispatch('showCopyImage');
+    }).catch(err => {
+      console.error('링크 복사에 실패했습니다:', err);
+    });
+  } else {
+    // Fallback for iOS Safari
+    const textArea = document.createElement('textarea');
+    textArea.value = currentUrl;
+    // Ensure the textarea is not visible and doesn't cause layout shifts
+    textArea.style.position = 'fixed'; // Fixed position to avoid layout changes
+    textArea.style.top = '0'; 
+    textArea.style.left = '0';
+    textArea.style.width = '1px';
+    textArea.style.height = '1px';
+    textArea.style.padding = '0';
+    textArea.style.border = 'none';
+    textArea.style.outline = 'none';
+    textArea.style.boxShadow = 'none';
+    textArea.style.background = 'transparent';
+    textArea.style.opacity = '0'; // Make it invisible
+    textArea.setAttribute('readonly', '');
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      const successful = document.execCommand('copy');
+      if (successful) {
+        this.$store.dispatch('showCopyImage');
+      } else {
+        console.error('링크 복사에 실패했습니다.');
+      }
+    } catch (err) {
+      console.error('링크 복사에 실패했습니다:', err);
+    }
+    document.body.removeChild(textArea);
   }
+}
+
   use() {
     console.log('use click!');
   }
@@ -129,15 +170,6 @@ export default class Header extends Vue {
   line-height: 26px;
 }
 
-.use {
-  padding: 0;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 21px;
-  background-color: transparent;
-  border: none;
-}
 
 img.logo {
   width: auto;
@@ -145,14 +177,16 @@ img.logo {
   cursor: pointer;
 }
 
-.share {
-  padding: 4px 9px;
-  border-radius: 8px;
-  border: 1px solid #fff;
+.share,
+.use {
+  padding: 7px 13px;
+  border-radius: 100px;
+  border: none;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 24px;
-  background-color: transparent;
+  background-color: rgba(255, 255, 255, 0.1);
   color: #fff;
+  cursor: pointer;
 }
 </style>

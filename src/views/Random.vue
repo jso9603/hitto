@@ -2,7 +2,6 @@
   <div class="container">
     <transition name="fade" mode="out-in">
       <div class="page1" v-if="showPage1" key="page1">
-        <!-- <img src="@/assets/content.png" /> -->
         <div class='typing1' v-html="typedText"></div>
         <div class="random-animation">
           <canvas ref="animationCanvas" width="260" height="260"></canvas>
@@ -336,11 +335,11 @@ export default class Random extends Vue {
   }
 
   private getNumberClass(number: number) {
-    if (number <= 10) return 'red';
-    else if (number <= 20) return 'orange';
-    else if (number <= 30) return 'green';
-    else if (number <= 40) return 'blue';
-    else return 'purple';
+    if (number <= 10) return 'yellow';
+    else if (number <= 20) return 'blue';
+    else if (number <= 30) return 'red';
+    else if (number <= 40) return 'grey';
+    else return 'green';
   }
 }
 </script>
@@ -500,7 +499,6 @@ canvas {
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  color: white;
   font-weight: bold;
 }
 
@@ -509,24 +507,29 @@ canvas {
   color: #fff;
 }
 
-.red {
-  border: 2px solid red !important;
-}
-
-.orange {
-  border: 2px solid orange !important;
-}
-
-.green {
-  border: 2px solid green !important;
+.yellow {
+  border: 2px solid #FEC03E !important;
+  color: #FEC03E !important;
 }
 
 .blue {
-  border: 2px solid blue !important;
+  border: 2px solid #4790FF !important;
+  color: #4790FF !important;
 }
 
-.purpe {
-  border: 2px solid purple !important;
+.red {
+  border: 2px solid #E64D3D !important;
+  color: #E64D3D !important;
+}
+
+.grey {
+  border: 2px solid #BEC3C7 !important;
+  color: #BEC3C7 !important;
+}
+
+.green {
+  border: 2px solid #2ECD70 !important;
+  color: #2ECD70 !important;
 }
 
 .last {
@@ -534,26 +537,27 @@ canvas {
   border-width: 2px;
   border-style: solid;
   border: none;
+  color: #171717 !important;
 }
 
-.red.last {
-  background-color: red !important;
-}
-
-.orange.last {
-  background-color: orange !important;
-}
-
-.green.last {
-  background-color: green !important;
+.yellow.last {
+  background-color: #FEC03E !important;
 }
 
 .blue.last {
-  background-color: blue !important;
+  background-color: #4790FF !important;
 }
 
-.purple.last {
-  background-color: purple !important;
+.red.last {
+  background-color: #E64D3D !important;
+}
+
+.grey.last {
+  background-color: #BEC3C7 !important;
+}
+
+.green.last {
+  background-color: #2ECD70 !important;
 }
 
 .floating {
