@@ -8,6 +8,7 @@ import Result from '@/views/Result.vue'
 import SelectHope from '@/views/SelectHope.vue'
 import Dream from '@/views/Dream.vue'
 import Login from '@/views/Login.vue'
+import My from '@/views/My.vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -57,6 +58,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/my',
+    name: 'my',
+    component: My,
   },
 ];
 

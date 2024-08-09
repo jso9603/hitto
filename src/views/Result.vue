@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { NavigationGuardNext } from 'vue-router'
+import { NavigationGuardNext } from 'vue-router/types'
 
 @Component
 export default class Result extends Vue {

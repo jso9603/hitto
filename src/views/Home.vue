@@ -8,8 +8,8 @@
         <img src="@/assets/ic-ai.svg" alt="ai" />
         <div class="text">GTP가 분석해주는<br/><span>AI 번호 생성</span></div>
       </div>
-      <div class="box" @click="onClick('dreams', '꿈해몽 생성')">
-        <img src="@/assets/ic-dreams.svg" alt="dreams" />
+      <div class="box" @click="onClick('dream', '꿈해몽 생성')">
+        <img src="@/assets/ic-dreams.svg" alt="dream" />
         <div class="text">조상신이 점지해주는<br/><span>꿈해몽 생성</span></div>
       </div>
     </div>

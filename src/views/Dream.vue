@@ -44,12 +44,23 @@
         <div
           v-for="(item, index) in mainCategories[selectedMainCategory].subCategories[selectedSubCategory].items" :key="index"
           @click="onLastCategory(index)"
-          :class="{ selected: index === selectedSubCategory }"
+          :class="{ selected: index === selectedLastCategory }"
           :style="{ animationDelay: `${index * 0.1}s` }"
         >
           {{ item }}
           <img :src="index === selectedLastCategory ? require('@/assets/ic-system-dream-select.svg') : require('@/assets/ic-system-dream-unselect.svg')" />
         </div>
+      </div>
+    </div>
+
+    <div class="floating">
+      <div class="participation">
+        <div class="people">
+          <div class="person" />
+          <div class="person" />
+          <div class="person" />
+        </div>
+        5,230명이 당첨 소감에 참여했어요
       </div>
     </div>
   </div>
@@ -277,6 +288,8 @@ mainCategories: MainCategory[] = [
   onLastCategory(index: number) {
     console.log(index);
     this.selectedLastCategory = index;
+
+    this.$router.push('/random')
   }
 }
 </script>
@@ -333,7 +346,11 @@ mainCategories: MainCategory[] = [
 }
 
 .main__category div span {
-  margin-left: 2px;
+  margin-left: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: -0.5px;
 }
 
 .main__category div img {
@@ -391,5 +408,44 @@ mainCategories: MainCategory[] = [
 .sub__category div.selected {
   background-color: #fff;
   color: #202223;
+}
+
+.floating {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: calc(100% - 40px);
+  padding: 30px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 64.38%);
+}
+
+.floating > .participation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  color: #ECEEF0;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.floating > .participation > .people {
+  display: flex;
+  flex-direction: row;
+}
+
+.floating > .participation > .people > .person:not(:first-child) {
+  margin-left: -6px;
+}
+
+.floating > .participation > .people > .person {
+  width: 32px;
+  height: 32px;
+  background-color: #414244;
+  border-radius: 50%;
+  border: 1.33px solid #181D23;
 }
 </style>

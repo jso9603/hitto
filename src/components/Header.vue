@@ -16,8 +16,13 @@
       </div>
     </template>
     <div v-else>
-      <img src="@/assets/ic-system-logo.svg" class="logo" />
-      <button class="share" @click="share">공유하기</button>
+      <template v-if="$route.path === '/my'">
+        <div class="service">나의 모히또</div>
+      </template>
+      <template v-else>
+        <img src="@/assets/ic-system-logo.svg" class="logo" />
+        <button class="share" @click="share">공유하기</button>
+      </template>
     </div>
   </div>
 </template>
@@ -95,7 +100,7 @@ export default class Header extends Vue {
   }
 
   get showBackButton() {
-    return this.$route.path !== '/';
+    return this.$route.path !== '/' && this.$route.path !== '/my';
   }
 
   get login() {
@@ -188,5 +193,18 @@ img.logo {
   background-color: rgba(255, 255, 255, 0.1);
   color: #fff;
   cursor: pointer;
+}
+
+
+.service {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+  text-align: center;
+  color: #ECEEF0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 </style>
