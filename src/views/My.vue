@@ -2,14 +2,20 @@
   <div class="my">
     <div class="summary">
       <img :src="userImage" class="person" />
-      <div class="email">{{user.email}}</div>
+      <div class="nickname">{{nickname}}</div>
+      <div class="email">
+        <div class="kakao">
+          <img src="@/assets/ic-system-kakao.svg" />
+        </div>
+        {{user.email}}
+      </div>
     </div>
 
     <div class="ad" />
 
     <div class="menu">
       <div class="title">서비스</div>
-        <div v-for="item in services" :key="item.title" class="service-item">
+        <div v-for="item in services" :key="item.title" class="service-item" @click="$router.push(item.link)">
           <img :src="require(`@/assets/${item.icon}`)" class="service-icon" />
           <span class="service-title">{{ item.title }}</span>
           <img src="@/assets/ic-system-arrow-right.svg" />
@@ -27,7 +33,7 @@
 
     <div class="menu">
       <div class="title">일반</div>
-      <div v-for="item in general" :key="item.title" class="service-item">
+      <div v-for="(item, i) in general" :key="item.title" class="service-item" @click="onGeneral(i)">
         <img :src="require(`@/assets/${item.icon}`)" class="service-icon" />
         <span class="service-title">{{ item.title }}</span>
         <img src="@/assets/ic-system-arrow-right.svg" />
@@ -41,6 +47,7 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component
 export default class My extends Vue {
+  nickname = '';
   // TODO
   // store에서 email, uid 가져와서 처리 필요
 
@@ -53,21 +60,27 @@ export default class My extends Vue {
     {
       title: 'Ai 로또생성',
       icon: 'ic-ai.svg',
+      link: '/ai',
     },
     {
       title: '꿈해몽 생성',
       icon: 'ic-dreams.svg',
+      link: '/dream',
     },
   ];
 
   repositories = [
     {
-      title: 'Ai 로또생성',
+      title: '나의 번호 관리',
       icon: 'ic-system-star.svg',
     }
   ];
 
   general = [
+    {
+      title: '문의하기',
+      icon: 'ic-system-setting.svg',
+    },
     {
       title: '이용약관',
       icon: 'ic-system-setting.svg',
@@ -76,6 +89,14 @@ export default class My extends Vue {
       title: '개인정보처리방침',
       icon: 'ic-system-setting.svg',
     },
+  ];
+
+  private adjectives: string[] = [
+    '희망찬', '용감한', '즐거운', '활기찬', '씩씩한', '지혜로운', '사랑스러운', '기쁜', '자유로운'
+  ];
+
+  private animals: string[] = [
+    '돼지', '호랑이', '사자', '고양이', '강아지', '곰', '여우', '토끼', '독수리'
   ];
 
   get userImage(): string {
@@ -94,6 +115,36 @@ export default class My extends Vue {
     }
 
     return require(`@/assets/${imageName}`);
+  }
+
+  generateNickname(uid: string): string {
+    const firstDigit = parseInt(uid.split('_')[1].charAt(0));
+    const lastDigit = parseInt(uid.slice(-1), 10);
+    const number = parseInt(uid.split('_')[1].substring(0, 4));
+
+    const adjective = this.adjectives[firstDigit % this.adjectives.length - 1];
+    const animal = this.animals[lastDigit % this.animals.length - 1];
+
+    return `${adjective}${animal}${number}`;
+  }
+
+  onGeneral(index: number) {
+    if (index === 0) {
+      this.openEmail();
+    }
+  }
+
+  openEmail() {
+    const email = 'mohito.project@gmail.com'; 
+    const subject = encodeURIComponent('문의사항');
+    const body = encodeURIComponent('여기에 내용을 입력하세요.');
+
+    const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+    window.location.href = mailtoLink;
+  }
+
+  created() {
+    this.nickname = this.generateNickname(this.user.uid);
   }
 }
 </script>
@@ -118,14 +169,40 @@ export default class My extends Vue {
   margin-bottom: 8px;
 }
 
-.summary > .email {
-  margin-bottom: 8px;
+.summary > .nickname {
+  margin-bottom: 4px;
   font-size: 22px;
   font-weight: 600;
   line-height: 33px;
   letter-spacing: -0.5px;
   text-align: center;
   color:#ECEEF0;
+}
+
+.summary > .email {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #9C9EA0;
+}
+
+.summary > .email > .kakao {
+  background-color: #ECEEF0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 75px;
+}
+
+.summary > .email > .kakao > img {
+  width: 13.5px;
+  height: 13.5px;
 }
 
 .ad {
