@@ -6,8 +6,10 @@
     </div>
   
     <div v-if="loading">
-      <!-- 로딩 스피너나 로딩 메시지를 표시할 수 있습니다 -->
-      <p>로딩 중...</p>
+      <div class="waitinging">
+        <img src="@/assets/ic-system-stefan.svg" class="bounce-animation" />
+        <div class="waiting">잠시만 기다려주세요.</div>
+      </div>
     </div>
     <div v-else>
       <div v-if="lottoData.length > 0">
@@ -54,7 +56,7 @@
         <div class="no-data">
           <img src="@/assets/ic-system-stefan.svg" />
           <div>행운은 도전하는 자에게 찾아옵니다!<br/>경제적 자유로 가는 첫걸음을 지금 시작해보세요!</div>
-          <button @click="this.$router.push('/ai')">시작하기</button>
+          <button @click="this.$router.push('/ai')">생성하기</button>
         </div>
       </div>
     </div>
@@ -100,7 +102,9 @@ export default class LottoList extends Vue {
 
   private setActiveTab(tab: string) {
     this.activeTab = tab;
-    this.loading = true;
+    setTimeout(() => {
+      this.loading = false;
+    }, 1000);
     this.lottoData = [];
     this.fetchLottoData(this.uid, tab);
   }
@@ -140,7 +144,9 @@ export default class LottoList extends Vue {
       console.error('데이터를 가져오는 중 오류 발생:', error);
     } finally {
       console.log('lottoData: ', this.lottoData)
-      this.loading = false;
+      setTimeout(() => {
+        this.loading = false;
+      }, 1000);
     }
   }
 
@@ -240,6 +246,8 @@ export default class LottoList extends Vue {
 .number-set {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .number-circle {
@@ -250,8 +258,7 @@ export default class LottoList extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 4px;
-  font-size: 14px;
+  font-size: 13px;
   color: white;
 }
 
@@ -271,9 +278,9 @@ export default class LottoList extends Vue {
   align-items: center;
   gap: 10px;
   margin-top: 10px;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 23px;
-  color: #aaa;
+  color: #ECEEF0;
 }
 
 .winning-text > img {
@@ -287,7 +294,7 @@ export default class LottoList extends Vue {
 }
 
 .no-data div {
-  margin: 16px auto;
+  margin: 12px auto 16px;
   font-size: 15px;
   font-weight: 400;
   line-height: 23px;
@@ -308,7 +315,7 @@ export default class LottoList extends Vue {
 }
 
 .no-data button:hover {
-  background-color: #0056b3;
+  background-color: #ECEEF0;
 }
 
 .yellow {
@@ -341,11 +348,14 @@ export default class LottoList extends Vue {
 }
 
 .tab-item {
-  margin-right: 16px;
+  margin-right: 20px;
   cursor: pointer;
   border-bottom: 2px solid transparent;
   color: #5F6163;
   transition: border-color 0.3s, background-color 0.3s;
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 700;
 }
 
 .tab-item.active {
@@ -380,5 +390,37 @@ export default class LottoList extends Vue {
 
 .option-item.active .text {
   color: #000;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-15px);
+  }
+  60% {
+    transform: translateY(-7.5px);
+  }
+}
+
+.waitinging {
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.waiting {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 23px;
+  text-align: center;
+  color: #9C9EA0;
+}
+
+.bounce-animation {
+  animation: bounce 2s infinite;
 }
 </style>

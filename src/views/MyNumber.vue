@@ -138,6 +138,7 @@ Math.floor(dff/7)+1은 주차를 계산하고 1을 더해 반환합니다.
 <style scoped>
 .my__number {
   margin-top: 20px;
+  margin-bottom: 32px;
   padding-left: 20px;
   padding-right: 20px;
 }
@@ -161,7 +162,7 @@ Math.floor(dff/7)+1은 주차를 계산하고 1을 더해 반환합니다.
 .lotto-result {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   margin-top: 16px;
   margin-bottom: 32px;
 }
@@ -169,6 +170,9 @@ Math.floor(dff/7)+1은 주차를 계산하고 1을 더해 반환합니다.
 .numbers {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 20px;
 }
 
 .number-circle {
@@ -182,7 +186,6 @@ Math.floor(dff/7)+1은 주차를 계산하고 1을 더해 반환합니다.
   font-weight: 600;
   line-height: 16px;
   color: #ECEEF0;
-  margin: 0 4px;
   border: none;
 }
 
