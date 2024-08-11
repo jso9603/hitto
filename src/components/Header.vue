@@ -1,6 +1,9 @@
 <template>
   <div :class="['header', headerClass, { 'scrolled': isScrolled }]">
-    <template v-if="showBackButton">
+    <template v-if="$route.path === '/qr'">
+      <img src="@/assets/ic-system-logo.svg" class="logo" />
+    </template>
+    <template v-else-if="showBackButton">
       <div v-if="login">
         <img src="@/assets/ic-system-logo.svg" class="logo" />
         <button @click="goBack" class="close">
@@ -21,7 +24,8 @@
       </template>
       <template v-else>
         <img src="@/assets/ic-system-logo.svg" class="logo" />
-        <button class="share" @click="share">공유</button>
+        <img src="@/assets/ic-system-qr.svg" class="qr" @click="onQr"/>
+        <button class="share" @click="onShare">공유</button>
       </template>
     </div>
   </div>
@@ -35,7 +39,11 @@ import Cookies from 'js-cookie'
 export default class Header extends Vue {
   isScrolled: boolean = false;
 
-  share() {
+  onQr() {
+    this.$router.push('/qr')
+  }
+
+  onShare() {
   const currentUrl = window.location.href;
 
   // Check if navigator.clipboard.writeText is available
@@ -96,7 +104,7 @@ export default class Header extends Vue {
   }
 
   get headerClass() {
-    return this.$route.path === '/' ? 'home' : 'subpage';
+    return this.$route.path === '/' ? 'home' : this.$route.path === '/qr' ? 'qr' : 'subpage';
   }
 
   get showBackButton() {
@@ -179,11 +187,15 @@ export default class Header extends Vue {
   line-height: 26px;
 }
 
-
 img.logo {
   width: auto;
   height: 18px;
   cursor: pointer;
+}
+
+img.qr {
+  margin-left: auto;
+  margin-right: 8px;
 }
 
 .share,

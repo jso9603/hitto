@@ -9,6 +9,7 @@ import SelectHope from '@/views/SelectHope.vue'
 import Dream from '@/views/Dream.vue'
 import Login from '@/views/Login.vue'
 import My from '@/views/My.vue'
+import Qr from '@/views/Qr.vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -63,6 +64,11 @@ const routes = [
     path: '/my',
     name: 'my',
     component: My,
+  },
+  {
+    path: '/qr',
+    name: 'qr',
+    component: Qr,
   },
 ];
 
