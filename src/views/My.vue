@@ -24,7 +24,7 @@
 
     <div class="menu">
       <div class="title">저장소</div>
-      <div v-for="item in repositories" :key="item.title" class="service-item">
+      <div v-for="item in repositories" :key="item.title" class="service-item" @click="onNumber(item.title)">
         <img :src="require(`@/assets/${item.icon}`)" class="service-icon" />
         <span class="service-title">{{ item.title }}</span>
         <img src="@/assets/ic-system-arrow-right.svg" />
@@ -44,6 +44,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import Cookies from 'js-cookie'
 
 @Component
 export default class My extends Vue {
@@ -132,6 +133,11 @@ export default class My extends Vue {
     if (index === 0) {
       this.openEmail();
     }
+  }
+
+  onNumber(title: string) {
+    Cookies.set('menu', title)
+    this.$router.push('/my/number')
   }
 
   openEmail() {
