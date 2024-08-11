@@ -3,8 +3,8 @@
     <div class='typing1'>"이제 마지막이야~소망을 선택해봐.<br/>토요일 너에게도 ✨행운이 갈거야"</div>
 
     <div class="tab">
-      <div :class="['tab-item', { active: activeTab === 'select' }]" @click="setActiveTab('select')">소망 선택</div>
-      <div :class="['tab-item', { active: activeTab === 'input' }]" @click="setActiveTab('input')">직접 입력</div>
+      <div :class="['tab-item', { active: activeTab === 'ai' }]" @click="setActiveTab('select')">Ai 로또</div>
+      <div :class="['tab-item', { active: activeTab === 'dream' }]" @click="setActiveTab('input')">꿈해몽</div>
     </div>
     <div class="tab-content">
       <div v-if="activeTab === 'select'">

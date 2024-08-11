@@ -15,6 +15,8 @@
       </div>
     </div>
     <div class="hr__line" />
+
+    <LottoList />
   </div>
 </template>
 
@@ -23,6 +25,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import axios from 'axios'
+import LottoList from '@/components/LottoList.vue'
 
 interface Lotto{
   totSellamnt: number,  // 총 상금
@@ -40,7 +43,11 @@ interface Lotto{
   bnusNo: number, // 로또 보너스 번호
 }
 
-@Component
+@Component({
+  components: {
+    LottoList,
+  },
+})
 export default class MyNumber extends Vue {
   week =''
   saturdayDate = ''
@@ -175,7 +182,7 @@ Math.floor(dff/7)+1은 주차를 계산하고 1을 더해 반환합니다.
   font-weight: 600;
   line-height: 16px;
   color: #ECEEF0;
-  margin: 0 8px;
+  margin: 0 4px;
   border: none;
 }
 
@@ -207,7 +214,7 @@ Math.floor(dff/7)+1은 주차를 계산하고 1을 더해 반환합니다.
 
 .hr__line {
   height: 10px;
-  margin: 0 -20px;
+  margin: 32px -20px;
   background-color: #111111;
 }
 </style>
