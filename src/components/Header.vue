@@ -12,7 +12,7 @@
           <img src="@/assets/ic-system-back-img.svg" />
         </button>
         <div class="menu">{{ menuName }}</div>
-        <button class="use" @click="use">이용안내</button>
+        <button class="use" @click="use">안내</button>
       </div>
     </template>
     <div v-else>
@@ -21,7 +21,7 @@
       </template>
       <template v-else>
         <img src="@/assets/ic-system-logo.svg" class="logo" />
-        <button class="share" @click="share">공유하기</button>
+        <button class="share" @click="share">공유</button>
       </template>
     </div>
   </div>
@@ -123,14 +123,17 @@ export default class Header extends Vue {
   align-items: center;
   justify-content: space-between;
   height: 54px;
-  padding: 0 20px;
   background-color: #171717;
   position: fixed;
   top: 0;
-  left: 0;
+  left: 20px;
+  right: 20px;
   width: calc(100% - 40px);
+  max-width: 576px;
   z-index: 1000;
   transition: backdrop-filter 0.3s ease;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .header.scrolled {
@@ -155,6 +158,7 @@ export default class Header extends Vue {
   border: none;
   width: 24px;
   height: auto;
+  cursor: pointer;
 }
 
 .back > img {

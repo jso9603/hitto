@@ -32,7 +32,7 @@
     </div>
 
     <div class="floating">
-      <button class="primary" @click="TODO">{{activeTab === 'select' ? '완료' : '작성 완료'}}</button>
+      <button class="primary" @click="onLogin">{{activeTab === 'select' ? '완료' : '작성 완료'}}</button>
       <button class="none" @click="$router.push('/ai')">그냥 넘어갈게요</button>
     </div>
 
@@ -79,7 +79,8 @@ export default class Result extends Vue {
   }
 
   private TODO() {
-    // TODO
+    // store에 로그인 정보가 있으면 이미지 저장 페이지로
+    // 없으면 로그인 페이지로
   }
 }
 </script>
