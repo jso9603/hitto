@@ -16,7 +16,7 @@
     </div>
     <div class="hr__line" />
 
-    <LottoList />
+    <LottoList :week="Number(week)"/>
   </div>
 </template>
 
@@ -27,7 +27,7 @@ import duration from 'dayjs/plugin/duration'
 import axios from 'axios'
 import LottoList from '@/components/LottoList.vue'
 
-interface Lotto{
+interface Lotto {
   totSellamnt: number,  // 총 상금
   returnValue: string,  // 성공 혹은 실패
   drwNoDate: string,  // 날짜

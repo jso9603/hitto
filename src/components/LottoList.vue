@@ -11,10 +11,14 @@
     </div>
     <div v-else>
       <div v-if="lottoData.length > 0">
-        <div v-for="(lotto, index) in lottoData" :key="index" class="lotto-result">
-          <div class="date">
+        <div
+          v-for="(lotto, index) in lottoData"
+          :key="lotto.id || index"
+          :class="['lotto-result', shouldAddMargin(lotto, index) ? 'with-margin' : '']"
+        >
+          <div v-if="shouldShowDate(lotto, index)" class="date">
             {{ getFormattedDate(lotto.date) }}
-            <div v-if="lotto.isFail" class="failed"> 추첨 전</div>
+            <div v-if="lotto.isBeforeTheDraw" class="failed"> 추첨 전</div>
             </div>
           <div class="box" :class="getResultClass(lotto)">
             <div class="numbers">
@@ -22,7 +26,7 @@
                 <div
                   v-for="(num, numIndex) in set.split(', ').slice(0, 6)"
                   :key="numIndex"
-                  :class="['number-circle', isMatchingNumber(lotto, Number(num)) ? getNumberClass(num) : 'default-color']"
+                  :class="['number-circle', lotto.winningNumbers ? isMatchingNumber(lotto, Number(num)) ? getNumberClass(num) : 'default-color' : '']"
                 >
                   {{ num }}
                 </div>
@@ -58,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 import dayjs from 'dayjs'
 import { db } from '../config/firebaseConfig'
 import { collection, query, getDocs, where } from 'firebase/firestore'
@@ -79,11 +83,13 @@ interface Lotto {
   drwtNo6: number;
   bnusNo: number;
   winningNumbers?: any;
-  isFail?: string;
+  isBeforeTheDraw?: boolean;
 }
 
 @Component
 export default class LottoList extends Vue {
+  @Prop(Number) week!: number;
+
   uid = 'uid_1720850205303'; // 예시 uid
 
   lottoData: any[] = []; // 나의 번호 데이터를 저장할 배열
@@ -94,9 +100,9 @@ export default class LottoList extends Vue {
 
   private setActiveTab(tab: string) {
     this.activeTab = tab;
-    console.log('tab: ', tab)
-    this.fetchLottoData(this.uid, tab);
+    this.loading = true;
     this.lottoData = [];
+    this.fetchLottoData(this.uid, tab);
   }
 
   async fetchLottoData(uid: string, dbTable: string) {
@@ -110,24 +116,23 @@ export default class LottoList extends Vue {
 
         // 각 회차에 대해 API 호출
         for (const lotto of this.lottoData) {
-          console.log('lotto: ', lotto)
-          const response = await axios.get<Lotto>(`/common.do?method=getLottoNumber&drwNo=${lotto.round}`);
-          console.log(response)
-          if (response.data.returnValue === 'success') {
-            lotto.winningNumbers = [
-            response.data.drwtNo1,
-            response.data.drwtNo2,
-            response.data.drwtNo3,
-            response.data.drwtNo4,
-            response.data.drwtNo5,
-            response.data.drwtNo6,
-            response.data.bnusNo,
-          ];
-          lotto.isFail = false;
-          } else {
-            // fail의 경우에는 추첨 전 or 데이터 가져오기 실패
+          if (this.week < lotto.round) {
+            lotto.isBeforeTheDraw = true;
             lotto.winningNumbers = [];
-            lotto.isFail = true;
+          } else {
+            const response = await axios.get<Lotto>(`/common.do?method=getLottoNumber&drwNo=${lotto.round}`);
+            if (response.data.returnValue === 'success') {
+              lotto.winningNumbers = [
+                response.data.drwtNo1,
+                response.data.drwtNo2,
+                response.data.drwtNo3,
+                response.data.drwtNo4,
+                response.data.drwtNo5,
+                response.data.drwtNo6,
+                response.data.bnusNo,
+              ];
+              lotto.isBeforeTheDraw = false;
+            }
           }
         }
       }
@@ -145,6 +150,23 @@ export default class LottoList extends Vue {
 
   getFormattedDate(dateString: string) {
     return dayjs(dateString).format('YYYY년 MM월 DD일');
+  }
+
+  shouldShowDate(lotto: any, index: number) {
+    if (index === 0) {
+      return true;
+    }
+    return lotto.date !== this.lottoData[index - 1].date;
+  }
+
+  shouldAddMargin(lotto: any, index: number) {
+    // 두 번째 result-box부터 with-margin 클래스를 추가
+    // 첫 번째 항목은 항상 false
+    if (index === 0) {
+      return false;
+    }
+    // 이전 항목과 현재 항목의 날짜가 같은 경우에만 마진 추가
+    return lotto.date === this.lottoData[index - 1].date;
   }
 
   isMatchingNumber(lotto: Lotto, num: number): boolean {
@@ -175,6 +197,10 @@ export default class LottoList extends Vue {
   color: #9C9EA0;
 }
 
+.lotto-result.with-margin {
+  margin-top: 8px;
+}
+
 .box {
   background-color: #222222;
   padding: 24px 20px;
@@ -189,7 +215,7 @@ export default class LottoList extends Vue {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
+  font-size: 15px;
   margin-bottom: 10px;
 }
 
@@ -217,8 +243,8 @@ export default class LottoList extends Vue {
 }
 
 .number-circle {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background-color: #333;
   display: flex;
