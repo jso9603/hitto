@@ -88,11 +88,15 @@ interface Lotto {
   isBeforeTheDraw?: boolean;
 }
 
+interface User {
+  email: string,
+  uid: string,
+}
+
 @Component
 export default class LottoList extends Vue {
   @Prop(Number) week!: number;
-
-  uid = 'uid_1720850205303'; // 예시 uid
+  @Prop(Object) user!: User;
 
   lottoData: any[] = []; // 나의 번호 데이터를 저장할 배열
   winningNumbers: number[] = []; // 당첨 번호를 저장할 배열
@@ -106,52 +110,96 @@ export default class LottoList extends Vue {
       this.loading = false;
     }, 1000);
     this.lottoData = [];
-    this.fetchLottoData(this.uid, tab);
+    this.fetchLottoData(this.user.uid, tab);
   }
 
   async fetchLottoData(uid: string, dbTable: string) {
-    try {
-      const q = query(collection(db, dbTable), where('uid', '==', uid));
-      const snapshot = await getDocs(q)
-      if (!snapshot.empty) {
-        snapshot.forEach(doc => {
-          this.lottoData.push(doc.data());
-        });
 
-        // 각 회차에 대해 API 호출
-        for (const lotto of this.lottoData) {
-          if (this.week < lotto.round) {
-            lotto.isBeforeTheDraw = true;
-            lotto.winningNumbers = [];
-          } else {
-            const response = await axios.get<Lotto>(`/common.do?method=getLottoNumber&drwNo=${lotto.round}`);
-            if (response.data.returnValue === 'success') {
-              lotto.winningNumbers = [
-                response.data.drwtNo1,
-                response.data.drwtNo2,
-                response.data.drwtNo3,
-                response.data.drwtNo4,
-                response.data.drwtNo5,
-                response.data.drwtNo6,
-                response.data.bnusNo,
-              ];
-              lotto.isBeforeTheDraw = false;
-            }
+    if (sessionStorage.getItem('myNumbers')) {
+      this.lottoData = JSON.parse(sessionStorage.getItem('myNumbers') as string);
+
+      this.lottoData.sort((a, b) => {
+        return b.date.localeCompare(a.date);
+      });
+
+      sessionStorage.setItem('myNumbers', JSON.stringify(this.lottoData));
+
+      // 각 회차에 대해 API 호출
+      for (const lotto of this.lottoData) {
+        if (this.week < lotto.round) {
+          lotto.isBeforeTheDraw = true;
+          lotto.winningNumbers = [];
+        } else {
+          const response = await axios.get<Lotto>(`/common.do?method=getLottoNumber&drwNo=${lotto.round}`);
+          if (response.data.returnValue === 'success') {
+            lotto.winningNumbers = [
+              response.data.drwtNo1,
+              response.data.drwtNo2,
+              response.data.drwtNo3,
+              response.data.drwtNo4,
+              response.data.drwtNo5,
+              response.data.drwtNo6,
+              response.data.bnusNo,
+            ];
+            lotto.isBeforeTheDraw = false;
           }
         }
       }
-    } catch (error) {
-      console.error('데이터를 가져오는 중 오류 발생:', error);
-    } finally {
-      console.log('lottoData: ', this.lottoData)
+
       setTimeout(() => {
         this.loading = false;
       }, 1000);
+          
+    } else {
+      try {
+        const q = query(collection(db, dbTable), where('uid', '==', uid));
+        const snapshot = await getDocs(q)
+        if (!snapshot.empty) {
+          snapshot.forEach(doc => {
+            this.lottoData.push(doc.data());
+          });
+
+          this.lottoData.sort((a, b) => {
+            return b.date.localeCompare(a.date);
+          });
+
+          sessionStorage.setItem('myNumbers', JSON.stringify(this.lottoData));
+
+          // 각 회차에 대해 API 호출
+          for (const lotto of this.lottoData) {
+            if (this.week < lotto.round) {
+              lotto.isBeforeTheDraw = true;
+              lotto.winningNumbers = [];
+            } else {
+              const response = await axios.get<Lotto>(`/common.do?method=getLottoNumber&drwNo=${lotto.round}`);
+              if (response.data.returnValue === 'success') {
+                lotto.winningNumbers = [
+                  response.data.drwtNo1,
+                  response.data.drwtNo2,
+                  response.data.drwtNo3,
+                  response.data.drwtNo4,
+                  response.data.drwtNo5,
+                  response.data.drwtNo6,
+                  response.data.bnusNo,
+                ];
+                lotto.isBeforeTheDraw = false;
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error('데이터를 가져오는 중 오류 발생:', error);
+      } finally {
+        console.log('lottoData: ', this.lottoData)
+        setTimeout(() => {
+          this.loading = false;
+        }, 1000);
+      }
     }
   }
 
   created() {
-    this.fetchLottoData(this.uid, this.activeTab);
+    this.fetchLottoData(this.user.uid, this.activeTab);
   }
 
   getFormattedDate(dateString: string) {

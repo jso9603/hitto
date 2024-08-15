@@ -16,13 +16,14 @@
     </div>
     <div class="hr__line" />
 
-    <LottoList :week="Number(week)"/>
+    <LottoList :week="Number(week)" :user="user"/>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import dayjs from 'dayjs'
+import Cookies from 'js-cookie'
 import duration from 'dayjs/plugin/duration'
 import axios from 'axios'
 import LottoList from '@/components/LottoList.vue'
@@ -52,6 +53,8 @@ export default class MyNumber extends Vue {
   week =''
   saturdayDate = ''
   lottoData: any = null
+
+  user: any = {}
 
   // 이번주 번호
   getWeek() {
@@ -88,6 +91,9 @@ export default class MyNumber extends Vue {
     console.log('Saturday Date', this.saturdayDate);
 
     this.fetchLottoData();
+
+    const userData = Cookies.get('user') as string;
+    this.user = JSON.parse(userData);
   }
 
   getFormattedDate(dateString: string) {

@@ -41,6 +41,10 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import dayjs from 'dayjs'
+import Cookies from 'js-cookie'
+import { db } from '../../src/config/firebaseConfig'
+import { collection, addDoc } from 'firebase/firestore'
 
 interface SelectOption {
   icon: string;
@@ -80,11 +84,65 @@ export default class Result extends Vue {
 
   private onLogin() {
     const user = this.$store.state.user;
+
+    // Type: lotto, dream
+    sessionStorage.setItem('type', 'lotto');
+    if (this.activeTab === 'select' && this.selectedIndex) {
+        sessionStorage.setItem('hope', `${this.selectOptions[this.selectedIndex].text}`);
+      } else {
+        sessionStorage.setItem('hope', `${this.impression}`);
+      }
     
     if (user.uid && user.email) {
-      // firestore 저장
+      this.saveLottoNumbers(this.activeTab === 'select' ? 'lottos' : 'dream');
+      
     } else {
       this.$router.push('/login');
+    }
+  }
+
+  saveLottoNumbers = async (collectionName: string) => {
+    const userData = Cookies.get('user') as string;
+    const user = JSON.parse(userData);
+
+    const t1 = dayjs('20021207')
+    const t2 = dayjs()
+    const dff = dayjs.duration(t2.diff(t1)).asDays()
+
+    // 돌아오는 회차를 저장
+    const round = Math.floor(dff / 7) + 2
+
+    const numbers = [(sessionStorage.getItem('lottoNumbers'))!.replace(/^"|"$/g, '')]
+
+    try {
+      // lottos 컬렉션에 새로운 문서 추가
+      await addDoc(collection(db, collectionName), {
+        date: dayjs().format('YYYYMMDD'),
+        numbers,
+        uid: user.uid,
+        round,
+        winningText: sessionStorage.getItem('hope'),
+      });
+
+      const datas = sessionStorage.getItem('myNumbers');
+      const insertData = {
+        date: dayjs().format('YYYYMMDD'),
+        numbers,
+        uid: user.uid,
+        round,
+        winningText: sessionStorage.getItem('hope'),
+      }
+
+      if (!datas) {
+        sessionStorage.setItem('myNumbers', JSON.stringify(insertData))
+      } else {
+        const alreadyDatas = JSON.parse(datas);
+        alreadyDatas.push(insertData);
+
+        sessionStorage.setItem('myNumbers', JSON.stringify(alreadyDatas));
+      }
+    } catch (e) {
+      console.error('Error adding document: ', e);
     }
   }
 }

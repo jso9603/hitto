@@ -47,7 +47,7 @@
             </div>
             지난 주 5,230명이 당첨됐어요
           </div>
-          <button class="primary" @click="$router.push('/select-hope')">선택 완료</button>
+          <button class="primary" @click="onSelectedBall">선택 완료</button>
           <button class="none" @click="oneMore">다시 생성</button>
         </div>
       </div>
@@ -340,6 +340,13 @@ export default class Random extends Vue {
     else if (number <= 30) return 'red';
     else if (number <= 40) return 'grey';
     else return 'green';
+  }
+
+  private onSelectedBall() {
+    // (session 저장: store는 refresh하면 정보 없어짐)
+    const ball = this.lottoNumbers[0].join(', ');
+    sessionStorage.setItem('lottoNumbers', JSON.stringify(ball));
+    this.$router.push('/select-hope');
   }
 }
 </script>

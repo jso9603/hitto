@@ -238,11 +238,13 @@ export default class Home extends Vue {
 .floating {
   position: fixed;
   bottom: 0;
-  left: 50%;
-  transform: translate(-50%, 0);
-  width: calc(100% - 40px);
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 500px; /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 64.38%);
+  background: linear-gradient(180deg, #171717 0%, #171717 64.38%);
 }
 
 .floating > .participation {

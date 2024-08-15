@@ -49,13 +49,7 @@ import Cookies from 'js-cookie'
 @Component
 export default class My extends Vue {
   nickname = '';
-  // TODO
-  // store에서 email, uid 가져와서 처리 필요
-
-  user = {
-    uid: 'uid_1720850205303',
-    email: 'test@gmail.com',
-  }
+  user: any = {};
 
   services = [
     {
@@ -150,6 +144,9 @@ export default class My extends Vue {
   }
 
   created() {
+    const userData = Cookies.get('user') as string;
+    this.user = JSON.parse(userData);
+
     this.nickname = this.generateNickname(this.user.uid);
   }
 }
