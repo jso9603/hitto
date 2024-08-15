@@ -3,8 +3,8 @@
     <div class='typing1'>"이제 마지막이야~소망을 선택해봐.<br/>토요일 너에게도 ✨행운이 갈거야"</div>
 
     <div class="tab">
-      <div :class="['tab-item', { active: activeTab === 'ai' }]" @click="setActiveTab('select')">Ai 로또</div>
-      <div :class="['tab-item', { active: activeTab === 'dream' }]" @click="setActiveTab('input')">꿈해몽</div>
+      <div :class="['tab-item', { active: activeTab === 'select' }]" @click="setActiveTab('select')">소망 선택</div>
+      <div :class="['tab-item', { active: activeTab === 'input' }]" @click="setActiveTab('input')">직접입력</div>
     </div>
     <div class="tab-content">
       <div v-if="activeTab === 'select'">
@@ -78,9 +78,14 @@ export default class Result extends Vue {
     this.impression = target.value;
   }
 
-  private TODO() {
-    // store에 로그인 정보가 있으면 이미지 저장 페이지로
-    // 없으면 로그인 페이지로
+  private onLogin() {
+    const user = this.$store.state.user;
+    
+    if (user.uid && user.email) {
+      // firestore 저장
+    } else {
+      this.$router.push('/login');
+    }
   }
 }
 </script>
@@ -187,11 +192,10 @@ export default class Result extends Vue {
 .floating {
   position: fixed;
   bottom: 0;
-  left: 20px;
-  right: 20px;
+  left: 0;
+  right: 0;
   margin-left: auto;
   margin-right: auto;
-  width: calc(100% - 40px);
   max-width: 500px; /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
   background: linear-gradient(180deg, #171717 0%, #171717 64.38%);

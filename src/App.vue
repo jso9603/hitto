@@ -26,23 +26,7 @@ import { mapState } from 'vuex'
     ...mapState(['showCopyImage']),
   },
 })
-export default class App extends Vue {
-  mounted() {
-    this.checkRoute(this.$route);
-    this.$router.beforeEach((to, from, next) => {
-      this.checkRoute(to);
-      next();
-    });
-  }
-
-  checkRoute(route: any) {
-    if (route.path === '/login') {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  }
-}
+export default class App extends Vue { }
 </script>
 
 <style>

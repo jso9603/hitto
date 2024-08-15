@@ -3,7 +3,7 @@
     <div class="get__started">
       <img src="@/assets/ic-system-logo.svg" />
       <div class="text">행운의 숫자로 꿈꾸는 경제적 자유</div>
-      <button @click="onKakao" class="kakao">
+      <button @click="kakaoLoginStart" class="kakao">
         <img src="@/assets/ic-system-kakao.svg" />
         카카오로 시작하기
       </button>
@@ -24,11 +24,99 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { db } from '../../src/config/firebaseConfig'
+import { collection, addDoc, query, where, getDocs } from 'firebase/firestore'
+
+interface User {
+  uid: string;
+  email: string;
+}
 
 @Component
 export default class Login extends Vue {
-  onKakao() {
-    console.log('kakao!!')
+  async kakaoLoginStart() {
+    if (window.Kakao.Auth.getAccessToken()) {
+      window.Kakao.API.request({
+        url: '/v1/user/unlink',
+        success: async (response: any) => {
+          console.log(response)
+        },
+        fail: async (error: any) => {
+          console.log(error)
+        },
+      })
+      window.Kakao.Auth.setAccessToken(undefined)
+    }
+
+    window.Kakao.Auth.login({
+      success: async () => {
+        window.Kakao.API.request({
+          url: '/v2/user/me',
+          data: {
+            property_keys: ['kakao_account.email']
+          },
+          success: async (response: any) => {
+            console.log(response)
+            
+            // DB: find and insert or Ignore
+            await this.saveUsers(response.kakao_account.email)
+          },
+          fail: async (error: any) => {
+            console.log(error)
+          },
+        })
+      },
+      fail: async (error: any) => {
+        console.log(error)
+      },
+    })
+  }
+
+  async saveUsers(email: string) {
+    try {
+        // 기존 이메일 확인
+        const q = query(collection(db, 'users'), where('email', '==', email));
+        const querySnapshot = await getDocs(q)
+        console.log(querySnapshot)
+
+        if (querySnapshot.empty) {
+          // 이메일이 존재하지 않으면 추가
+          const user = {
+            email,
+            uid: `uid_${Date.now()}` // 고유한 uid 생성
+          };
+          await addDoc(collection(db, 'users'), user)
+
+          this.storeDispache(user);
+        } else {
+          const doc = querySnapshot.docs[0];
+          const userData = doc.data() as User;
+
+          this.storeDispache(userData);
+        }
+      } catch (e) {
+        console.error('Error adding document: ', e);
+      }
+  }
+
+  storeDispache(user: User) {
+    this.$store.dispatch('loginUser', user);
+
+    this.$router.push('/');
+  }
+
+  // iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
+  // 특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음
+  setViewportHeight = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  };
+
+  mounted() {
+    window.addEventListener('resize', this.setViewportHeight);
+    window.addEventListener('orientationchange', this.setViewportHeight);
+
+    this.setViewportHeight();
   }
 }
 </script>
@@ -38,8 +126,12 @@ export default class Login extends Vue {
   margin: 0;
   padding-left: 20px;
   padding-right: 20px;
-  height: 100vh;
+  /* iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
+  특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음 */
+  height: calc(var(--vh, 1vh) * 100 - 54px);
   background-color: #171717;
+  display: flex;
+  flex-direction: column;
 }
 
 .get__started {

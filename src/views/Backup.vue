@@ -11,10 +11,6 @@
     <button @click="saveLottoNumbers">당첨 메시지와 로또번호 저장하기</button>
   </div>
 
-  <div class="kakao__login">
-    <KakaoLogin />
-  </div>
-
   <div class="high-probability">
     <div>확률 높은 번호 추첨</div>
     <button @click="generateHighNumbers">확률 높은 번호 추첨</button>
@@ -29,15 +25,10 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import Cookies from 'js-cookie'
-import KakaoLogin from '../components/KakaoLogin.vue'
 import { db } from '../config/firebaseConfig'
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore'
 
-@Component({
-  components: {
-    KakaoLogin
-  }
-})
+@Component
 export default class Backup extends Vue {
   lottoNumbers: number[][] = []
   winningMsg: string = ''
