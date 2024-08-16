@@ -75,7 +75,6 @@ export default class MyNumber extends Vue {
     try {
       const response = await axios.get(`/common.do?method=getLottoNumber&drwNo=${this.week}`);
       this.lottoData = response.data as Lotto;
-      console.log('로또 데이터:', this.lottoData);
     } catch (error) {
       console.error('로또 데이터를 가져오는 중 오류 발생:', error);
     }
@@ -87,8 +86,6 @@ export default class MyNumber extends Vue {
     const currentWeek = this.getWeek();
     this.week = this.getWeek().toString()
     this.saturdayDate = this.getSaturdayDate(currentWeek);
-    console.log('week', this.week)
-    console.log('Saturday Date', this.saturdayDate);
 
     this.fetchLottoData();
 

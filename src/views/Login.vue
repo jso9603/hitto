@@ -157,7 +157,7 @@ export default class Login extends Vue {
       this.saveLottoNumbers('dream');
     }
 
-    this.$router.push('/');
+    this.$router.push('/my/number');
   }
 
   // iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음

@@ -83,7 +83,8 @@ export default class Result extends Vue {
   }
 
   private onLogin() {
-    const user = this.$store.state.user;
+    const userData = Cookies.get('user') as string;
+    const user = JSON.parse(userData);
 
     // Type: lotto, dream
     sessionStorage.setItem('type', 'lotto');
@@ -99,6 +100,29 @@ export default class Result extends Vue {
     } else {
       this.$router.push('/login');
     }
+  }
+
+  // test
+  mounted() {
+    const numbers = [(sessionStorage.getItem('lottoNumbers'))!.replace(/^"|"$/g, '')]
+  
+    const datas = sessionStorage.getItem('myNumbers');
+      const insertData = {
+        date: dayjs().format('YYYYMMDD'),
+        numbers,
+        uid: '123',
+        round: 1133,
+        winningText: sessionStorage.getItem('hope'),
+      }
+
+      if (!datas) {
+        sessionStorage.setItem('myNumbers', JSON.stringify(insertData))
+      } else {
+        const alreadyDatas = JSON.parse(datas);
+        alreadyDatas.push(insertData);
+
+        sessionStorage.setItem('myNumbers', JSON.stringify(alreadyDatas));
+      }
   }
 
   saveLottoNumbers = async (collectionName: string) => {
@@ -141,6 +165,7 @@ export default class Result extends Vue {
 
         sessionStorage.setItem('myNumbers', JSON.stringify(alreadyDatas));
       }
+      this.$router.push('/my/number');
     } catch (e) {
       console.error('Error adding document: ', e);
     }

@@ -116,11 +116,8 @@ export default class LottoList extends Vue {
   async fetchLottoData(uid: string, dbTable: string) {
 
     if (sessionStorage.getItem('myNumbers')) {
-      this.lottoData = JSON.parse(sessionStorage.getItem('myNumbers') as string);
-
-      this.lottoData.sort((a, b) => {
-        return b.date.localeCompare(a.date);
-      });
+      const datas = JSON.parse(sessionStorage.getItem('myNumbers') as string);
+      this.lottoData = datas;
 
       sessionStorage.setItem('myNumbers', JSON.stringify(this.lottoData));
 
