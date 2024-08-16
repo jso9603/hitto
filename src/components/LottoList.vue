@@ -114,12 +114,13 @@ export default class LottoList extends Vue {
   }
 
   async fetchLottoData(uid: string, dbTable: string) {
+    const storageName = dbTable === 'lottos' ? 'myNumbers' : 'myDreams';
 
-    if (sessionStorage.getItem('myNumbers')) {
-      const datas = JSON.parse(sessionStorage.getItem('myNumbers') as string);
+    if (sessionStorage.getItem(storageName)) {
+      const datas = JSON.parse(sessionStorage.getItem(storageName) as string);
       this.lottoData = datas;
 
-      sessionStorage.setItem('myNumbers', JSON.stringify(this.lottoData));
+      sessionStorage.setItem(storageName, JSON.stringify(this.lottoData));
 
       // 각 회차에 대해 API 호출
       for (const lotto of this.lottoData) {
@@ -160,7 +161,7 @@ export default class LottoList extends Vue {
             return b.date.localeCompare(a.date);
           });
 
-          sessionStorage.setItem('myNumbers', JSON.stringify(this.lottoData));
+          sessionStorage.setItem(storageName, JSON.stringify(this.lottoData));
 
           // 각 회차에 대해 API 호출
           for (const lotto of this.lottoData) {
