@@ -56,8 +56,8 @@
 import { Component, Vue } from 'vue-property-decorator'
 import dayjs from 'dayjs'
 import Cookies from 'js-cookie'
-// import { db } from '../../src/config/firebaseConfig'
-// import { collection, addDoc } from 'firebase/firestore'
+import { db } from '../../src/config/firebaseConfig'
+import { collection, addDoc } from 'firebase/firestore'
 
 interface SelectOption {
   icon: string;
@@ -134,7 +134,7 @@ export default class Challenge extends Vue {
       Cookies.set('challenge', JSON.stringify(data), { expires: 14 });
 
       try {
-      // await addDoc(collection(db, 'lottos'), data);
+      await addDoc(collection(db, 'lottos'), data);
 
       await alert('더보기 > 내 번호 관리에서 확인하실 수 있습니다.')
     } catch (e) {

@@ -14,7 +14,7 @@
     </div>
     <div class="hr__line" />
 
-    <GuessParticipants />
+    <GuessParticipants :week="this.week" />
     <button
       class="challenge"
       :disabled="isButtonDisabled"
