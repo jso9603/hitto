@@ -11,6 +11,8 @@ import Login from '@/views/Login.vue'
 import My from '@/views/My.vue'
 import Qr from '@/views/Qr.vue'
 import MyNumber from '@/views/MyNumber.vue'
+import Guess from '@/views/Guess.vue'
+import Challenge from '@/views/Challenge.vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -75,6 +77,16 @@ const routes = [
     path: '/my/number',
     name: 'number',
     component: MyNumber,
+  },
+  {
+    path: '/guess',
+    name: 'guess',
+    component: Guess,
+  },
+  {
+    path: '/challenge',
+    name: 'challenge',
+    component: Challenge,
   },
 ];
 

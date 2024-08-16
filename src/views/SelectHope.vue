@@ -102,29 +102,6 @@ export default class Result extends Vue {
     }
   }
 
-  // test
-  mounted() {
-    const numbers = [(sessionStorage.getItem('lottoNumbers'))!.replace(/^"|"$/g, '')]
-  
-    const datas = sessionStorage.getItem('myNumbers');
-      const insertData = {
-        date: dayjs().format('YYYYMMDD'),
-        numbers,
-        uid: '123',
-        round: 1133,
-        winningText: sessionStorage.getItem('hope'),
-      }
-
-      if (!datas) {
-        sessionStorage.setItem('myNumbers', JSON.stringify(insertData))
-      } else {
-        const alreadyDatas = JSON.parse(datas);
-        alreadyDatas.push(insertData);
-
-        sessionStorage.setItem('myNumbers', JSON.stringify(alreadyDatas));
-      }
-  }
-
   saveLottoNumbers = async (collectionName: string) => {
     const userData = Cookies.get('user') as string;
     const user = JSON.parse(userData);
@@ -226,6 +203,7 @@ export default class Result extends Vue {
   border-radius: 10px;
   margin-bottom: 8px;
   cursor: pointer;
+  font-weight: 600;
 }
 
 .option-item.active {
