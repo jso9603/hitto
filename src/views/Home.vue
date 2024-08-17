@@ -123,7 +123,7 @@ export default class Home extends Vue {
 .home > .desc {
   margin-bottom: 40px;
   color: #BABCBE;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 400;
   line-height: 23px;
 }
@@ -220,7 +220,7 @@ export default class Home extends Vue {
 
 .dream > .desc {
   margin-top: 12px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 400;
   line-height: 23px;
   color: #BABCBE;

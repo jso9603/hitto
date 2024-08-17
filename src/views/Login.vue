@@ -64,12 +64,16 @@ export default class Login extends Vue {
             await this.saveUsers(response.kakao_account.email)
           },
           fail: async (error: any) => {
-            console.log(error)
+            console.log('login request fail: ', error)
           },
         })
       },
       fail: async (error: any) => {
-        console.log(error)
+        console.log('login fail: ', error)
+        if (error.error === 'invalid_grant') {
+          await alert('정보가 만료되었습니다. 다시 로그인을 시도해주세요')
+          await this.kakaoLoginStart()
+        }
       },
     })
   }
@@ -147,7 +151,7 @@ export default class Login extends Vue {
   }
 
   storeDispache(user: User) {
-    Cookies.set('user', JSON.stringify(user));
+    Cookies.set('user', JSON.stringify(user), {expires: 30});
     this.$store.dispatch('loginUser', user);
 
     const lottoType = sessionStorage.getItem('type')
