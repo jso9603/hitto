@@ -7,11 +7,21 @@
         <div class="kakao">
           <img src="@/assets/ic-system-kakao.svg" />
         </div>
-        {{user.email}}
+        <div v-if="user !== null">{{user.email}}</div>
+        <div v-if="user === null">카카오 계정으로 로그인해주세요.</div>
       </div>
     </div>
 
-    <div class="ad" />
+    <iframe
+      class="ad"
+      src="https://ads-partners.coupang.com/widgets.html?id=800971&template=carousel&trackingCode=AF9553073&subId=&width=335&height=60&tsource="
+      width="335"
+      height="60"
+      frameborder="0"
+      scrolling="no"
+      referrerpolicy="unsafe-url"
+      browsingtopics
+    ></iframe>
 
     <div class="menu">
       <div class="title">서비스</div>
@@ -95,21 +105,25 @@ export default class My extends Vue {
   ];
 
   get userImage(): string {
-    const lastDigit = parseInt(this.user.uid.slice(-1), 10);
-
-    let imageName = "";
-
-    if (lastDigit >= 1 && lastDigit <= 3) {
-      imageName = 'ic-system-user1.svg';
-    } else if (lastDigit >= 4 && lastDigit <= 6) {
-      imageName = 'ic-system-user2.svg';
-    } else if (lastDigit >= 7 && lastDigit <= 9) {
-      imageName = 'ic-system-user3.svg';
+    if (this.user === null) {
+      return require(`@/assets/ic-system-user1.svg`);
     } else {
-      imageName = 'ic-system-user1.svg';
-    }
+      const lastDigit = parseInt(this.user.uid.slice(-1), 10);
 
-    return require(`@/assets/${imageName}`);
+      let imageName = "";
+
+      if (lastDigit >= 1 && lastDigit <= 3) {
+        imageName = 'ic-system-user1.svg';
+      } else if (lastDigit >= 4 && lastDigit <= 6) {
+        imageName = 'ic-system-user2.svg';
+      } else if (lastDigit >= 7 && lastDigit <= 9) {
+        imageName = 'ic-system-user3.svg';
+      } else {
+        imageName = 'ic-system-user1.svg';
+      }
+
+      return require(`@/assets/${imageName}`);
+    }
   }
 
   generateNickname(uid: string): string {
@@ -144,10 +158,20 @@ export default class My extends Vue {
   }
 
   created() {
-    const userData = Cookies.get('user') as string;
-    this.user = JSON.parse(userData);
+    const userData = Cookies.get('user');
 
-    this.nickname = this.generateNickname(this.user.uid);
+    if (userData) {
+      try {
+        this.user = JSON.parse(userData);
+        this.nickname = this.generateNickname(this.user.uid);
+      } catch (error) {
+        console.error('Failed to parse user data:', error);
+        this.user = null;
+      }
+    } else {
+      this.user = null;
+      this.nickname = 'Guest';
+    }
   }
 }
 </script>
@@ -211,7 +235,6 @@ export default class My extends Vue {
 .ad {
   margin-bottom: 24px;
   background-color: #F3F3F3;
-  border-radius: 12px;
   width: 100%;
   height: 62px;
 }

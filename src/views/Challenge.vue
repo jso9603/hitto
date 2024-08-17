@@ -144,7 +144,7 @@ export default class Challenge extends Vue {
   }
 
   created() {
-    this.week = this.$route.query.week;
+    this.week = this.$route.query.week as string;
   }
 }
 </script>

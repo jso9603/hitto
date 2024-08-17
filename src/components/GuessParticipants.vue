@@ -29,7 +29,6 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import Cookies from 'js-cookie'
-import data from '@/datas/guess/data.json'
 
 @Component
 export default class GuessParticipants extends Vue {
@@ -50,21 +49,25 @@ export default class GuessParticipants extends Vue {
   ];
 
   get userImage(): string {
-    const lastDigit = parseInt(this.user.uid.slice(-1), 10);
+    if (this.user !== null) {
+      const lastDigit = parseInt(this.user.uid.slice(-1), 10);
 
-    let imageName = "";
+      let imageName = "";
 
-    if (lastDigit >= 1 && lastDigit <= 3) {
-      imageName = 'ic-system-user1.svg';
-    } else if (lastDigit >= 4 && lastDigit <= 6) {
-      imageName = 'ic-system-user2.svg';
-    } else if (lastDigit >= 7 && lastDigit <= 9) {
-      imageName = 'ic-system-user3.svg';
+      if (lastDigit >= 1 && lastDigit <= 3) {
+        imageName = 'ic-system-user1.svg';
+      } else if (lastDigit >= 4 && lastDigit <= 6) {
+        imageName = 'ic-system-user2.svg';
+      } else if (lastDigit >= 7 && lastDigit <= 9) {
+        imageName = 'ic-system-user3.svg';
+      } else {
+        imageName = 'ic-system-user1.svg';
+      }
+
+      return require(`@/assets/${imageName}`);
     } else {
-      imageName = 'ic-system-user1.svg';
+      return require(`@/assets/ic-system-user3.svg`);
     }
-
-    return require(`@/assets/${imageName}`);
   }
 
   generateNickname(uid: string): string {
@@ -79,12 +82,22 @@ export default class GuessParticipants extends Vue {
   }
 
   created() {
-    this.participants = data;
+    this.participants = require('@/datas/guess/data.json');
 
-    const userData = Cookies.get('user') as string;
-    this.user = JSON.parse(userData);
+    const userData = Cookies.get('user');
 
-    this.nickname = this.generateNickname(this.user.uid);
+    if (userData) {
+      try {
+        this.user = JSON.parse(userData);
+        this.nickname = this.generateNickname(this.user.uid);
+      } catch (error) {
+        console.error('Failed to parse user data:', error);
+        this.user = null;
+      }
+    } else {
+      this.user = null;
+      this.nickname = 'Guest';
+    }
 
     const challengeData = JSON.parse(Cookies.get('challenge') || '{}');
     if (challengeData && this.week === challengeData.round) {

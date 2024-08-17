@@ -30,18 +30,6 @@
       <img class="list" src="@/assets/ic-system-list.svg" />
     </div>
 
-    <!-- <div class="floating">
-      <div class="participation">
-        <div class="people">
-          <div class="person" />
-          <div class="person" />
-          <div class="person" />
-        </div>
-        5,230명이 당첨 소감에 참여했어요
-      </div>
-      <button class="primary" @click="$router.push('/ai')">AI 로또 번호 뽑기</button>
-    </div> -->
-
     <div class="floating">
       <div class="count__down">
         <img src="@/assets/ic-system-timer.svg" />
@@ -121,7 +109,7 @@ export default class Home extends Vue {
   justify-content: center;
   gap: 4px;
   color: #4AFF81;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   line-height: 22px;
   text-align: center;
@@ -205,7 +193,7 @@ export default class Home extends Vue {
 
 .dream {
   margin-top: 40px;
-  margin-bottom: 50px;
+  margin-bottom: 118px;
 }
 
 .dream > .cloud {
@@ -237,14 +225,14 @@ export default class Home extends Vue {
 
 .floating {
   position: fixed;
-  bottom: 0;
+  bottom: 64px;
   left: 0;
   right: 0;
   margin-left: auto;
   margin-right: auto;
   max-width: 500px; /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
-  background: linear-gradient(180deg, #171717 0%, #171717 64.38%);
+  background: linear-gradient(360deg, #171717 50%, rgba(23, 23, 23, 0) 100%);
 }
 
 .floating > .participation {

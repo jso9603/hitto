@@ -10,23 +10,33 @@
     <div class="content">
       <router-view />
     </div>
+    <Navigation v-if="showNavigation" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import Header from '@/components/Header.vue'
+import Navigation from '@/components/Navigation.vue'
 import { mapState } from 'vuex'
 
 @Component({
   components: {
     Header,
+    Navigation,
   },
    computed: {
     ...mapState(['showCopyImage']),
   },
 })
-export default class App extends Vue { }
+export default class App extends Vue {
+  get showNavigation() {
+    if (this.$route.path === '/' || this.$route.path === '/home' || this.$route.path === '/guess' || this.$route.path === '/my') {
+      return true
+    }
+    return false
+  }
+}
 </script>
 
 <style>
