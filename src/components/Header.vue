@@ -1,33 +1,53 @@
 <template>
   <div :class="['header', headerClass, { 'scrolled': isScrolled }]">
-    <template v-if="$route.path === '/qr'">
+    <template v-if="$route.path === '/' || $route.path === '/home'">
+      <img src="@/assets/ic-system-logo.svg" class="logo" />
+      <img src="@/assets/ic-system-qr.svg" class="qr" @click="onQr"/>
+      <button class="share" @click="onShare">공유</button>
+    </template>
+
+    <template v-else-if="$route.path === '/ai' || $route.path === '/dream' || $route.path === '/random' || $route.path === '/select-hope'">
+      <button @click="goBack" class="back">
+        <img src="@/assets/ic-system-back-img.svg" />
+      </button>
+      <div class="menu">{{ menuName }}</div>
+      <button class="use" @click="use">안내</button>
+    </template>
+
+    <template v-else-if="$route.path === '/qr'">
       <img src="@/assets/ic-system-logo.svg" class="logo" />
     </template>
-    <template v-else-if="showBackButton">
-      <div v-if="login">
-        <img src="@/assets/ic-system-logo.svg" class="logo" />
-        <button @click="goBack" class="close">
-          <img src="@/assets/ic-system-close-img.svg" />
-        </button>
-      </div>
-      <div v-else>
-        <button @click="goBack" class="back">
-          <img src="@/assets/ic-system-back-img.svg" />
-        </button>
-        <div class="menu">{{ menuName }}</div>
-        <button class="use" @click="use">안내</button>
-      </div>
+
+    <template v-else-if="$route.path === '/login'">
+      <img src="@/assets/ic-system-logo.svg" class="logo" />
+      <button @click="goBack" class="close">
+        <img src="@/assets/ic-system-close-img.svg" />
+      </button>
     </template>
-    <div v-else>
-      <template v-if="$route.path === '/my'">
-        <div class="service">나의 모히또</div>
-      </template>
-      <template v-else>
-        <img src="@/assets/ic-system-logo.svg" class="logo" />
-        <img src="@/assets/ic-system-qr.svg" class="qr" @click="onQr"/>
-        <button class="share" @click="onShare">공유</button>
-      </template>
-    </div>
+
+    <template v-else-if="$route.path === '/my'">
+      <div class="menu">나의 모히또</div>
+    </template>
+
+    <template v-else-if="$route.path === '/my/number'">
+      <button @click="goBack" class="back">
+        <img src="@/assets/ic-system-back-img.svg" />
+      </button>
+      <div class="menu">나의 로또번호</div>
+    </template>
+
+    <template v-else-if="$route.path === '/guess' || $route.path === '/Guess'">
+      <div></div>
+      <div class="menu">{{ menuName }}</div>
+      <button class="use" @click="use">안내</button>
+    </template>
+
+    <template v-else-if="$route.path === '/challenge'">
+      <button @click="goBack" class="back">
+        <img src="@/assets/ic-system-back-img.svg" />
+      </button>
+      <div class="menu">로또 맞추기</div>
+    </template>
   </div>
 </template>
 
@@ -150,14 +170,14 @@ export default class Header extends Vue {
   background-color: rgba(23, 23, 23, 0.5);
 }
 
-.home > div,
+/* .home > div,
 .subpage > div {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   position: relative;
-}
+} */
 
 .back,
 .close {
@@ -195,7 +215,7 @@ img.logo {
 
 img.qr {
   margin-left: auto;
-  margin-right: 8px;
+  margin-right: 12px;
 }
 
 .share,

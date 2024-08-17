@@ -86,7 +86,11 @@ export default class Home extends Vue {
     const minutes = durationObj.minutes();
     const seconds = durationObj.seconds();
 
-    this.countdown = `${days}일 ${hours}시 ${minutes}분 ${seconds}초 남음`;
+    if (days === 0) {
+      this.countdown = `${hours}시 ${minutes}분 ${seconds}초 남음`;
+    } else {
+      this.countdown = `${days}일 ${hours}시 ${minutes}분 ${seconds}초 남음`;
+    }
   }
 }
 </script>

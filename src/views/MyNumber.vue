@@ -80,12 +80,24 @@ export default class MyNumber extends Vue {
     }
   }
 
+  isAfterSaturday8_30() {
+    const now = dayjs();
+    const saturday8_30 = dayjs().day(6).hour(20).minute(30).second(0);
+    return now.isAfter(saturday8_30);
+  }
+
   created() {
     dayjs.extend(duration)
 
     const currentWeek = this.getWeek();
-    this.week = this.getWeek().toString()
-    this.saturdayDate = this.getSaturdayDate(currentWeek);
+    if (this.isAfterSaturday8_30()) {
+      // 토요일 8시 30분 이후라면 이번 주 회차 사용
+      this.week = currentWeek.toString();
+    } else {
+      // 토요일 8시 30분 이전이라면 전 주 회차 사용
+      this.week = (currentWeek - 1).toString();
+    }
+    this.saturdayDate = this.getSaturdayDate(Number(this.week));
 
     this.fetchLottoData();
 

@@ -83,20 +83,22 @@ export default class Result extends Vue {
   }
 
   private onLogin() {
-    const userData = Cookies.get('user') as string;
-    const user = JSON.parse(userData);
+    const userData = Cookies.get('user');
 
-    // Type: lotto, dream
-    sessionStorage.setItem('type', 'lotto');
-    if (this.activeTab === 'select' && this.selectedIndex) {
-        sessionStorage.setItem('hope', `${this.selectOptions[this.selectedIndex].text}`);
-      } else {
-        sessionStorage.setItem('hope', `${this.impression}`);
+    if (userData) {
+      try {
+        // Type: lotto, dream
+        sessionStorage.setItem('type', 'lotto');
+        if (this.activeTab === 'select' && this.selectedIndex) {
+          sessionStorage.setItem('hope', `${this.selectOptions[this.selectedIndex].text}`);
+        } else {
+          sessionStorage.setItem('hope', `${this.impression}`);
+        }
+
+        this.saveLottoNumbers(this.activeTab === 'select' ? 'lottos' : 'dream');
+      } catch (error) {
+        console.error('Failed to parse user data:', error);
       }
-    
-    if (user.uid && user.email) {
-      this.saveLottoNumbers(this.activeTab === 'select' ? 'lottos' : 'dream');
-      
     } else {
       this.$router.push('/login');
     }

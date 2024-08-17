@@ -31,7 +31,9 @@ import { mapState } from 'vuex'
 })
 export default class App extends Vue {
   get showNavigation() {
-    if (this.$route.path === '/' || this.$route.path === '/home' || this.$route.path === '/guess' || this.$route.path === '/my') {
+    const currentPath = this.$route.path.toLowerCase();
+
+    if (currentPath === '/' || currentPath === '/home' || currentPath === '/guess' || currentPath === '/my') {
       return true
     }
     return false
