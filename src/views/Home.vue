@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <img class="main" src="@/assets/ic-system-main.svg" />
+    <img class="main" src="@/assets/ic-system-main.png" />
     <div class="desc">ai 통계기반 알고리즘을 통해<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
 
     <div class="boxes">
@@ -16,18 +16,18 @@
 
     <div class="algorithm">
       <div class="light">
-        <img src="@/assets/ic-system-star.svg" />
+        <img src="@/assets/ic-system-star.png" />
       </div>
       <div class="title">스테판이 생성해주는<br/>정교한 알고리즘</div>
       <div class="desc">ai 통계기반 알고리즘을 통해<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
-      <img src="@/assets/ic-system-intro-aicard.svg" />
+      <img src="@/assets/ic-system-intro-aicard.png" />
     </div>
 
     <div class="dream">
-      <img class="cloud" src="@/assets/ic-system-cloud.svg" />
+      <img class="cloud" src="@/assets/ic-system-cloud.png" />
       <div class="title">꿈자리를 통한<br/>이상적인 번호 조합</div>
       <div class="desc">로또 1등 당첨자들이 가장 많이 꾼꿈을<br/>조합하여 이상적인 번호 생성을 도와드려요.</div>
-      <img class="list" src="@/assets/ic-system-list.svg" />
+      <img class="list" src="@/assets/ic-system-list.png" />
     </div>
 
     <div class="floating">
@@ -103,8 +103,8 @@ export default class Home extends Vue {
 }
 
 .main {
-  width: 240px;
-  height: 220px;
+  width: 260px;
+  height: auto;
 }
 
 .count__down {
@@ -172,6 +172,11 @@ export default class Home extends Vue {
 .algorithm > .light {
   margin-bottom: 12px;
   width: 32px;
+}
+
+.algorithm > .light > img {
+  width: 32px;
+  height: auto;
 }
 
 .algorithm > .title {

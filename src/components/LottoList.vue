@@ -45,7 +45,7 @@
             <template v-if="lotto.winningText">
               <div class="hr__line-1" />
               <div class="winning-text">
-                <img class="cloud" src="@/assets/ic-system-cloud.svg" />
+                <img class="cloud" src="@/assets/ic-system-cloud.png" />
                 {{ lotto.winningText }}
               </div>
             </template>
