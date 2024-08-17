@@ -56,6 +56,7 @@ body {
 
 .noti {
   width: calc(100% - 80px);
+  max-width: 576px;
   padding: 18px 20px;
   display: flex;
   align-items: center;
@@ -68,7 +69,10 @@ body {
   border-radius: 16px;
   position: fixed;
   top: 54px;
-  left: 20px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
   z-index: 100;
 }
 

@@ -2,9 +2,7 @@ import Vue from 'vue'
 import Home from '@/views/Home.vue'
 import Ai from '@/views/Ai.vue'
 import Backup from '@/views/Backup.vue'
-import Recent from '@/views/Recent.vue'
 import Random from '@/views/Random.vue'
-import Result from '@/views/Result.vue'
 import SelectHope from '@/views/SelectHope.vue'
 import Dream from '@/views/Dream.vue'
 import Login from '@/views/Login.vue'
@@ -34,19 +32,9 @@ const routes = [
     component: Backup,
   },
   {
-    path: '/recent',
-    name: 'Recent',
-    component: Recent
-  },
-  {
     path: '/random',
     name: 'Random',
     component: Random,
-  },
-  {
-    path: '/result',
-    name: 'Result',
-    component: Result,
   },
   {
     path: '/select-hope',
