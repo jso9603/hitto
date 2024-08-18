@@ -8,7 +8,7 @@
           <img src="@/assets/ic-system-kakao.svg" />
         </div>
         <div v-if="user !== null">{{user.email}}</div>
-        <div v-if="user === null">카카오 계정으로 로그인해주세요.</div>
+        <div v-if="user === null" @click="onLogin">카카오 계정으로 로그인해주세요.</div>
       </div>
     </div>
 
@@ -155,6 +155,10 @@ export default class My extends Vue {
 
     const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
     window.location.href = mailtoLink;
+  }
+
+  onLogin() {
+    this.$router.push('/login');
   }
 
   created() {

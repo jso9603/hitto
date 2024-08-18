@@ -114,9 +114,10 @@ export default class Result extends Vue {
         this.saveLottoNumbers(Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream');
       } catch (error) {
         console.error('Failed to parse user data:', error);
+        alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요');
       }
     } else {
-      this.$router.push('/login');
+      this.$router.push('/login?redirect=select-hope');
     }
   }
 
@@ -164,12 +165,24 @@ export default class Result extends Vue {
         updatedData.push(insertData);
         sessionStorage.setItem('myNumbers', JSON.stringify(updatedData));
       }
+
+      sessionStorage.removeItem('hope');
+      sessionStorage.removeItem('lottoNumbers');
+      sessionStorage.removeItem('type');
+
       this.isLoading = false;
 
       this.$router.push('/my/number');
     } catch (e) {
       console.error('Error adding document: ', e);
       alert('저장하는 과정에서 오류가 발생했습니다. 다시 시도해주세요.');
+    }
+  }
+
+  // redirect (login)
+  created() {
+    if (sessionStorage.getItem('hope') && sessionStorage.getItem('lottoNumbers') && sessionStorage.getItem('type')) {
+      this.saveLottoNumbers(Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream');
     }
   }
 }

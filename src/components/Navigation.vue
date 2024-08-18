@@ -17,6 +17,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import Cookies from 'js-cookie'
 
 @Component
 export default class Navigation extends Vue {
@@ -56,6 +57,7 @@ export default class Navigation extends Vue {
         this.$router.push('/');
         break;
       case 'challenge':
+        Cookies.set('menu', '로또 맞추기');
         this.$router.push('/guess');
         break;
       case 'more':

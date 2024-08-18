@@ -58,6 +58,7 @@ import dayjs from 'dayjs'
 import Cookies from 'js-cookie'
 import { db } from '../../src/config/firebaseConfig'
 import { collection, addDoc } from 'firebase/firestore'
+import { getLoggedUserInfo } from '@/utils/user'
 
 interface SelectOption {
   icon: string;
@@ -116,30 +117,34 @@ export default class Challenge extends Vue {
       return;
     }
 
-    const confirmed = confirm('정말로 저장 GO?');
+    const confirmed = confirm('고른 번호가 확실합니까?');
     if (confirmed) {
-      // 저장
-      const numbers = [this.selectedNumbers.join(', ')]
 
-      const userData = Cookies.get('user') as string;
-      const user = JSON.parse(userData);
+      const user = getLoggedUserInfo();
+      if (user) {
+        try {
+          // 저장
+          const numbers = [this.selectedNumbers.join(', ')]
 
-      const data = {
-        date: dayjs().format('YYYYMMDD'),
-        numbers,
-        uid: user.uid,
-        round: this.week,
-        winningText: this.selectOptions[this.selectedIndex].text,
+          const data = {
+            date: dayjs().format('YYYYMMDD'),
+            numbers,
+            uid: user.uid,
+            round: this.week,
+            winningText: this.selectOptions[this.selectedIndex].text,
+          }
+          Cookies.set('challenge', JSON.stringify(data), { expires: 14 });
+
+          await addDoc(collection(db, 'lottos'), data);
+
+          await alert('더보기 > 내 번호 관리에서 확인하실 수 있습니다.');
+        } catch (error) {
+          console.error('Failed to parse user data:', error);
+          alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요');
+        }
+      } else {
+        this.$router.push('/login?redirect=challenge?week=1134');
       }
-      Cookies.set('challenge', JSON.stringify(data), { expires: 14 });
-
-      try {
-      await addDoc(collection(db, 'lottos'), data);
-
-      await alert('더보기 > 내 번호 관리에서 확인하실 수 있습니다.')
-    } catch (e) {
-      console.error('Error adding document: ', e);
-    }
     }
   }
 
@@ -152,6 +157,7 @@ export default class Challenge extends Vue {
 <style scoped>
 .challenge {
   margin-top: 20px;
+  margin-bottom: 114px;
   padding: 0 20px;
 }
 

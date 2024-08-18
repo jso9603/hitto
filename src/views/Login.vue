@@ -24,7 +24,6 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import dayjs from 'dayjs'
 import Cookies from 'js-cookie'
 import { db } from '../../src/config/firebaseConfig'
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore'
@@ -36,6 +35,8 @@ interface User {
 
 @Component
 export default class Login extends Vue {
+  redirectUrl: string = ''
+
   async kakaoLoginStart() {
     if (window.Kakao.Auth.getAccessToken()) {
       window.Kakao.API.request({
@@ -65,6 +66,7 @@ export default class Login extends Vue {
           },
           fail: async (error: any) => {
             console.log('login request fail: ', error)
+            await alert('로그인 요청에 실패했습니다. 잠시후 다시 시도해주세요');
           },
         })
       },
@@ -86,7 +88,6 @@ export default class Login extends Vue {
       console.log(querySnapshot)
 
       if (querySnapshot.empty) {
-        // 이메일이 존재하지 않으면 추가
         const user = {
           email,
           uid: `uid_${Date.now()}` // 고유한 uid 생성
@@ -105,63 +106,11 @@ export default class Login extends Vue {
     }
   }
 
-  saveLottoNumbers = async (collectionName: string) => {
-    const userData = Cookies.get('user') as string;
-    const user = JSON.parse(userData);
-
-    const t1 = dayjs('20021207')
-    const t2 = dayjs()
-    const dff = dayjs.duration(t2.diff(t1)).asDays()
-
-    // 돌아오는 회차를 저장
-    const round = Math.floor(dff / 7) + 2
-
-    const numbers = [(sessionStorage.getItem('lottoNumbers'))!.replace(/^"|"$/g, '')]
-
-    try {
-      // lottos 컬렉션에 새로운 문서 추가
-      await addDoc(collection(db, collectionName), {
-        date: dayjs().format('YYYYMMDD'),
-        numbers,
-        uid: user.uid,
-        round,
-        winningText: sessionStorage.getItem('hope'),
-      });
-
-      const datas = sessionStorage.getItem('myNumbers');
-      const insertData = {
-        date: dayjs().format('YYYYMMDD'),
-        numbers,
-        uid: user.uid,
-        round,
-        winningText: sessionStorage.getItem('hope'),
-      }
-
-      if (!datas) {
-        sessionStorage.setItem('myNumbers', JSON.stringify(insertData))
-      } else {
-        const alreadyDatas = JSON.parse(datas);
-        alreadyDatas.push(insertData);
-
-        sessionStorage.setItem('myNumbers', JSON.stringify(alreadyDatas));
-      }
-    } catch (e) {
-      console.error('Error adding document: ', e);
-    }
-  }
-
   storeDispache(user: User) {
     Cookies.set('user', JSON.stringify(user), {expires: 30});
-    this.$store.dispatch('loginUser', user);
 
-    const lottoType = sessionStorage.getItem('type')
-    if (lottoType === 'lotto') {
-      this.saveLottoNumbers('lottos');
-    } else {
-      this.saveLottoNumbers('dream');
-    }
 
-    this.$router.push('/my/number');
+    this.redirectUrl ? this.$router.push(`/${this.redirectUrl}`) : this.$router.go(-1);
   }
 
   // iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
@@ -169,13 +118,18 @@ export default class Login extends Vue {
   setViewportHeight = () => {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
-  };
+  }
 
   mounted() {
     window.addEventListener('resize', this.setViewportHeight);
     window.addEventListener('orientationchange', this.setViewportHeight);
 
     this.setViewportHeight();
+  }
+
+  created() {
+    // ex) /login?redirect=select-hope
+    this.redirectUrl = this.$route.query.redirect as string;
   }
 }
 </script>
