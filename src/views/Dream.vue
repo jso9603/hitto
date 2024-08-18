@@ -274,19 +274,16 @@ mainCategories: MainCategory[] = [
   ];
 
   onMainCategory(index: number) {
-    console.log(index);
     this.selectedMainCategory = index;
     this.showPage = 2;
   }
 
   onSubCategory(index: number) {
-    console.log(index);
     this.selectedSubCategory = index;
     this.showPage = 3;
   }
 
   onLastCategory(index: number) {
-    console.log(index);
     this.selectedLastCategory = index;
 
     this.$router.push('/random')

@@ -42,7 +42,7 @@
       <div class="floating">
         <button
           class="primary"
-          :disabled="activeTab === 'select' ? !selectedIndex : impression.length < 1"
+          :disabled="activeTab === 'select' ? selectedIndex === null : impression.length < 1"
           @click="onLogin"
         >
           {{activeTab === 'select' ? '완료' : '작성 완료'}}
@@ -103,6 +103,8 @@ export default class Result extends Vue {
     const user = getLoggedUserInfo();
     if (user) {
       try {
+        // my에서 탭으로 분류
+        sessionStorage.setItem('type', Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream');
         if (this.activeTab === 'select' && this.selectedIndex) {
           sessionStorage.setItem('hope', `${this.selectOptions[this.selectedIndex].text}`);
         } else {
@@ -144,7 +146,7 @@ export default class Result extends Vue {
         winningText: sessionStorage.getItem('hope'),
       });
 
-      const datas = sessionStorage.getItem('myNumbers');
+      const datas = Cookies.get('menu') === 'AI 번호 생성' ? sessionStorage.getItem('myNumbers') : sessionStorage.getItem('myDreams');
       const insertData = {
         date: dayjs().format('YYYYMMDD'),
         numbers,
@@ -155,13 +157,16 @@ export default class Result extends Vue {
 
       if (!datas) {
         // sessionStorage에 아무 데이터도 없으면, 배열에 insertData를 넣어서 저장
-        sessionStorage.setItem('myNumbers', JSON.stringify(insertData));
+        const sessionStorageName = Cookies.get('menu') === 'AI 번호 생성' ? 'myNumbers' : 'myDreams';
+        sessionStorage.setItem(sessionStorageName, JSON.stringify(insertData));
       } else {
         const alreadyDatas = JSON.parse(datas);
 
         const updatedData = Array.isArray(alreadyDatas) ? alreadyDatas : [alreadyDatas];
         updatedData.push(insertData);
-        sessionStorage.setItem('myNumbers', JSON.stringify(updatedData));
+
+        const sessionStorageName = Cookies.get('menu') === 'AI 번호 생성' ? 'myNumbers' : 'myDreams';
+        sessionStorage.setItem(sessionStorageName, JSON.stringify(updatedData));
       }
 
       sessionStorage.removeItem('hope');
