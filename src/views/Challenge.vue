@@ -44,10 +44,10 @@
           <span class="text">{{ option.text }}</span>
         </div>
       </div>
+    </div>
 
-      <div class="floating">
-        <button class="primary" @click="onSave">제출하기</button>
-      </div>
+    <div class="floating">
+      <button class="primary" @click="onSave">제출하기</button>
     </div>
   </div>
 </template>
@@ -290,6 +290,7 @@ h2 {
   max-width: 500px; /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
   background: linear-gradient(180deg, #171717 0%, #171717 64.38%);
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 
 .floating > button {

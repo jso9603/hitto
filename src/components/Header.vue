@@ -154,8 +154,8 @@ export default class Header extends Vue {
   background-color: #171717;
   position: fixed;
   top: 0;
-  left: 20px;
-  right: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   width: calc(100% - 40px);
   max-width: 576px;
   z-index: 1000;

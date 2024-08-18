@@ -92,6 +92,7 @@ export default class Navigation extends Vue {
   border-right: none;
   border-bottom: none;
   backdrop-filter: blur(10px);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .nav-item {
