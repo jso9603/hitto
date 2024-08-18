@@ -156,7 +156,7 @@ export default class Header extends Vue {
   }
 
   goBack() {
-    this.$router.go(-1);
+    this.$router.replace('/');
   }
 
   onSetting() {

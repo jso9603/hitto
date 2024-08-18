@@ -103,8 +103,6 @@ export default class Result extends Vue {
     const user = getLoggedUserInfo();
     if (user) {
       try {
-        // Type: lotto, dream
-        sessionStorage.setItem('type', 'lotto');
         if (this.activeTab === 'select' && this.selectedIndex) {
           sessionStorage.setItem('hope', `${this.selectOptions[this.selectedIndex].text}`);
         } else {
@@ -137,7 +135,7 @@ export default class Result extends Vue {
     const numbers = [(sessionStorage.getItem('lottoNumbers'))!.replace(/^"|"$/g, '')]
 
     try {
-      // lottos 컬렉션에 새로운 문서 추가
+      // lottos or dream 컬렉션에 새로운 문서 추가
       await addDoc(collection(db, collectionName), {
         date: dayjs().format('YYYYMMDD'),
         numbers,
@@ -181,7 +179,7 @@ export default class Result extends Vue {
 
   // redirect (login)
   created() {
-    if (sessionStorage.getItem('hope') && sessionStorage.getItem('lottoNumbers') && sessionStorage.getItem('type')) {
+    if (sessionStorage.getItem('hope') && sessionStorage.getItem('lottoNumbers')) {
       this.saveLottoNumbers(Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream');
     }
   }
