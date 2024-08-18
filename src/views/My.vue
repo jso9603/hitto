@@ -77,7 +77,7 @@ export default class My extends Vue {
   repositories = [
     {
       title: '나의 번호 관리',
-      icon: 'ic-system-star.svg',
+      icon: 'ic-system-star.png',
     }
   ];
 

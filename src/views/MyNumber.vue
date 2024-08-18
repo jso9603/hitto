@@ -91,11 +91,9 @@ export default class MyNumber extends Vue {
 
     const currentWeek = this.getWeek();
     if (this.isAfterSaturday8_30()) {
-      // 토요일 8시 30분 이후라면 이번 주 회차 사용
-      this.week = currentWeek.toString();
+      this.week = (currentWeek + 1).toString();
     } else {
-      // 토요일 8시 30분 이전이라면 전 주 회차 사용
-      this.week = (currentWeek - 1).toString();
+      this.week = currentWeek.toString();
     }
     this.saturdayDate = this.getSaturdayDate(Number(this.week));
 

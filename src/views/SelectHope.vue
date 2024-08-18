@@ -1,41 +1,55 @@
 <template>
   <div class="container">
-    <div class='typing1'>"이제 마지막이야~소망을 선택해봐.<br/>토요일 너에게도 ✨행운이 갈거야"</div>
-
-    <div class="tab">
-      <div :class="['tab-item', { active: activeTab === 'select' }]" @click="setActiveTab('select')">소망 선택</div>
-      <div :class="['tab-item', { active: activeTab === 'input' }]" @click="setActiveTab('input')">직접입력</div>
+    <div v-if="isLoading">
+      <div class="waitinging">
+        <img src="@/assets/ic-system-stefan.svg" class="bounce-animation" />
+        <div class="waiting">잠시만 기다려주세요.</div>
+      </div>
     </div>
-    <div class="tab-content">
-      <div v-if="activeTab === 'select'">
-        <div
-          v-for="(option, index) in selectOptions"
-          :key="index"
-          :class="['option-item', { active: selectedIndex === index }]"
-          @click="selected(index)"
+
+    <div v-else>
+      <div class='typing1'>"이제 마지막이야~소망을 선택해봐.<br/>토요일 너에게도 ✨행운이 갈거야"</div>
+
+      <div class="tab">
+        <div :class="['tab-item', { active: activeTab === 'select' }]" @click="setActiveTab('select')">소망 선택</div>
+        <div :class="['tab-item', { active: activeTab === 'input' }]" @click="setActiveTab('input')">직접입력</div>
+      </div>
+      <div class="tab-content">
+        <div v-if="activeTab === 'select'">
+          <div
+            v-for="(option, index) in selectOptions"
+            :key="index"
+            :class="['option-item', { active: selectedIndex === index }]"
+            @click="selected(index)"
+          >
+            <span class="icon">{{ option.icon }}</span>
+            <span class="text">{{ option.text }}</span>
+          </div>
+        </div>
+        <div v-if="activeTab === 'input'">
+          <textarea
+            class="custom-textarea"
+            v-model="impression"
+            placeholder="진솔한 당첨소감을 작성해보세요.\n꼭 이루어질거예요!"
+            @input="handleInput"
+          />
+          <div class="textarea-footer">
+            <span>{{ impression.length }} / 300</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="floating">
+        <button
+          class="primary"
+          :disabled="activeTab === 'select' ? !selectedIndex : impression.length < 1"
+          @click="onLogin"
         >
-          <span class="icon">{{ option.icon }}</span>
-          <span class="text">{{ option.text }}</span>
-        </div>
-      </div>
-      <div v-if="activeTab === 'input'">
-        <textarea
-          class="custom-textarea"
-          v-model="impression"
-          placeholder="진솔한 당첨소감을 작성해보세요.\n꼭 이루어질거예요!"
-          @input="handleInput"
-         />
-        <div class="textarea-footer">
-          <span>{{ impression.length }} / 300</span>
-        </div>
+          {{activeTab === 'select' ? '완료' : '작성 완료'}}
+        </button>
+        <button class="none" @click="onLogin">그냥 넘어갈게요</button>
       </div>
     </div>
-
-    <div class="floating">
-      <button class="primary" @click="onLogin">{{activeTab === 'select' ? '완료' : '작성 완료'}}</button>
-      <button class="none" @click="$router.push('/ai')">그냥 넘어갈게요</button>
-    </div>
-
   </div>
 </template>
 
@@ -45,6 +59,7 @@ import dayjs from 'dayjs'
 import Cookies from 'js-cookie'
 import { db } from '../../src/config/firebaseConfig'
 import { collection, addDoc } from 'firebase/firestore'
+import { getLoggedUserInfo } from '@/utils/user'
 
 interface SelectOption {
   icon: string;
@@ -55,6 +70,8 @@ interface SelectOption {
 export default class Result extends Vue {
   private activeTab: string = 'select';
   private selectedIndex: number | null = null;
+
+  isLoading = false;
 
   impression: string = '';
 
@@ -83,9 +100,8 @@ export default class Result extends Vue {
   }
 
   private onLogin() {
-    const userData = Cookies.get('user');
-
-    if (userData) {
+    const user = getLoggedUserInfo();
+    if (user) {
       try {
         // Type: lotto, dream
         sessionStorage.setItem('type', 'lotto');
@@ -95,7 +111,7 @@ export default class Result extends Vue {
           sessionStorage.setItem('hope', `${this.impression}`);
         }
 
-        this.saveLottoNumbers(this.activeTab === 'select' ? 'lottos' : 'dream');
+        this.saveLottoNumbers(Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream');
       } catch (error) {
         console.error('Failed to parse user data:', error);
       }
@@ -105,6 +121,8 @@ export default class Result extends Vue {
   }
 
   saveLottoNumbers = async (collectionName: string) => {
+    this.isLoading = true;
+
     const userData = Cookies.get('user') as string;
     const user = JSON.parse(userData);
 
@@ -137,16 +155,21 @@ export default class Result extends Vue {
       }
 
       if (!datas) {
-        sessionStorage.setItem('myNumbers', JSON.stringify(insertData))
+        // sessionStorage에 아무 데이터도 없으면, 배열에 insertData를 넣어서 저장
+        sessionStorage.setItem('myNumbers', JSON.stringify(insertData));
       } else {
         const alreadyDatas = JSON.parse(datas);
-        alreadyDatas.push(insertData);
 
-        sessionStorage.setItem('myNumbers', JSON.stringify(alreadyDatas));
+        const updatedData = Array.isArray(alreadyDatas) ? alreadyDatas : [alreadyDatas];
+        updatedData.push(insertData);
+        sessionStorage.setItem('myNumbers', JSON.stringify(updatedData));
       }
+      this.isLoading = false;
+
       this.$router.push('/my/number');
     } catch (e) {
       console.error('Error adding document: ', e);
+      alert('저장하는 과정에서 오류가 발생했습니다. 다시 시도해주세요.');
     }
   }
 }
@@ -307,6 +330,11 @@ export default class Result extends Vue {
   cursor: pointer;
 }
 
+.floating > button:disabled {
+  background-color: #414244;
+  color: #181D23;
+}
+
 .floating > button.none {
   margin-top: 8px;
   background-color: #171717;
@@ -314,5 +342,38 @@ export default class Result extends Vue {
   font-size: 15px;
   font-weight: 500;
   line-height: 18px;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-15px);
+  }
+  60% {
+    transform: translateY(-7.5px);
+  }
+}
+
+.waitinging {
+  padding: 40px 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.waiting {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 23px;
+  text-align: center;
+  color: #9C9EA0;
+}
+
+.bounce-animation {
+  animation: bounce 2s infinite;
 }
 </style>
