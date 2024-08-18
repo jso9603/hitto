@@ -158,7 +158,7 @@ export default class My extends Vue {
   }
 
   onLogin() {
-    this.$router.push('/login');
+    this.$router.replace('/login');
   }
 
   created() {

@@ -117,7 +117,7 @@ export default class Result extends Vue {
         alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요');
       }
     } else {
-      this.$router.push('/login?redirect=select-hope');
+      this.$router.replace('/login?redirect=select-hope');
     }
   }
 

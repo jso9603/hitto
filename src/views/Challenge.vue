@@ -151,7 +151,7 @@ export default class Challenge extends Vue {
         sessionStorage.setItem('chanllenge-winning', this.selectedIndex.toString());
         sessionStorage.setItem('challenge-round', this.week);
 
-        this.$router.push('/login?redirect=challenge?week=1134');
+        this.$router.replace('/login?redirect=challenge?week=1134');
       }
     }
   }

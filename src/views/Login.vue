@@ -110,7 +110,7 @@ export default class Login extends Vue {
     Cookies.set('user', JSON.stringify(user), {expires: 30});
 
 
-    this.redirectUrl ? this.$router.push(`/${this.redirectUrl}`) : this.$router.go(-1);
+    this.redirectUrl ? this.$router.replace(`/${this.redirectUrl}`) : this.$router.go(-1);
   }
 
   // iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
