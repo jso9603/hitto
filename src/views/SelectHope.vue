@@ -107,7 +107,7 @@ export default class Result extends Vue {
         // my에서 탭으로 분류
         sessionStorage.setItem('type', Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream');
         if (this.activeTab === 'select' && this.selectedIndex) {
-          sessionStorage.setItem('hope', `${this.selectOptions[this.selectedIndex].text}`);
+          sessionStorage.setItem('hope', this.selectedIndex.toString());
         } else {
           sessionStorage.setItem('hope', `${this.impression}`);
         }
@@ -144,7 +144,7 @@ export default class Result extends Vue {
         numbers,
         uid: user.uid,
         round,
-        winningText: sessionStorage.getItem('hope'),
+        winningText: Cookies.get('menu') === 'AI 번호 생성' ? this.selectOptions[Number(sessionStorage.getItem('hope'))].text : sessionStorage.getItem('hope'),
       });
 
       const datas = Cookies.get('menu') === 'AI 번호 생성' ? sessionStorage.getItem('myNumbers') : sessionStorage.getItem('myDreams');
@@ -153,7 +153,7 @@ export default class Result extends Vue {
         numbers,
         uid: user.uid,
         round,
-        winningText: sessionStorage.getItem('hope'),
+        winningText: Cookies.get('menu') === 'AI 번호 생성' ? this.selectOptions[Number(sessionStorage.getItem('hope'))].text : sessionStorage.getItem('hope'),
       }
 
       if (!datas) {
@@ -190,6 +190,12 @@ export default class Result extends Vue {
   // redirect (login)
   created() {
     if (sessionStorage.getItem('hope') && sessionStorage.getItem('lottoNumbers')) {
+      if (Cookies.get('menu') === 'AI 번호 생성') {
+        this.selectedIndex = Number(sessionStorage.getItem('hope'));
+      } else {
+        this.impression = sessionStorage.getItem('hope') || '';
+      }
+      
       this.saveLottoNumbers(Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream');
     }
   }
