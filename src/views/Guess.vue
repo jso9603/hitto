@@ -74,6 +74,8 @@ export default class Guess extends Vue {
   }
 
   created() {
+    window.scrollTo(0, 0);
+
     dayjs.extend(duration)
 
     const currentWeek = this.getWeek();
@@ -87,6 +89,7 @@ export default class Guess extends Vue {
 .guess {
   margin-top: 20px;
   padding: 0 20px;
+  margin-bottom: calc(94px + env(safe-area-inset-bottom));
 }
 
 .week {

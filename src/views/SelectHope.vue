@@ -42,12 +42,12 @@
       <div class="floating">
         <button
           class="primary"
-          :disabled="activeTab === 'select' ? selectedIndex === null : impression.length < 1"
+          :disabled="activeTab === 'select' ? selectedIndex === null : impression.length  < 1 ||isLoading"
           @click="onLogin"
         >
           {{activeTab === 'select' ? '완료' : '작성 완료'}}
         </button>
-        <button class="none" @click="onLogin">그냥 넘어갈게요</button>
+        <button class="none" :disabled="isLoading" @click="onLogin">그냥 넘어갈게요</button>
       </div>
     </div>
   </div>
@@ -165,6 +165,10 @@ export default class Result extends Vue {
 
         const updatedData = Array.isArray(alreadyDatas) ? alreadyDatas : [alreadyDatas];
         updatedData.push(insertData);
+
+        updatedData.sort((a, b) => {
+          return dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1;
+        });
 
         const sessionStorageName = Cookies.get('menu') === 'AI 번호 생성' ? 'myNumbers' : 'myDreams';
         sessionStorage.setItem(sessionStorageName, JSON.stringify(updatedData));
