@@ -138,11 +138,19 @@ export default class Challenge extends Vue {
           await addDoc(collection(db, 'lottos'), data);
 
           await alert('더보기 > 내 번호 관리에서 확인하실 수 있습니다.');
+
+          sessionStorage.removeItem('challenge-number');
+          sessionStorage.removeItem('challenge-winning');
+          sessionStorage.removeItem('challenge-round');
         } catch (error) {
           console.error('Failed to parse user data:', error);
           alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요');
         }
       } else {
+        sessionStorage.setItem('challenge-number', [this.selectedNumbers.join(', ')].toString());
+        sessionStorage.setItem('chanllenge-winning', this.selectedIndex.toString());
+        sessionStorage.setItem('challenge-round', this.week);
+
         this.$router.push('/login?redirect=challenge?week=1134');
       }
     }
@@ -150,6 +158,26 @@ export default class Challenge extends Vue {
 
   created() {
     this.week = this.$route.query.week as string;
+
+    if (
+      sessionStorage.getItem('challenge-number') &&
+      sessionStorage.getItem('chanllenge-winning') &&
+      sessionStorage.getItem('challenge-round')
+    ) {
+      const storedNumbers = sessionStorage.getItem('challenge-number');
+
+      if (storedNumbers) {
+        this.selectedNumbers = storedNumbers
+          .split(',') 
+          .map(num => parseInt(num.trim(), 10));
+      }
+
+      const storedWinning = sessionStorage.getItem('chanllenge-winning');
+
+      if (storedWinning) {
+        this.selectedIndex = Number(storedWinning);
+      }
+    }
   }
 }
 </script>

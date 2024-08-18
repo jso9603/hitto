@@ -15,7 +15,7 @@
       v-for="(participant, index) in participants"
       :key="index"
       class="participant"
-      :style="{ animationDelay: `${index * 0.4}s` }"
+      :style="{ animationDelay: `${index * 0.1}s` }"
     >
       <img :src="require(`@/assets/ic-system-user${participant.img}.svg`)" />
       <div class="info">
@@ -35,7 +35,7 @@ export default class GuessParticipants extends Vue {
   @Prop(String) week!: string;
 
   participants = []
-  myData = {}
+  myData = null
 
   nickname = ''
   user: any = {}
@@ -99,7 +99,14 @@ export default class GuessParticipants extends Vue {
       this.nickname = 'Guest';
     }
 
-    const challengeData = JSON.parse(Cookies.get('challenge') || '{}');
+    const challengeCookie = Cookies.get('challenge');
+    let challengeData: any = null;
+
+    if (challengeCookie) {
+      challengeData = JSON.parse(challengeCookie);
+      console.log('challengeData: ', challengeData);
+    }
+
     if (challengeData && this.week === challengeData.round) {
       this.myData = challengeData;
     }
@@ -141,12 +148,9 @@ export default class GuessParticipants extends Vue {
 }
 
 .participant > .info > .text {
-  font-family: Pretendard;
-font-size: 14px;
-font-weight: 400;
-line-height: 21px;
-text-align: left;
-color: #9C9EA0;
-
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #9C9EA0;
 }
 </style>
