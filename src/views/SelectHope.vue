@@ -101,6 +101,7 @@ export default class Result extends Vue {
 
   private onLogin() {
     const user = getLoggedUserInfo();
+
     if (user) {
       try {
         // my에서 탭으로 분류
@@ -139,7 +140,7 @@ export default class Result extends Vue {
     try {
       // lottos or dream 컬렉션에 새로운 문서 추가
       await addDoc(collection(db, collectionName), {
-        date: dayjs().format('YYYYMMDD'),
+        date: dayjs().format('YYYYMMDD HH:MM'),
         numbers,
         uid: user.uid,
         round,
@@ -148,7 +149,7 @@ export default class Result extends Vue {
 
       const datas = Cookies.get('menu') === 'AI 번호 생성' ? sessionStorage.getItem('myNumbers') : sessionStorage.getItem('myDreams');
       const insertData = {
-        date: dayjs().format('YYYYMMDD'),
+        date: dayjs().format('YYYYMMDD HH:MM'),
         numbers,
         uid: user.uid,
         round,
@@ -223,6 +224,9 @@ export default class Result extends Vue {
   border-bottom: 2px solid transparent;
   color: #5F6163;
   transition: border-color 0.3s, background-color 0.3s;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
 }
 
 .tab-item.active {
@@ -356,7 +360,7 @@ export default class Result extends Vue {
   background-color: #171717;
   color: #fff;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 18px;
 }
 
