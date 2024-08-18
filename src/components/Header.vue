@@ -26,7 +26,9 @@
     </template>
 
     <template v-else-if="$route.path === '/my'">
+      <div></div>
       <div class="menu">나의 모히또</div>
+      <img src="@/assets/ic-setting.svg" v-if="isLoggedIn" @click="onSetting" />
     </template>
 
     <template v-else-if="$route.path === '/my/number'">
@@ -34,6 +36,13 @@
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
       <div class="menu">나의 로또번호</div>
+    </template>
+
+    <template v-else-if="$route.path === '/my/setting'">
+      <button @click="goBack" class="back">
+        <img src="@/assets/ic-system-back-img.svg" />
+      </button>
+      <div class="menu">설정</div>
     </template>
 
     <template v-else-if="$route.path === '/guess' || $route.path === '/Guess'">
@@ -54,6 +63,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import Cookies from 'js-cookie'
+import { getLoggedUserInfo } from '@/utils/user'
 
 @Component
 export default class Header extends Vue {
@@ -107,6 +117,12 @@ export default class Header extends Vue {
   }
 }
 
+  get isLoggedIn() {
+    const user = getLoggedUserInfo();
+
+    return user ? true : false;
+  }
+
   use() {
     console.log('use click!');
   }
@@ -136,11 +152,15 @@ export default class Header extends Vue {
   }
 
   get menuName() {
-    return Cookies.get('menu')
+    return Cookies.get('menu');
   }
 
   goBack() {
     this.$router.go(-1);
+  }
+
+  onSetting() {
+    this.$router.push('/my/setting');
   }
 }
 </script>

@@ -11,6 +11,7 @@ import Qr from '@/views/Qr.vue'
 import MyNumber from '@/views/MyNumber.vue'
 import Guess from '@/views/Guess.vue'
 import Challenge from '@/views/Challenge.vue'
+import Setting from '@/views/Setting.vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -75,6 +76,11 @@ const routes = [
     path: '/challenge',
     name: 'challenge',
     component: Challenge,
+  },
+  {
+    path: '/my/setting',
+    name: 'setting',
+    component: Setting,
   },
 ];
 

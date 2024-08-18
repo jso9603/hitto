@@ -122,6 +122,8 @@ export default class LottoList extends Vue {
 
       sessionStorage.setItem(storageName, JSON.stringify(this.lottoData));
 
+      this.lottoData = Array.isArray(this.lottoData) ? this.lottoData : [this.lottoData];
+
       // 각 회차에 대해 API 호출
       for (const lotto of this.lottoData) {
         if (this.week < lotto.round) {
