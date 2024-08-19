@@ -40,7 +40,7 @@ export default class ToggleSwitch extends Vue {
 }
 
 .toggle-track.is-checked {
-  background-color: red;
+  background-color: #171717;
 }
 
 .toggle-thumb {

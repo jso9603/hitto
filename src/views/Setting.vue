@@ -34,7 +34,7 @@ import { getLoggedUserInfo } from '@/utils/user'
 })
 export default class Setting extends Vue {
   user: any | null = null
-  private toggleState: boolean = false
+  private toggleState: boolean = true
 
   private async handleToggle(newState: boolean) {
     this.toggleState = newState;
@@ -47,7 +47,7 @@ export default class Setting extends Vue {
   }
 
   onLeave() {
-    // 페이지 이동
+    this.$router.push('/leave');
   }
 
   created() {

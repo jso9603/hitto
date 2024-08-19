@@ -12,6 +12,7 @@ import MyNumber from '@/views/MyNumber.vue'
 import Guess from '@/views/Guess.vue'
 import Challenge from '@/views/Challenge.vue'
 import Setting from '@/views/Setting.vue'
+import Leave from '@/views/Leave.vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -81,6 +82,11 @@ const routes = [
     path: '/my/setting',
     name: 'setting',
     component: Setting,
+  },
+  {
+    path: '/leave',
+    name: 'leave',
+    component: Leave,
   },
 ];
 
