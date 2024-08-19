@@ -42,7 +42,7 @@
       <div class="floating">
         <button
           class="primary"
-          :disabled="activeTab === 'select' ? selectedIndex === null : impression.length  < 1 ||isLoading"
+          :disabled="isLoading || activeTab === 'select' ? selectedIndex === null : impression.length  < 1"
           @click="onLogin"
         >
           {{activeTab === 'select' ? '완료' : '작성 완료'}}
@@ -99,20 +99,22 @@ export default class Result extends Vue {
     this.impression = target.value;
   }
 
-  private onLogin() {
+  private async onLogin() {
     const user = getLoggedUserInfo();
 
     if (user) {
       try {
         // my에서 탭으로 분류
         sessionStorage.setItem('type', Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream');
-        if (this.activeTab === 'select' && this.selectedIndex) {
-          sessionStorage.setItem('hope', this.selectedIndex.toString());
+        if (this.activeTab === 'select') {
+          sessionStorage.setItem('hope', this.selectedIndex!.toString());
+          sessionStorage.setItem('hope-select', 'true');
         } else {
           sessionStorage.setItem('hope', `${this.impression}`);
+          sessionStorage.setItem('hope-select', 'false');
         }
 
-        this.saveLottoNumbers(Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream');
+        await this.saveLottoNumbers(Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream');
       } catch (error) {
         console.error('Failed to parse user data:', error);
         alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요');
@@ -122,7 +124,7 @@ export default class Result extends Vue {
     }
   }
 
-  saveLottoNumbers = async (collectionName: string) => {
+  private async saveLottoNumbers(collectionName: string) {
     this.isLoading = true;
 
     const userData = Cookies.get('user') as string;
@@ -144,7 +146,7 @@ export default class Result extends Vue {
         numbers,
         uid: user.uid,
         round,
-        winningText: Cookies.get('menu') === 'AI 번호 생성' ? this.selectOptions[Number(sessionStorage.getItem('hope'))].text : sessionStorage.getItem('hope'),
+        winningText: this.activeTab === 'select' ? this.selectOptions[this.selectedIndex!].text : this.impression,
       });
 
       const datas = Cookies.get('menu') === 'AI 번호 생성' ? sessionStorage.getItem('myNumbers') : sessionStorage.getItem('myDreams');
@@ -153,7 +155,7 @@ export default class Result extends Vue {
         numbers,
         uid: user.uid,
         round,
-        winningText: Cookies.get('menu') === 'AI 번호 생성' ? this.selectOptions[Number(sessionStorage.getItem('hope'))].text : sessionStorage.getItem('hope'),
+        winningText: this.activeTab === 'select' ? this.selectOptions[this.selectedIndex!].text : this.impression,
       }
 
       if (!datas) {
@@ -178,9 +180,12 @@ export default class Result extends Vue {
       sessionStorage.removeItem('lottoNumbers');
       sessionStorage.removeItem('type');
 
-      this.isLoading = false;
+      setTimeout(() => {
+        this.isLoading = false;
 
-      this.$router.push('/my/number');
+        this.$router.push('/my/number');
+      }, 2000);
+      
     } catch (e) {
       console.error('Error adding document: ', e);
       alert('저장하는 과정에서 오류가 발생했습니다. 다시 시도해주세요.');
@@ -190,10 +195,12 @@ export default class Result extends Vue {
   // redirect (login)
   created() {
     if (sessionStorage.getItem('hope') && sessionStorage.getItem('lottoNumbers')) {
-      if (Cookies.get('menu') === 'AI 번호 생성') {
+      if (sessionStorage.getItem('hope-select') === 'true') {
         this.selectedIndex = Number(sessionStorage.getItem('hope'));
+        this.activeTab = 'select';
       } else {
         this.impression = sessionStorage.getItem('hope') || '';
+        this.activeTab = 'input';
       }
       
       this.saveLottoNumbers(Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream');

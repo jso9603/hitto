@@ -47,7 +47,7 @@
             </div>
             지난 주 5,230명이 당첨됐어요
           </div>
-          <button class="primary" @click="onSelectedBall">선택 완료</button>
+          <button :disabled="isLoading" class="primary" @click="onSelectedBall">선택 완료</button>
           <button class="none" @click="oneMore">다시 생성</button>
         </div>
       </div>
@@ -93,6 +93,8 @@ export default class Random extends Vue {
   private showMessage: boolean = false;
 
   private showPage1: boolean = true;
+
+  private isLoading = false;
 
   typingText() {
     const contents = `“스테판이 ai 통계기반\n로또 번호를 생성하고 있어요"`
@@ -343,9 +345,13 @@ export default class Random extends Vue {
   }
 
   private onSelectedBall() {
+    this.isLoading = true;
+
     // (session 저장: store는 refresh하면 정보 없어짐)
     const ball = this.lottoNumbers[0].join(', ');
     sessionStorage.setItem('lottoNumbers', JSON.stringify(ball));
+
+    this.isLoading = false;
     this.$router.push('/select-hope');
   }
 }
