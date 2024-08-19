@@ -183,7 +183,7 @@ export default class Result extends Vue {
       setTimeout(() => {
         this.isLoading = false;
 
-        this.$router.push('/my/number');
+        this.$router.push(`/my/number?tab=${Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream'}`);
       }, 2000);
       
     } catch (e) {

@@ -203,6 +203,7 @@ export default class LottoList extends Vue {
   }
 
   created() {
+    this.activeTab = this.$route.query.tab as string || 'lottos';
     this.fetchLottoData(this.user.uid, this.activeTab);
   }
 

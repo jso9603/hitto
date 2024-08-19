@@ -104,6 +104,11 @@ export default class Leave extends Vue {
   height: calc(100vh - 102px);
 }
 
+img {
+  width: 64px;
+  height: 64px;
+}
+
 .title {
   margin-top: 16px;
   font-size: 22px;
