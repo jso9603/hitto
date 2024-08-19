@@ -38,44 +38,30 @@ export default class Login extends Vue {
   redirectUrl: string = ''
 
   async kakaoLoginStart() {
-    if (window.Kakao.Auth.getAccessToken()) {
-      window.Kakao.API.request({
-        url: '/v1/user/unlink',
-        success: async (response: any) => {
-          console.log(response)
-        },
-        fail: async (error: any) => {
-          console.log(error)
-        },
-      })
-      window.Kakao.Auth.setAccessToken(undefined)
-    }
+    // console.log(window.Kakao.Auth.getAccessToken())
+    await window.Kakao.Auth.login({
+      success: (res: any) => {
+        console.log(res);
+        window.Kakao.Auth.setAccessToken(res.access_token);
+        console.log('카카오 로그인 성공');
 
-    window.Kakao.Auth.login({
-      success: async () => {
         window.Kakao.API.request({
           url: '/v2/user/me',
-          data: {
-            property_keys: ['kakao_account.email']
-          },
-          success: async (response: any) => {
-            console.log(response)
-            
+          success: (res: any) => {
+            console.log('카카오 인가 요청 성공');
+            const kakaoAccount = res.kakao_account;
+            console.log(kakaoAccount)
+
             // DB: find and insert or Ignore
-            await this.saveUsers(response.kakao_account.email)
+            this.saveUsers(kakaoAccount.email);
           },
-          fail: async (error: any) => {
-            console.log('login request fail: ', error)
-            await alert('로그인 요청에 실패했습니다. 잠시후 다시 시도해주세요');
+          fail: (error: any) => {
+            console.log(error);
           },
         })
       },
-      fail: async (error: any) => {
-        console.log('login fail: ', error)
-        if (error.error === 'invalid_grant') {
-          await alert('정보가 만료되었습니다. 다시 로그인을 시도해주세요')
-          await this.kakaoLoginStart()
-        }
+      fail: (error: any) => {
+        console.log(error);
       },
     })
   }
