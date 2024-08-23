@@ -185,6 +185,7 @@ export default class My extends Vue {
 <style scoped>
 .my {
   margin-top: 24px;
+  margin-bottom: calc(40px + 64px + env(safe-area-inset-bottom));
   padding: 0 20px;
 }
 

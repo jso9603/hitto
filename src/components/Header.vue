@@ -181,10 +181,10 @@ export default class Header extends Vue {
   background-color: #171717;
   position: fixed;
   top: 0;
-  padding-left: 20px;
-  padding-right: 20px;
-  width: calc(100% - 40px);
-  max-width: 576px;
+  left: 0;
+  right: 0;
+  padding: 0 20px;
+  max-width: calc(576px - 40px);
   z-index: 1000;
   transition: backdrop-filter 0.3s ease;
   margin-left: auto;
