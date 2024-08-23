@@ -97,11 +97,11 @@ export default class My extends Vue {
   ];
 
   private adjectives: string[] = [
-    '희망찬', '용감한', '즐거운', '활기찬', '씩씩한', '지혜로운', '사랑스러운', '기쁜', '자유로운'
+    '희망찬', '용감한', '즐거운', '활기찬', '씩씩한', '지혜로운', '사랑스러운', '기쁜', '자유로운', '귀여운',
   ];
 
   private animals: string[] = [
-    '돼지', '호랑이', '사자', '고양이', '강아지', '곰', '여우', '토끼', '독수리'
+    '돼지', '호랑이', '사자', '고양이', '강아지', '곰', '여우', '토끼', '독수리', '판다',
   ];
 
   get userImage(): string {
@@ -132,7 +132,9 @@ export default class My extends Vue {
     const number = parseInt(uid.split('_')[1].substring(0, 4));
 
     const adjective = this.adjectives[firstDigit % this.adjectives.length - 1];
-    const animal = this.animals[lastDigit % this.animals.length - 1];
+    const index = lastDigit % this.animals.length - 1;
+    const adjustedIndex = index < 0 ? 0 : index;
+    const animal = this.animals[adjustedIndex];
 
     return `${adjective}${animal}${number}`;
   }

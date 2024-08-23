@@ -142,6 +142,8 @@ export default class Challenge extends Vue {
           sessionStorage.removeItem('challenge-number');
           sessionStorage.removeItem('challenge-winning');
           sessionStorage.removeItem('challenge-round');
+
+          await this.$router.replace('/my/number?tab=lottos');
         } catch (error) {
           console.error('Failed to parse user data:', error);
           alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요');
@@ -317,7 +319,7 @@ h2 {
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  max-width: 500px; /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
+  max-width: 576px; /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
   background: linear-gradient(180deg, #171717 0%, #171717 64.38%);
   padding-bottom: calc(20px + env(safe-area-inset-bottom));

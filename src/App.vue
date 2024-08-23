@@ -66,7 +66,7 @@ body {
   background-color: #222222E5;
   font-size: 16px;
   font-weight: 500;
-  line-height: 19.09px;
+  line-height: 20px;
   color: #ECEEF0;
   border-radius: 16px;
   position: fixed;

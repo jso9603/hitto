@@ -157,7 +157,7 @@ img {
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  max-width: 500px; /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
+  max-width: 576px; /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
   background: linear-gradient(180deg, #171717 0%, #171717 64.38%);
 }
