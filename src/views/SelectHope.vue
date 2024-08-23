@@ -319,7 +319,7 @@ export default class Result extends Vue {
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  max-width: 576px; /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
+  max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
   background: linear-gradient(180deg, #171717 0%, #171717 64.38%);
 }
@@ -353,8 +353,6 @@ export default class Result extends Vue {
 
 .floating > button {
   width: 100%;
-  /* max-width 사이즈에 양옆 padding 값 */
-  max-width: calc(576px - 40px);
   min-height: 52px;
   background-color: #4AFF81;
   padding: 8px 8px;

@@ -22,17 +22,17 @@
         <div class="result__box">
           <div v-for="(round, index) in lottoNumbers" :key="index" class="round">
             <div class="row">
-              <div v-for="number in round.slice(0, 4)" :key="number" :class="getNumberClass(number)">
+              <div v-for="number in round.slice(0, 3)" :key="number" :class="getNumberClass(number)">
                 {{ number }}
               </div>
             </div>
             <div class="row">
-              <div v-for="number in round.slice(4, 6)" :key="number" :class="getNumberClass(number)">
+              <div v-for="number in round.slice(3, 5)" :key="number" :class="getNumberClass(number)">
                 {{ number }}
               </div>
-              <div class="plus">+</div>
+              <!-- <div class="plus">+</div> -->
               <div :class="[getNumberClass(round[6]), 'last']">
-                {{ round[6] }}
+                {{ round[5] }}
               </div>
             </div>
           </div>
@@ -76,7 +76,7 @@ interface Message {
 export default class Random extends Vue {
   typedText = ''
   private animationCanvas: HTMLCanvasElement | null = null;
-  private ballCount: number = 7;
+  private ballCount: number = 6;
   private balls: Ball[] = [];
   private circleCenter = { x: 130, y: 130 }; // 중심점 (캔버스의 중간 지점)
   private circleRadius: number = 125; // 원의 반지름 (큰 원의 상하좌우가 잘려보임)
@@ -328,7 +328,7 @@ export default class Random extends Vue {
   private generateLottoNumbers(rounds: number) {
     for (let i = 0; i < rounds; i++) {
       const numbers = new Set<number>();
-      while (numbers.size < 7) {
+      while (numbers.size < 6) {
         const randomNum = Math.floor(Math.random() * 45) + 1;
         numbers.add(randomNum);
       }
@@ -579,7 +579,7 @@ canvas {
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  max-width: 576px; /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
+  max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
   background: linear-gradient(180deg, #171717 0%, #171717 64.38%);
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
@@ -614,8 +614,6 @@ canvas {
 
 .floating > button {
   width: 100%;
-  /* max-width 사이즈에 양옆 padding 값 */
-  max-width: calc(576px - 40px);
   min-height: 52px;
   background-color: #4AFF81;
   padding: 8px 8px;

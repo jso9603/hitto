@@ -81,7 +81,7 @@ export default class Backup extends Vue {
 
     for (let i = 0; i < rounds; i++) {
       const numbers = new Set<number>()
-      while (numbers.size < 7) {
+      while (numbers.size < 6) {
         const randomNum = Math.floor(Math.random() * 45) + 1
         numbers.add(randomNum)
       }

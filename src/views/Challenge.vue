@@ -89,7 +89,7 @@ export default class Challenge extends Vue {
     if (index > -1) {
       this.selectedNumbers.splice(index, 1); // 이미 선택된 경우, 선택 해제
     } else {
-      this.selectedNumbers.length === 7 ? alert('7개까지만 선택할 수 있습니다.') : this.selectedNumbers.push(number); // 선택되지 않은 경우, 선택
+      this.selectedNumbers.length === 6 ? alert('6개까지만 선택할 수 있습니다.') : this.selectedNumbers.push(number); // 선택되지 않은 경우, 선택
     }
   }
 
@@ -101,8 +101,8 @@ export default class Challenge extends Vue {
   }
 
   async onSave() {
-    if (this.selectedNumbers.length < 7) {
-      alert('숫자는 7개를 선택해주세요');
+    if (this.selectedNumbers.length < 6) {
+      alert('숫자는 6개를 선택해주세요');
       return;
     }
     
@@ -117,7 +117,7 @@ export default class Challenge extends Vue {
       return;
     }
 
-    const confirmed = confirm('고른 번호가 확실합니까?');
+    const confirmed = confirm('선택하신 번호가 확실합니까?');
     if (confirmed) {
 
       const user = getLoggedUserInfo();
@@ -319,7 +319,7 @@ h2 {
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  max-width: 576px; /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
+  max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
   background: linear-gradient(180deg, #171717 0%, #171717 64.38%);
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
@@ -327,8 +327,6 @@ h2 {
 
 .floating > button {
   width: 100%;
-  /* max-width 사이즈에 양옆 padding 값 */
-  max-width: calc(576px - 40px);
   min-height: 52px;
   background-color: #4AFF81;
   padding: 8px 8px;
