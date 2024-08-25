@@ -87,14 +87,18 @@ export default class Random extends Vue {
   private messages: Message[] = [
     { text: '최근 3개월 통계를 찾아보고 있어요', icon: require('@/assets/ic-system-random-message1.svg') },
     { text: 'AI가 선별하는 번호를 찾아보고 있어요', icon: require('@/assets/ic-system-random-message2.svg') },
-    { text: '더 좋은 번호가 있는지 찾아보고 있어요', icon: require('@/assets/ic-system-random-message3.svg') }
-  ];
-  private selectedMessage: Message | null = null;
-  private showMessage: boolean = false;
+    { text: '더 좋은 번호가 있는지 찾아보고 있어요', icon: require('@/assets/ic-system-random-message3.svg') },
+  ]
+  private selectedMessage: Message | null = null
+  private showMessage: boolean = false
 
-  private showPage1: boolean = true;
+  private showPage1: boolean = true
 
-  private isLoading = false;
+  private isLoading = false
+
+  // 확률 높은 숫자들
+  highProbNumbers: number[] = [1, 3, 6, 7, 12, 14, 17, 24, 26, 27, 33, 34, 42, 43, 45]
+  private lottoNumbers: number[][] = []
 
   typingText() {
     const contents = `“스테판이 ai 통계기반\n로또 번호를 생성하고 있어요"`
@@ -317,22 +321,53 @@ export default class Random extends Vue {
       setTimeout(() => {
         // this.$router.push('/result');
         this.showPage1 = false;
-        this.generateLottoNumbers(1);
+        this.generateHighNumbers(1);
       }, 3000);
 
     }, 2000); // 2초 지연
   }
 
-  private lottoNumbers: number[][] = [];
+  // private generateLottoNumbers(rounds: number) {
+  //   for (let i = 0; i < rounds; i++) {
+  //     const numbers = new Set<number>();
+  //     while (numbers.size < 6) {
+  //       const randomNum = Math.floor(Math.random() * 45) + 1;
+  //       numbers.add(randomNum);
+  //     }
+  //     this.lottoNumbers.push(Array.from(numbers).sort((a, b) => a - b));
+  //   }
+  // }
+  getRandomNumbers(array: number[], count: number): number[] {
+    const result = []
+    const _array = [...array]
+    for (let i = 0; i < count; i++) {
+      const index = Math.floor(Math.random() * _array.length)
+      result.push(_array.splice(index, 1)[0])
+    }
+    return result
+  }
 
-  private generateLottoNumbers(rounds: number) {
-    for (let i = 0; i < rounds; i++) {
-      const numbers = new Set<number>();
-      while (numbers.size < 6) {
-        const randomNum = Math.floor(Math.random() * 45) + 1;
-        numbers.add(randomNum);
+  getRemainingNumbers(exclude: number[]): number[] {
+    const remaining = []
+    for (let i = 1; i <= 45; i++) {
+      if (!exclude.includes(i) && !this.highProbNumbers.includes(i)) {
+        remaining.push(i)
       }
-      this.lottoNumbers.push(Array.from(numbers).sort((a, b) => a - b));
+    }
+    return remaining
+  }
+  
+  generateLotteryNumbers(): number[] {
+    const selectedHighProbNumbers = this.getRandomNumbers(this.highProbNumbers, 3)
+    const remainingNumbers = this.getRemainingNumbers(selectedHighProbNumbers)
+    const selectedRemainingNumbers = this.getRandomNumbers(remainingNumbers, 3)
+    return selectedHighProbNumbers.concat(selectedRemainingNumbers).sort((a, b) => a - b)
+  }
+
+  generateHighNumbers(rounds: number) {
+    this.lottoNumbers = [];
+    for (let i = 0; i < rounds; i++) {
+      this.lottoNumbers.push(this.generateLotteryNumbers())
     }
   }
 
