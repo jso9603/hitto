@@ -1,20 +1,13 @@
 <template>
   <div class="container">
-    <h3>모두의 희망로또</h3>
-    <div class="description">모희또의 ai 통계기반 알고리즘을 통<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
-
-    <div class="benefit" v-for="(benefit, index) in benefits" :key="index">
-      <img :src="require(`@/assets/${benefit.icon}`)" />
-      <div class="text">{{benefit.text}}</div>
-    </div>
-    <!-- <div class="get__started">
+    <div class="get__started">
       <img src="@/assets/ic-system-logo.svg" />
       <div class="text">행운의 숫자로 꿈꾸는 경제적 자유</div>
       <button @click="kakaoLoginStart" class="kakao">
         <img src="@/assets/ic-system-kakao.svg" />
         카카오로 시작하기
       </button>
-    </div> -->
+    </div>
 
     <div class="floating">
       <div class="participation">
@@ -25,11 +18,6 @@
         </div>
         5,230명이 당첨 소감에 참여했어요
       </div>
-
-      <button @click="kakaoLoginStart" class="kakao">
-        <img src="@/assets/ic-system-kakao.svg" />
-        카카오로 시작하기
-      </button>
     </div>
   </div>
 </template>
@@ -48,21 +36,6 @@ interface User {
 @Component
 export default class Login extends Vue {
   redirectUrl: string = ''
-
-  private benefits = [
-    {
-      icon: 'free.svg',
-      text: '무료로 ai 로또 번호를 생성해보세요',
-    },
-    {
-      icon: 'ball.svg',
-      text: '매주 로또 1등을 맞춰 보세요',
-    },
-    {
-      icon: 'folder.svg',
-      text: '나만의 로또번호를 보관 관리해 보세요',
-    },
-  ]
 
   async kakaoLoginStart() {
     // console.log(window.Kakao.Auth.getAccessToken())
@@ -154,57 +127,10 @@ export default class Login extends Vue {
   padding-right: 20px;
   /* iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
   특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음 */
-  /* 타이틀 margin-top: 24px 더해줘야 함 */
-  height: calc(var(--vh, 1vh) * 100 - 78px);
+  height: calc(var(--vh, 1vh) * 100 - 54px);
   background-color: #171717;
   display: flex;
   flex-direction: column;
-}
-
-h3 {
-  margin-top: 24px;
-  margin-bottom: 12px;
-  font-family: Pretendard;
-  font-size: 26px;
-  font-weight: 700;
-  line-height: 30px;
-  text-align: center;
-  color: #fff;
-}
-
-.description {
-  margin-bottom: 36px;
-  font-family: Pretendard;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 23px;
-  text-align: center;
-  color: #9C9EA0;
-}
-
-.benefit {
-  margin-top: 12px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 20px;
-  border-radius: 16px;
-  background-color: #222222;
-}
-
-.benefit > img {
-  width: 24px;
-  height: 24px;
-}
-
-.benefit > .text {
-  font-family: Pretendard;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 23px;
-  letter-spacing: -0.5px;
-  text-align: left;
-  color: #ECEEF0;
 }
 
 .get__started {
@@ -229,12 +155,10 @@ h3 {
   line-height: 19px;
 }
 
-.floating > button {
+.get__started > button {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
-  width: 100%;
   background-color: #FFE812;
   border-radius: 40px;
   padding: 14px 29.5px;
@@ -247,26 +171,15 @@ h3 {
 
 
 .floating {
-  /* position: fixed;
+  position: fixed;
   margin-top: 32px;
   bottom: 32px;
   left: 50%;
   transform: translate(-50%, 0);
-  width: 100%; */
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
-    padding: 20px;
-    background: linear-gradient(180deg, #171717 0%, #171717 64.38%);
-    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  width: 100%;
 }
 
 .floating > .participation {
-  margin-bottom: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
