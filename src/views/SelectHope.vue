@@ -1,5 +1,11 @@
 <template>
   <div class="container">
+
+    <div>
+      <button @click="showPopup">팝업 열기</button>
+      <LoginPopup :numbers="[19, 19, 19, 19, 34, 5]" :visible="isPopupVisible" @close="isPopupVisible = false" />
+    </div>
+
     <div v-if="isLoading">
       <div class="waitinging">
         <img src="@/assets/ic-system-stefan.svg" class="bounce-animation" />
@@ -60,13 +66,18 @@ import Cookies from 'js-cookie'
 import { db } from '../../src/config/firebaseConfig'
 import { collection, addDoc } from 'firebase/firestore'
 import { getLoggedUserInfo } from '@/utils/user'
+import LoginPopup from '@/components/LoginPopup.vue'
 
 interface SelectOption {
   icon: string;
   text: string;
 }
 
-@Component
+@Component({
+  components: {
+    LoginPopup,
+  },
+})
 export default class Result extends Vue {
   private activeTab: string = 'select';
   private selectedIndex: number | null = null;
@@ -75,6 +86,8 @@ export default class Result extends Vue {
 
   impression: string = '';
 
+  isPopupVisible = false;
+
   private selectOptions: SelectOption[] = [
     { icon: '✨', text: '포르쉐 파나메라 사게해주세요.' },
     { icon: '🏡', text: '반포 아크로리버파크 사게해주세요.' },
@@ -82,6 +95,10 @@ export default class Result extends Vue {
     { icon: '🤱', text: '자녀 교육에 걱정 없게 해주세요!'},
     { icon: '🦄', text: '꿈꾸던 사업을 시작하고 싶어요!'},
   ];
+
+  showPopup() {
+    this.isPopupVisible = true;
+  }
 
   private setActiveTab(tab: string) {
     this.activeTab = tab;
