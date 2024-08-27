@@ -110,7 +110,10 @@ export default class LottoList extends Vue {
       this.loading = false;
     }, 1000);
     this.lottoData = [];
-    this.fetchLottoData(this.user.uid, tab);
+
+    this.fetchLottoData(this.user.uid, tab).then(() => {
+      this.$forceUpdate(); // 강제로 뷰를 업데이트
+    });
   }
 
   async fetchLottoData(uid: string, dbTable: string) {
