@@ -1,7 +1,9 @@
 <template>
   <div class="my">
     <div class="summary">
-      <img :src="userImage" class="person" />
+      <div class="img-bg">
+        <img src="@/assets/ic-stefan-2d.svg" class="person" />
+      </div>
       <div class="nickname">{{nickname}}</div>
       <div class="email">
         <div class="kakao">
@@ -84,15 +86,15 @@ export default class My extends Vue {
   general = [
     {
       title: '문의하기',
-      icon: 'ic-system-setting.svg',
+      icon: 'ic-cs.svg',
     },
     {
-      title: '이용약관',
-      icon: 'ic-system-setting.svg',
+      title: '광고 문의',
+      icon: 'ic-inquiry.svg',
     },
     {
-      title: '개인정보처리방침',
-      icon: 'ic-system-setting.svg',
+      title: '개인 정보 보호 및 약관',
+      icon: 'ic-terms.svg',
     },
   ];
 
@@ -103,28 +105,6 @@ export default class My extends Vue {
   private animals: string[] = [
     '돼지', '호랑이', '사자', '고양이', '강아지', '곰', '여우', '토끼', '독수리', '판다',
   ];
-
-  get userImage(): string {
-    if (this.user === null) {
-      return require(`@/assets/ic-system-user1.svg`);
-    } else {
-      const lastDigit = parseInt(this.user.uid.slice(-1), 10);
-
-      let imageName = "";
-
-      if (lastDigit >= 1 && lastDigit <= 3) {
-        imageName = 'ic-system-user1.svg';
-      } else if (lastDigit >= 4 && lastDigit <= 6) {
-        imageName = 'ic-system-user2.svg';
-      } else if (lastDigit >= 7 && lastDigit <= 9) {
-        imageName = 'ic-system-user3.svg';
-      } else {
-        imageName = 'ic-system-user1.svg';
-      }
-
-      return require(`@/assets/${imageName}`);
-    }
-  }
 
   generateNickname(uid: string): string {
     const firstDigit = parseInt(uid.split('_')[1].charAt(0));
@@ -196,11 +176,21 @@ export default class My extends Vue {
   justify-content: center;
 }
 
-.summary > img {
+.summary > .img-bg {
   width: 64px;
   height: 64px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4262FF;
+  border-radius: 50%;
   margin-bottom: 8px;
+}
+
+.summary > .img-bg > img {
+  width: 40px;
+  height: 40px;
+  text-align: center;
 }
 
 .summary > .nickname {

@@ -16,6 +16,10 @@
       </div>
 
       <div class="page2" v-else key="page2">
+        <div class="img-bg">
+          <img src='@/assets/img-stefan-3d.png' at="character 이미지" />
+        </div>
+
         <div class='typing2'>"기운이 느껴져?<br/>한 주 동안 즐겁게 기다려보자구~"</div>
         <div class="sub">마음에 들지 않으면 다시 생성할 수 있어요!</div>
 
@@ -430,6 +434,27 @@ export default class Random extends Vue {
   letter-spacing: -0.5px;
   text-align: center;
   min-height: 66px;
+}
+
+.img-bg {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #4262FF;
+  border-radius: 50%;
+  margin-bottom: 12px;
+}
+
+.img-bg > img {
+  width: 44px;
+  height: 44px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .typing2 {

@@ -1,6 +1,9 @@
 <template>
   <div class="ai">
-    <img src='@/assets/ic-stefan.svg' at="character 이미지" />
+    <div class="img-bg">
+      <img src='@/assets/img-stefan-3d.png' at="character 이미지" />
+    </div>
+    
     <div class='typing1' v-html="typedText"></div>
 
     <div class="floating">
@@ -64,11 +67,23 @@ export default class Ai extends Vue {
   height: calc(100vh - 54px);
 }
 
-.ai > img {
+.ai > .img-bg {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4262FF;
+  border-radius: 50%;
+  margin-bottom: 12px;
+}
+
+.ai > .img-bg > img {
+  width: 44px;
+  height: 44px;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 12px;
 }
 
 .typing1 {
