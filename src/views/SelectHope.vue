@@ -141,6 +141,15 @@ export default class Result extends Vue {
         alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요');
       }
     } else {
+      sessionStorage.setItem('type', Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream');
+      if (this.activeTab === 'select') {
+        sessionStorage.setItem('hope', this.selectedIndex!.toString());
+        sessionStorage.setItem('hope-select', 'true');
+      } else {
+        sessionStorage.setItem('hope', `${this.impression}`);
+        sessionStorage.setItem('hope-select', 'false');
+      }
+      
       this.$router.replace('/login?redirect=select-hope');
     }
   }

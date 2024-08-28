@@ -26,7 +26,7 @@
             <div class="numbers">
               <div v-for="(set, setIndex) in lotto.numbers" :key="setIndex" class="number-set">
                 <div
-                  v-for="(num, numIndex) in set.split(', ').slice(0, 6)"
+                  v-for="(num, numIndex) in set.split(', ').slice(0, 5)"
                   :key="numIndex"
                   :class="['number-circle', lotto.winningNumbers ? isMatchingNumber(lotto, Number(num)) ? getNumberClass(num) : 'default-color' : '']"
                 >
