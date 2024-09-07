@@ -26,8 +26,13 @@ export default class Qr extends Vue {
     promise.catch((error) => {
       if (error.name === 'NotAllowedError') {
         alert('카메라 접근이 거부되었습니다.');
+      } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+        alert('사용 가능한 카메라 장치를 찾을 수 없습니다.');
+      } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
+        alert('카메라를 사용할 수 없습니다. 카메라가 다른 애플리케이션에서 사용 중일 수 있습니다.');
       } else {
-        alert('카메라 초기화에 실패했습니다.');
+        // camera access is only permitted in secure context. Use HTTPS or localhost rather than HTPP.
+        alert('카메라 초기화에 실패했습니다. 오류: ' + error.message);
       }
     });
   }
@@ -40,6 +45,20 @@ export default class Qr extends Vue {
   onQrClose() {
     this.$router.go(-1);
   }
+
+  // iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
+  // 특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음
+  setViewportHeight = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
+
+   mounted() {
+    window.addEventListener('resize', this.setViewportHeight);
+    window.addEventListener('orientationchange', this.setViewportHeight);
+
+    this.setViewportHeight();
+  }
 }
 </script>
 
@@ -51,9 +70,12 @@ export default class Qr extends Vue {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  /* 헤더 사이즈 */
-  height: calc(100vh - 54px);
+  justify-content: flex-start;
+  /* iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
+  특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음 */
+  /* margin-top: 20px까지 제외시킨다. */
+  height: calc(var(--vh, 1vh) * 100 - 54px);
+  position: relative;
   background-color: #333;
   color: white;
   padding: 20px;
@@ -61,6 +83,7 @@ export default class Qr extends Vue {
 }
 
 .text {
+  margin-top: auto;
   margin-bottom: 20px;
   font-size: 22px;
   font-weight: 600;
@@ -108,7 +131,9 @@ export default class Qr extends Vue {
   border-image-repeat: round; /* Border를 둥글게 만듭니다 */
   -webkit-mask-image: linear-gradient(white, white);
   border: 2px solid;
+}
 
-
+img {
+  margin-top: auto;
 }
 </style>

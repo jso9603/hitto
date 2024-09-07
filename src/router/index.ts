@@ -10,9 +10,10 @@ import My from '@/views/My.vue'
 import Qr from '@/views/Qr.vue'
 import MyNumber from '@/views/MyNumber.vue'
 import Guess from '@/views/Guess.vue'
-import Challenge from '@/views/Challenge.vue'
+import Challenge from '@/views/Challenge.vue' 
 import Setting from '@/views/Setting.vue'
 import Leave from '@/views/Leave.vue'
+import Terms from '@/views/Terms.vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -88,6 +89,11 @@ const routes = [
     name: 'leave',
     component: Leave,
   },
+  {
+    path: '/terms',
+    name: 'terms',
+    component: Terms,
+  }
 ];
 
 const router = new Router({
