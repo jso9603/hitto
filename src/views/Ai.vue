@@ -8,7 +8,7 @@
 
     <div class="floating">
       <div class="participation">        
-        5,230명이 추천 번호를 받았어요.
+        {{ formattedCount }}명이 추천 번호를 받았어요.
       </div>
       <button class="primary" @click="$router.push('/random')">시작하기</button>
     </div>
@@ -22,6 +22,10 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class Ai extends Vue {
   typedText = ''
 
+  private currentCount: number = 0;
+  private targetCount: number = 5230;
+  private intervalId: number | null = null;
+
   // iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
   // 특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음
   setViewportHeight = () => {
@@ -29,11 +33,36 @@ export default class Ai extends Vue {
     document.documentElement.style.setProperty('--vh', `${vh}px`);
   }
 
+  // 숫자를 포맷팅 (1,000 형태로 표시)
+  get formattedCount(): string {
+    return this.currentCount.toLocaleString();
+  }
+
+  // 카운팅 애니메이션
+  private startCounting(): void {
+    const duration = 3000;
+    const steps = 100; // 카운팅 업데이트 횟수 (프레임 수)
+    const stepTime = Math.floor(duration / steps); // 각 프레임의 시간 간격 (밀리초)
+    const increment = Math.ceil(this.targetCount / steps); // 한 번에 더해질 숫자
+
+    this.intervalId = window.setInterval(() => {
+      if (this.currentCount < this.targetCount) {
+        this.currentCount += increment;
+        if (this.currentCount >= this.targetCount) {
+          this.currentCount = this.targetCount; // 목표값을 초과하지 않도록 설정
+          clearInterval(this.intervalId!); // 카운팅이 완료되면 멈춤
+        }
+      }
+    }, stepTime);
+  }
+
   mounted() {
     window.addEventListener('resize', this.setViewportHeight);
     window.addEventListener('orientationchange', this.setViewportHeight);
 
     this.setViewportHeight();
+
+    this.startCounting();
 
     const contents: string =
       '"저는 스테판입니다.\n단순한 행운이 아닌 체계적인\n전략으로 14번이나\n당첨된 전설적인 인물이죠.\n제 소개는 그만 각설하고..."\n\n"자~ 이제 시작해볼까요?"';
@@ -66,6 +95,12 @@ export default class Ai extends Vue {
         }
       }
     }, 50);
+  }
+
+  beforeDestroy(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 }
 </script>
@@ -166,6 +201,7 @@ export default class Ai extends Vue {
   font-weight: 400;
   font-size: 16px;
   line-height: 22px;
+  font-variant: common-ligatures tabular-nums;
 }
 
 .floating > .participation > .people {

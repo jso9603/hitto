@@ -40,11 +40,11 @@
     </template>
 
     <template v-else-if="$route.path === '/my/number'">
-      <div class="empty"></div>
       <button @click="goBack" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
       <div class="menu">나의 로또번호</div>
+      <div class="empty"></div>
     </template>
 
     <template v-else-if="$route.path === '/my/setting'">
@@ -70,11 +70,11 @@
     </template>
 
     <template v-else-if="$route.path === '/challenge'">
-      <div class="empty"></div>
       <button @click="goBack" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
       <div class="menu">로또 맞추기</div>
+      <div class="empty"></div>
     </template>
     <template v-else-if="$route.path === '/terms'">
       <div class="empty"></div>

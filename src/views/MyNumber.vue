@@ -82,7 +82,20 @@ export default class MyNumber extends Vue {
 
   isAfterSaturday9() {
     const now = dayjs();
-    const saturday9 = dayjs().day(6).hour(21).minute(0).second(0);
+    let saturday9 = dayjs().day(6).hour(21).minute(0).second(0);  // 이번 주 토요일 9시
+
+    // dayjs().day(6)를 사용할 때 dayjs가 현재 주의 "토요일"을 참조
+    // 현재 dayjs().day(6)는 토요일을 기준으로 시간을 계산하는데, 일요일이 되면 dayjs().day(6)는 다가오는 토요일(다음 주 토요일)을 참조
+    // 그래서 일요일이 되면 dayjs().day(6)은 일주일 후의 토요일 오후 9시를 참조하게 되며,
+    // 이로 인해 now.isAfter(saturday9)는 false를 반환
+
+    // day(6)를 사용할 때는 현재 요일을 고려하여, 다음 주가 아니라 이번 주의 토요일 9시를 기준으로 할 수 있도록 해야함
+
+    // 만약 현재 시간이 일요일이면 지난 토요일을 참조하도록 처리
+    if (now.day() === 0) {
+      // 일요일일 경우 지난 토요일로 변경 (지난 토요일 9시)
+      saturday9 = dayjs().subtract(1, 'week').day(6).hour(21).minute(0).second(0);
+    }
     return now.isAfter(saturday9);
   }
 

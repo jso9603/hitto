@@ -53,7 +53,7 @@
         <div class="no-data">
           <img src="@/assets/ic-stefan-2d.svg" />
           <div>행운은 도전하는 자에게 찾아옵니다!<br/>경제적 자유로 가는 첫걸음을 지금 시작해보세요!</div>
-          <button @click="this.$router.push('/ai')">생성하기</button>
+          <button @click="onCreate">생성하기</button>
         </div>
       </div>
     </div>
@@ -100,6 +100,15 @@ export default class LottoList extends Vue {
   loading: boolean = true;
 
   private activeTab: string = 'lottos';
+
+  private onCreate() {
+    console.log('user: ', !this.user)
+    if (Object.keys(this.user).length === 0) {
+      this.$router.push('/login')
+    } else {
+      this.$router.push('/ai')
+    }
+  }
 
   private setActiveTab(tab: string) {
     this.activeTab = tab;
