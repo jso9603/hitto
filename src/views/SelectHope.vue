@@ -1,13 +1,12 @@
 <template>
   <div class="container">
+    <div style="display: none;">
+      <button @click="showPopup">팝업 열기</button>
+      <LoginPopup :numbers="[19, 19, 19, 19, 34, 5]" :visible="isPopupVisible" @close="isPopupVisible = false" />
+    </div>
 
     <div class="img-bg">
       <img src='@/assets/img-stefan-3d.png' at="character 이미지" />
-    </div>
-
-    <div>
-      <button @click="showPopup">팝업 열기</button>
-      <LoginPopup :numbers="[19, 19, 19, 19, 34, 5]" :visible="isPopupVisible" @close="isPopupVisible = false" />
     </div>
 
     <div v-if="isLoading">
@@ -18,11 +17,14 @@
     </div>
 
     <div v-else>
-      <div class='typing1'>"이제 마지막이야~소망을 선택해봐.<br/>토요일 너에게도 ✨행운이 갈거야"</div>
+      <div class="text">"이제 소망을 선택해보세요.<br/>토요일 좋은 일이 생길거예요"</div>
 
-      <div class="tab">
-        <div :class="['tab-item', { active: activeTab === 'select' }]" @click="setActiveTab('select')">소망 선택</div>
-        <div :class="['tab-item', { active: activeTab === 'input' }]" @click="setActiveTab('input')">직접입력</div>
+      <div class="tab-container">
+        <div class="tab">
+          <div :class="['tab-item', { active: activeTab === 'select' }]" @click="setActiveTab('select')">소망 선택</div>
+          <div :class="['tab-item', { active: activeTab === 'input' }]" @click="setActiveTab('input')">직접입력</div>
+          <div class="tab-indicator" :style="indicatorStyle"></div>
+        </div>
       </div>
       <div class="tab-content">
         <div v-if="activeTab === 'select'">
@@ -33,7 +35,7 @@
             @click="selected(index)"
           >
             <span class="icon">{{ option.icon }}</span>
-            <span class="text">{{ option.text }}</span>
+            <span class="tab-text">{{ option.text }}</span>
           </div>
         </div>
         <div v-if="activeTab === 'input'">
@@ -55,9 +57,9 @@
           :disabled="isLoading || activeTab === 'select' ? selectedIndex === null : impression.length  < 1"
           @click="onLogin"
         >
-          {{activeTab === 'select' ? '완료' : '작성 완료'}}
+          {{activeTab === 'select' ? '선택할게요' : '입력했어요'}}
         </button>
-        <button class="none" :disabled="isLoading" @click="onLogin">그냥 넘어갈게요</button>
+        <button class="none" :disabled="isLoading" @click="onLogin">괜찮아요</button>
       </div>
     </div>
   </div>
@@ -106,6 +108,12 @@ export default class Result extends Vue {
 
   private setActiveTab(tab: string) {
     this.activeTab = tab;
+  }
+
+  get indicatorStyle() {
+    return {
+      transform: this.activeTab === 'select' ? 'translateX(0)' : 'translateX(100%)',
+    };
   }
 
   private selected(index: number) {
@@ -245,7 +253,7 @@ export default class Result extends Vue {
   margin-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
-  width: calc(100% - 40px);
+  width: 100%;
   box-sizing: border-box;
   background-color: #171717;
 }
@@ -271,34 +279,62 @@ export default class Result extends Vue {
   margin-right: auto;
 }
 
-.typing1 {
-  margin-bottom: 36px;
-  font-size: 22px;
+.text {
+  margin-bottom: 32px;
+  font-size: 20px;
   font-weight: 600;
-  line-height: 33px;
+  line-height: 30px;
   letter-spacing: -0.5px;
   text-align: center;
   color: #fff;
 }
 
+.tab-container {
+  width: 100%;
+  background-color: #222222;
+  border-radius: 100px;
+}
+
 .tab {
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  border-radius: 100px;
+  width: 100%;
+  position: relative;
 }
 
 .tab-item {
-  margin-right: 16px;
+  flex: 1;
+  text-align: center;
+  padding: 16px 0;
+  border-radius: 100px;
+  font-size: 14px;
+  color: #737577;
   cursor: pointer;
-  border-bottom: 2px solid transparent;
-  color: #5F6163;
-  transition: border-color 0.3s, background-color 0.3s;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 24px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 18px;
+  z-index: 1;
+}
+
+.tab-indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 50%; /* 탭 인디케이터 너비는 두 개의 탭에 맞춰 50%로 설정 */
+  background-color: #ECEEF0;
+  border-radius: 100px;
+  transition: transform 0.3s ease; /* 슬라이드 트랜지션 */
+  z-index: 0; /* 텍스트 뒤에 배경 인디케이터를 배치 */
 }
 
 .tab-item.active {
-  color: #fff;
+  color: #202223;
+  /* background-color: #ECEEF0; */
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 18px;
 }
 
 .tab-content {
@@ -310,7 +346,6 @@ export default class Result extends Vue {
 .tab-content .option-item {
   display: flex;
   align-items: center;
-  width: 100%;
   padding: 20px;
   background-color: #222222;
   border-radius: 10px;
@@ -323,12 +358,12 @@ export default class Result extends Vue {
   background-color: #fff;
 }
 
-.tab-content .option-item .text {
+.tab-content .option-item .tab-text {
   margin-left: 10px;
   color: #fff;
 }
 
-.option-item.active .text {
+.option-item.active .tab-text {
   color: #000;
 }
 
@@ -375,33 +410,6 @@ export default class Result extends Vue {
   background: linear-gradient(180deg, #171717 0%, #171717 64.38%);
 }
 
-.floating > .participation {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 20px;
-  color: #fff;
-  font-weight: 300;
-}
-
-.floating > .participation > .people {
-  display: flex;
-  flex-direction: row;
-}
-
-.floating > .participation > .people > .person:not(:first-child) {
-  margin-left: -6px;
-}
-
-.floating > .participation > .people > .person {
-  width: 24px;
-  height: 24px;
-  background-color: #414244;
-  border-radius: 50%;
-  border: 1px solid #181D23;
-}
-
 .floating > button {
   width: 100%;
   min-height: 52px;
@@ -424,9 +432,9 @@ export default class Result extends Vue {
 .floating > button.none {
   margin-top: 8px;
   background-color: #171717;
-  color: #fff;
+  color: #9C9EA0;
   font-size: 15px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 18px;
 }
 
