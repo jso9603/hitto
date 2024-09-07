@@ -23,34 +23,42 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 
-// TODO
-// 1. 개행 (\n\n)이 너무 넓음
-// 2. 너비 맞췄으면..
-
 @Component
 export default class Ai extends Vue {
   typedText = ''
 
   mounted() {
-    const contents = '저는 스테판입니다.\n\n단순한 행운이 아닌 체계적인\n전략으로 14번이나\n당첨된 전설적인 인물입니다.\n\n자~ 이제 시작해볼까요?'
-    let saveInterval: any
+    const contents: string =
+      '"저는 스테판입니다.\n단순한 행운이 아닌 체계적인\n전략으로 14번이나\n당첨된 전설적인 인물이죠.\n제 소개는 그만 각설하고..."\n\n"자~ 이제 시작해볼까요?"';
+    let saveInterval: number | undefined;
 
-    let index = 0
-    this.typedText = ''
-    clearInterval(saveInterval) // 기존 interval 종료
+    let index = 0;
+    this.typedText = '';
+    clearInterval(saveInterval); // 기존 interval 종료
 
-    saveInterval = setInterval(() => {
-      if(index >= contents.length - 1) { // index가 범위에 도달될 경우 interval 종료
-        clearInterval(saveInterval)
+    saveInterval = window.setInterval(() => {
+      if (index >= contents.length - 1) {
+        clearInterval(saveInterval); // 인덱스가 범위에 도달하면 interval 종료
       }
 
-      if(contents[index] === '\n') { // 개행문자 일 경우 <br /> 삽입
-        this.typedText += '<br />'
-        index++
+      if (contents[index] === '\n') {
+        // 두 줄바꿈(\n\n)을 확인하여 두 번째 줄바꿈에만 스타일 적용
+        if (contents[index + 1] === '\n') {
+          this.typedText += '<div class="spacer"></div>'; // 두 번째 줄바꿈에 여백을 추가
+          index += 2; // 두 개의 줄바꿈을 건너뜀
+        } else {
+          this.typedText += '<br />';
+          index++;
+        }
       } else {
-        this.typedText += contents[index++]
+        if (index >= contents.lastIndexOf('"자~ 이제 시작해볼까요?"')) {
+          // 마지막 문장에 녹색 색상을 적용
+          this.typedText += `<span style="color: #4AFF81;">${contents[index++]}</span>`;
+        } else {
+          this.typedText += contents[index++];
+        }
       }
-    }, 50)
+    }, 50);
   }
 }
 </script>
@@ -65,9 +73,13 @@ export default class Ai extends Vue {
 
   /* 전체 height에서 header값 제거 */
   height: calc(100vh - 54px);
+  position: relative;
 }
 
 .ai > .img-bg {
+  position: absolute;
+  top: calc(50% - 230px);
+  
   width: 64px;
   height: 64px;
   display: flex;
@@ -75,7 +87,7 @@ export default class Ai extends Vue {
   justify-content: center;
   background-color: #4262FF;
   border-radius: 50%;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
 }
 
 .ai > .img-bg > img {
@@ -88,12 +100,21 @@ export default class Ai extends Vue {
 
 .typing1 {
   width: 100%;
-  color: #fff;
-  font-size: 22px;
-  font-weight: 600;
-  line-height: 33px;
+  color: #ECEEF0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
   letter-spacing: -0.5px;
   text-align: center;
+
+  position: absolute;
+  top: calc(50% - 147px); /* 텍스트의 높이 294px의 절반인 147px을 보정 */
+  white-space: pre-wrap;
+}
+
+::v-deep .spacer {
+  display: block;
+  margin-top: 20px; /* 줄바꿈 사이 여백 */
 }
 
 .startBtn {
