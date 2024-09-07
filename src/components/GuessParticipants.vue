@@ -110,7 +110,7 @@ export default class GuessParticipants extends Vue {
       console.log('challengeData: ', challengeData);
     }
 
-    if (challengeData && this.week === challengeData.round) {
+    if (userData && challengeData && this.week === challengeData.round) {
       this.myData = challengeData;
     }
   }
