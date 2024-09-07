@@ -4,7 +4,7 @@
     <div class="date">{{getFormattedDate(saturdayDate)}} 추첨</div>
 
     <div class="numbers">
-      <div v-for="(number, index) in 6" :key="index" class="number-circle">
+      <div v-for="(number, index) in 5" :key="index" class="number-circle">
         ?
       </div>
       <span class="plus">+</span>

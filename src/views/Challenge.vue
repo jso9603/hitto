@@ -126,6 +126,7 @@ export default class Challenge extends Vue {
             uid: user.uid,
             round: this.week,
             winningText: this.selectOptions[this.selectedIndex].text,
+            type: 'challange',
           }
           Cookies.set('challenge', JSON.stringify(data), { expires: 14 });
 
