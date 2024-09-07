@@ -27,7 +27,19 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class Ai extends Vue {
   typedText = ''
 
+  // iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
+  // 특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음
+  setViewportHeight = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
+
   mounted() {
+    window.addEventListener('resize', this.setViewportHeight);
+    window.addEventListener('orientationchange', this.setViewportHeight);
+
+    this.setViewportHeight();
+
     const contents: string =
       '"저는 스테판입니다.\n단순한 행운이 아닌 체계적인\n전략으로 14번이나\n당첨된 전설적인 인물이죠.\n제 소개는 그만 각설하고..."\n\n"자~ 이제 시작해볼까요?"';
     let saveInterval: number | undefined;
@@ -65,20 +77,23 @@ export default class Ai extends Vue {
 
 <style scoped>
 .ai {
+  margin: 0;
   padding: 0 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 
-  /* 전체 height에서 header값 제거 */
-  height: calc(100vh - 54px);
+  /* iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
+  특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음 */
+  /* margin-top: 20px까지 제외시킨다. */
+  height: calc(var(--vh, 1vh) * 100 - 78px);
   position: relative;
 }
 
 .ai > .img-bg {
   position: absolute;
-  top: calc(50% - 230px);
+  top: calc(50% - 178px);
   
   width: 64px;
   height: 64px;
@@ -108,7 +123,7 @@ export default class Ai extends Vue {
   text-align: center;
 
   position: absolute;
-  top: calc(50% - 147px); /* 텍스트의 높이 294px의 절반인 147px을 보정 */
+  top: calc(50% - 100px); /* 텍스트의 높이 294px의 절반인 147px을 보정 */
   white-space: pre-wrap;
 }
 

@@ -20,8 +20,7 @@
           <img src='@/assets/img-stefan-3d.png' at="character 이미지" />
         </div>
 
-        <div class='typing2'>"기운이 느껴져?<br/>한 주 동안 즐겁게 기다려보자구~"</div>
-        <div class="sub">마음에 들지 않으면 다시 생성할 수 있어요!</div>
+        <div class='typing2'>"Ai분석으로 번호를 생성했어요!<br/>맘에 드시나요?"</div>
 
         <div class="result__box">
           <div v-for="(round, index) in lottoNumbers" :key="index" class="round">
@@ -34,8 +33,7 @@
               <div v-for="number in round.slice(3, 5)" :key="number" :class="getNumberClass(number)">
                 {{ number }}
               </div>
-              <!-- <div class="plus">+</div> -->
-              <div :class="[getNumberClass(round[6]), 'last']">
+              <div :class="[getNumberClass(round[6])]">
                 {{ round[5] }}
               </div>
             </div>
@@ -43,16 +41,8 @@
         </div>
 
         <div class="floating">
-          <div class="participation">
-            <div class="people">
-              <div class="person" />
-              <div class="person" />
-              <div class="person" />
-            </div>
-            지난 주 5,230명이 당첨됐어요
-          </div>
-          <button :disabled="isLoading" class="primary" @click="onSelectedBall">선택 완료</button>
-          <button class="none" @click="oneMore">다시 생성</button>
+          <button :disabled="isLoading" class="primary" @click="onSelectedBall">선택할게요</button>
+          <button class="none" @click="oneMore">다시 선택할래요</button>
         </div>
       </div>
     </transition>
@@ -181,7 +171,19 @@ export default class Random extends Vue {
     }
   }
 
+  // iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
+  // 특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음
+  setViewportHeight = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
+
   mounted() {
+    window.addEventListener('resize', this.setViewportHeight);
+    window.addEventListener('orientationchange', this.setViewportHeight);
+
+    this.setViewportHeight();
+
     this.typingText();
     this.initCanvas();
     this.selectRandomMessageWithDelay();
@@ -323,7 +325,6 @@ export default class Random extends Vue {
       this.showMessage = true;
 
       setTimeout(() => {
-        // this.$router.push('/result');
         this.showPage1 = false;
         this.generateHighNumbers(1);
       }, 3000);
@@ -405,7 +406,15 @@ export default class Random extends Vue {
 }
 
 .container {
- padding: 0 20px;
+  margin: 0;
+  padding: 0 20px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  /* iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
+  특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음 */
+  /* margin-top: 20px까지 제외시킨다. */
+  height: calc(var(--vh, 1vh) * 100 - 78px);
 }
 
 /* .container {
@@ -422,6 +431,11 @@ export default class Random extends Vue {
   margin-top: 30px;
   background-color: #171717;
   text-align: center;
+
+  position: absolute;
+  top: calc(50% - 228px); /*디자인 수정되면 바꿔야 함 */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .typing1 {
@@ -457,13 +471,18 @@ export default class Random extends Vue {
   margin-right: auto;
 }
 
+.page2 {
+  position: absolute;
+  top: calc(50% - 154px); /*디자인 수정되면 바꿔야 함 */
+}
+
 .typing2 {
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   width: 100%;
   color: #fff;
-  font-size: 22px;
-  font-weight: 600;
-  line-height: 33px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
   letter-spacing: -0.5px;
   text-align: center;
 }
@@ -534,21 +553,11 @@ canvas {
   color: #fff;
 }
 
-.sub {
-  margin-bottom: 32px;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 24px;
-  letter-spacing: -0.5px;
-  text-align: center;
-  color: #9C9EA0;
-}
-
-.result__box {
+/* .result__box {
   padding: 32px 20px;
   background-color: #222222;
   border-radius: 16px;
-}
+} */
 .round {
   display: flex;
   flex-direction: column;
@@ -564,72 +573,35 @@ canvas {
 }
 
 .row > div {
-  width: 50px;
-  height: 50px;
-  margin: 5px;
+  width: 48px;
+  height: 48px;
+  margin: 6px;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
   font-weight: bold;
-}
-
-.plus {
-  font-size: 48px;
-  color: #fff;
+  color: #ECEEF0;
 }
 
 .yellow {
-  border: 2px solid #FEC03E !important;
-  color: #FEC03E !important;
+  background: linear-gradient(180deg, #FEC03E 0%, #C08405 100%) !important;
 }
 
 .blue {
-  border: 2px solid #4790FF !important;
-  color: #4790FF !important;
+  background: linear-gradient(180deg, #4790FF 0%, #2D6ED1 100%) !important;
 }
 
 .red {
-  border: 2px solid #E64D3D !important;
-  color: #E64D3D !important;
+  background: linear-gradient(180deg, #E64D3D 0%, #C23526 100%) !important;
 }
 
 .grey {
-  border: 2px solid #BEC3C7 !important;
-  color: #BEC3C7 !important;
+  background: linear-gradient(180deg, #BEC3C7 0%, #7C8388 100%) !important;
 }
 
 .green {
-  border: 2px solid #2ECD70 !important;
-  color: #2ECD70 !important;
-}
-
-.last {
-  background-color: transparent !important;
-  border-width: 2px;
-  border-style: solid;
-  border: none;
-  color: #171717 !important;
-}
-
-.yellow.last {
-  background-color: #FEC03E !important;
-}
-
-.blue.last {
-  background-color: #4790FF !important;
-}
-
-.red.last {
-  background-color: #E64D3D !important;
-}
-
-.grey.last {
-  background-color: #BEC3C7 !important;
-}
-
-.green.last {
-  background-color: #2ECD70 !important;
+  background: linear-gradient(180deg, #2ECD70 0%, #0E9D49 100%) !important;
 }
 
 .floating {
@@ -645,33 +617,6 @@ canvas {
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 
-.floating > .participation {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 20px;
-  color: #fff;
-  font-weight: 300;
-}
-
-.floating > .participation > .people {
-  display: flex;
-  flex-direction: row;
-}
-
-.floating > .participation > .people > .person:not(:first-child) {
-  margin-left: -6px;
-}
-
-.floating > .participation > .people > .person {
-  width: 24px;
-  height: 24px;
-  background-color: #414244;
-  border-radius: 50%;
-  border: 1px solid #181D23;
-}
-
 .floating > button {
   width: 100%;
   min-height: 52px;
@@ -679,19 +624,19 @@ canvas {
   padding: 8px 8px;
   border-radius: 24px;
   border-style: none;
-  color: #181D23;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 20px;
+  color: #202223;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 18px;
   cursor: pointer;
 }
 
 .floating > button.none {
   margin-top: 8px;
-  background-color: #171717;
-  color: #fff;
+  background-color: #fff;
+  color: #202223;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 18px;
 }
 </style>
