@@ -1,35 +1,32 @@
 <template>
   <div class="container">
-    <h3>모두의 희망로또</h3>
-    <div class="description">모희또의 ai 통계기반 알고리즘을 통<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
+    <div class="contents">
+      <h3>모두의 희망로또</h3>
+      <div class="description">모희또의 ai 통계기반 알고리즘을 통해<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
 
-    <div class="benefit" v-for="(benefit, index) in benefits" :key="index">
-      <img :src="require(`@/assets/${benefit.icon}`)" />
-      <div class="text">{{benefit.text}}</div>
-    </div>
-    <!-- <div class="get__started">
-      <img src="@/assets/ic-system-logo.svg" />
-      <div class="text">행운의 숫자로 꿈꾸는 경제적 자유</div>
-      <button @click="kakaoLoginStart" class="kakao">
-        <img src="@/assets/ic-system-kakao.svg" />
-        카카오로 시작하기
-      </button>
-    </div> -->
-
-    <div class="floating">
-      <div class="participation">
-        <div class="people">
-          <div class="person" />
-          <div class="person" />
-          <div class="person" />
-        </div>
-        5,230명이 당첨 소감에 참여했어요
+      <div class="benefit" v-for="(benefit, index) in benefits" :key="index">
+        <img :src="require(`@/assets/${benefit.icon}`)" />
+        <div class="text">{{benefit.text}}</div>
       </div>
+      <!-- <div class="get__started">
+        <img src="@/assets/ic-system-logo.svg" />
+        <div class="text">행운의 숫자로 꿈꾸는 경제적 자유</div>
+        <button @click="kakaoLoginStart" class="kakao">
+          <img src="@/assets/ic-system-kakao.svg" />
+          카카오로 시작하기
+        </button>
+      </div> -->
 
-      <button @click="kakaoLoginStart" class="kakao">
-        <img src="@/assets/ic-system-kakao.svg" />
-        카카오로 시작하기
-      </button>
+      <div class="floating">
+        <div class="participation">
+          5,230명이 당첨 소감에 참여했어요
+        </div>
+
+        <button @click="kakaoLoginStart" class="kakao">
+          <img src="@/assets/ic-system-kakao.svg" />
+          카카오로 시작하기
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -60,7 +57,7 @@ export default class Login extends Vue {
     },
     {
       icon: 'folder.svg',
-      text: '나만의 로또번호를 보관 관리해 보세요',
+      text: '나만의 로또번호를 관리하고 보관해 보세요',
     },
   ]
 
@@ -161,6 +158,12 @@ export default class Login extends Vue {
   flex-direction: column;
 }
 
+.contents {
+  position: absolute;
+  top: calc(50% - 184px);
+  width: calc(100% - 40px);
+}
+
 h3 {
   margin-top: 24px;
   margin-bottom: 12px;
@@ -247,22 +250,16 @@ h3 {
 
 
 .floating {
-  /* position: fixed;
-  margin-top: 32px;
-  bottom: 32px;
-  left: 50%;
-  transform: translate(-50%, 0);
-  width: 100%; */
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
-    padding: 20px;
-    background: linear-gradient(180deg, #171717 0%, #171717 64.38%);
-    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
+  padding: 20px;
+  background: linear-gradient(180deg, #171717 0%, #171717 64.38%);
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 
 .floating > .participation {
@@ -273,6 +270,7 @@ h3 {
   flex-direction: column;
   color: #fff;
   font-weight: 300;
+  font-size: 15px;
 }
 
 .floating > .participation > .people {

@@ -32,9 +32,6 @@
                 >
                   {{ num }}
                 </div>
-                <div class="plus-number">
-                  <span class="plus">+</span>
-                </div>
                 <div
                   :class="['number-circle', isMatchingNumber(lotto, Number(lotto.numbers[lotto.numbers.length - 1].split(', ').slice(-1)[0])) ? getNumberClass(Number(lotto.numbers[lotto.numbers.length - 1].split(', ').slice(-1)[0])) : 'default-color']"
                 >

@@ -38,15 +38,16 @@
             <span class="tab-text">{{ option.text }}</span>
           </div>
         </div>
-        <div v-if="activeTab === 'input'">
+        <div v-if="activeTab === 'input'" class="textarea-box">
           <textarea
+            ref="myTextarea"
             class="custom-textarea"
             v-model="impression"
-            placeholder="진솔한 당첨소감을 작성해보세요.\n꼭 이루어질거예요!"
             @input="handleInput"
           />
+          <div class="placeholder" @click="onPlaceholder" v-if="!impression">{{ placeholderText }}</div>
           <div class="textarea-footer">
-            <span>{{ impression.length }} / 300</span>
+            <span class="current">{{ impression.length }}<span class="max"> / 300</span></span>
           </div>
         </div>
       </div>
@@ -85,12 +86,13 @@ interface SelectOption {
   },
 })
 export default class Result extends Vue {
-  private activeTab: string = 'select';
-  private selectedIndex: number | null = null;
+  private activeTab: string = 'select'
+  private selectedIndex: number | null = null
 
-  isLoading = false;
+  isLoading = false
 
-  impression: string = '';
+  impression: string = ''
+  placeholderText: string = '진솔한 당첨소감을 작성해보세요.\n꼭 이루어질거예요!'
 
   isPopupVisible = false;
 
@@ -121,11 +123,23 @@ export default class Result extends Vue {
   }
 
   private handleInput(event: Event) {
+    const textarea = document.getElementById('textarea') as HTMLTextAreaElement;
+    const placeholder = document.querySelector('.placeholder') as HTMLDivElement;
+    
+    if (textarea && placeholder) {
+      // 텍스트 영역에 입력된 값이 없으면 placeholder를 보여줌
+      placeholder.style.display = textarea.value ? 'none' : 'block';
+    }
+
     const target = event.target as HTMLTextAreaElement;
     if (target.value.length > 300) {
       target.value = target.value.slice(0, 300);
     }
     this.impression = target.value;
+  }
+
+  private onPlaceholder() {
+    (this.$refs.myTextarea as HTMLTextAreaElement).focus();
   }
 
   private async onLogin() {
@@ -367,22 +381,32 @@ export default class Result extends Vue {
   color: #000;
 }
 
+.textarea-box {
+  padding: 16px 20px;
+  border-radius: 10px;
+  background-color: #2a2a2a;
+  position: relative;
+}
+
 .custom-textarea {
+  padding: 0;
   width: 100%;
-  height: 100px;
-  padding: 15px;
+  height: 46px;
   border: none;
   outline: none;
-  border-radius: 10px;
   background-color: #2a2a2a;
   color: #b3b3b3;
   resize: none;
-  font-size: 16px;
-  white-space: pre-line; /* 줄바꿈을 위한 스타일 */
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 23px;
+  white-space: pre-line;
 }
 
-.custom-textarea::placeholder {
-  color: #737577;
+.placeholder {
+  position: absolute;
+  top: 16px;
+  color: #9C9EA0;
   white-space: pre-line;
   font-size: 15px;
   font-weight: 500;
@@ -396,6 +420,17 @@ export default class Result extends Vue {
   margin-top: 10px;
   color: #b3b3b3;
   font-size: 14px;
+}
+
+.textarea-footer span {
+  color: #FFFFFF;
+  font-size: 13px;
+  line-height: 17px;
+  font-weight: 400;
+}
+
+.textarea-footer span.max {
+  color: #D3D5D9;
 }
 
 .floating {
