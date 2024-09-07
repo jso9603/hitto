@@ -9,7 +9,10 @@
         <div class="id">{{nickname}}</div>
         <div class="text">{{myData.winningText}}</div>
       </div>
-      <div class="challenging">도전 중</div>
+      <div class="challenging">
+        <img src="@/assets/ic-outline-checkmark.svg" />
+        도전 중
+      </div>
     </div>
 
     <div
@@ -158,13 +161,15 @@ export default class GuessParticipants extends Vue {
 }
 
 .participant > .challenging {
+  display: flex;
+  align-items: center;
   margin-left: auto;
-  padding: 4px 7px;
-  color: #4AFF81;
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 14px;
-  border: 1px solid #4AFF81;
+  padding: 5px 8px;
+  color: #ECEEF0;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16px;
+  border: 1px solid #ECEEF0;
   border-radius: 100px;
 }
 </style>

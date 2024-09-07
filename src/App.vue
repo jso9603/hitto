@@ -47,7 +47,6 @@ export default class App extends Vue {
   get myNumbers() {
     const numbersStr = sessionStorage.getItem('lottoNumbers')
     const cleanedStr = numbersStr && numbersStr.replace(/^"|"$/g, '')
-    console.log(numbersStr)
 
     return cleanedStr && cleanedStr.split(',').map(num => Number(num.trim()))
   }

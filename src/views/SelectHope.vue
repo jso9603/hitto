@@ -180,67 +180,79 @@ export default class Result extends Vue {
     this.isLoading = true;
 
     const userData = Cookies.get('user') as string;
-    const user = JSON.parse(userData);
+    let user = null;
 
-    const t1 = dayjs('20021207')
-    const t2 = dayjs()
-    const dff = dayjs.duration(t2.diff(t1)).asDays()
+    if (userData) {
+      try {
+        user = JSON.parse(userData)
 
-    // 돌아오는 회차를 저장
-    const round = Math.floor(dff / 7) + 2
+        const t1 = dayjs('20021207')
+        const t2 = dayjs()
+        const dff = dayjs.duration(t2.diff(t1)).asDays()
 
-    const numbers = [(sessionStorage.getItem('lottoNumbers'))!.replace(/^"|"$/g, '')]
+        // 돌아오는 회차를 저장
+        const round = Math.floor(dff / 7) + 2
 
-    try {
-      // lottos or dream 컬렉션에 새로운 문서 추가
-      await addDoc(collection(db, collectionName), {
-        date: dayjs().format('YYYYMMDD HH:MM'),
-        numbers,
-        uid: user.uid,
-        round,
-        winningText: this.activeTab === 'select' ? this.selectOptions[this.selectedIndex!].text : this.impression,
-      });
+        const numbers = [(sessionStorage.getItem('lottoNumbers'))!.replace(/^"|"$/g, '')]
 
-      const datas = Cookies.get('menu') === 'AI 번호 생성' ? sessionStorage.getItem('myNumbers') : sessionStorage.getItem('myDreams');
-      const insertData = {
-        date: dayjs().format('YYYYMMDD HH:MM'),
-        numbers,
-        uid: user.uid,
-        round,
-        winningText: this.activeTab === 'select' ? this.selectOptions[this.selectedIndex!].text : this.impression,
+        try {
+          // lottos or dream 컬렉션에 새로운 문서 추가
+          await addDoc(collection(db, collectionName), {
+            date: dayjs().format('YYYYMMDD HH:MM'),
+            numbers,
+            uid: user.uid,
+            round,
+            winningText: this.activeTab === 'select' ? this.selectOptions[this.selectedIndex!].text : this.impression,
+          })
+
+          const datas = Cookies.get('menu') === 'AI 번호 생성' ? sessionStorage.getItem('myNumbers') : sessionStorage.getItem('myDreams')
+          const insertData = {
+            date: dayjs().format('YYYYMMDD HH:MM'),
+            numbers,
+            uid: user.uid,
+            round,
+            winningText: this.activeTab === 'select' ? this.selectOptions[this.selectedIndex!].text : this.impression,
+          }
+
+          if (!datas) {
+            // sessionStorage에 아무 데이터도 없으면, 배열에 insertData를 넣어서 저장
+            const sessionStorageName = Cookies.get('menu') === 'AI 번호 생성' ? 'myNumbers' : 'myDreams'
+            sessionStorage.setItem(sessionStorageName, JSON.stringify(insertData));
+          } else {
+            const alreadyDatas = JSON.parse(datas)
+
+            const updatedData = Array.isArray(alreadyDatas) ? alreadyDatas : [alreadyDatas]
+            updatedData.push(insertData)
+
+            updatedData.sort((a, b) => {
+              return dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1
+            })
+
+            const sessionStorageName = Cookies.get('menu') === 'AI 번호 생성' ? 'myNumbers' : 'myDreams'
+            sessionStorage.setItem(sessionStorageName, JSON.stringify(updatedData))
+          }
+
+          sessionStorage.removeItem('hope')
+          sessionStorage.removeItem('lottoNumbers')
+          sessionStorage.removeItem('type')
+
+          setTimeout(() => {
+            this.isLoading = false
+
+            this.$router.push(`/my/number?tab=${Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream'}`)
+          }, 2000)
+          
+        } catch (e) {
+          console.error('Error adding document: ', e)
+          alert('저장하는 과정에서 오류가 발생했습니다. 다시 시도해주세요.')
+        }
+      } catch (error) {
+        console.error('Failed to parse user data:', error)
+        user = null
       }
-
-      if (!datas) {
-        // sessionStorage에 아무 데이터도 없으면, 배열에 insertData를 넣어서 저장
-        const sessionStorageName = Cookies.get('menu') === 'AI 번호 생성' ? 'myNumbers' : 'myDreams';
-        sessionStorage.setItem(sessionStorageName, JSON.stringify(insertData));
-      } else {
-        const alreadyDatas = JSON.parse(datas);
-
-        const updatedData = Array.isArray(alreadyDatas) ? alreadyDatas : [alreadyDatas];
-        updatedData.push(insertData);
-
-        updatedData.sort((a, b) => {
-          return dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1;
-        });
-
-        const sessionStorageName = Cookies.get('menu') === 'AI 번호 생성' ? 'myNumbers' : 'myDreams';
-        sessionStorage.setItem(sessionStorageName, JSON.stringify(updatedData));
-      }
-
-      sessionStorage.removeItem('hope');
-      sessionStorage.removeItem('lottoNumbers');
-      sessionStorage.removeItem('type');
-
-      setTimeout(() => {
-        this.isLoading = false;
-
-        this.$router.push(`/my/number?tab=${Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream'}`);
-      }, 2000);
-      
-    } catch (e) {
-      console.error('Error adding document: ', e);
-      alert('저장하는 과정에서 오류가 발생했습니다. 다시 시도해주세요.');
+    } else {
+      user = null
+      this.$router.push('/login')
     }
   }
 
@@ -248,14 +260,14 @@ export default class Result extends Vue {
   created() {
     if (sessionStorage.getItem('hope') && sessionStorage.getItem('lottoNumbers')) {
       if (sessionStorage.getItem('hope-select') === 'true') {
-        this.selectedIndex = Number(sessionStorage.getItem('hope'));
-        this.activeTab = 'select';
+        this.selectedIndex = Number(sessionStorage.getItem('hope'))
+        this.activeTab = 'select'
       } else {
-        this.impression = sessionStorage.getItem('hope') || '';
-        this.activeTab = 'input';
+        this.impression = sessionStorage.getItem('hope') || ''
+        this.activeTab = 'input'
       }
       
-      this.saveLottoNumbers(Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream');
+      this.saveLottoNumbers(Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream')
     }
   }
 }
@@ -487,7 +499,6 @@ export default class Result extends Vue {
 
 .waitinging {
   padding: 40px 20px;
-  width: 100%;
   display: flex;
   align-items: center;
   flex-direction: column;
