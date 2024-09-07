@@ -80,20 +80,20 @@ export default class MyNumber extends Vue {
     }
   }
 
-  isAfterSaturday8_30() {
+  isAfterSaturday9() {
     const now = dayjs();
-    const saturday8_30 = dayjs().day(6).hour(20).minute(30).second(0);
-    return now.isAfter(saturday8_30);
+    const saturday9 = dayjs().day(6).hour(21).minute(0).second(0);
+    return now.isAfter(saturday9);
   }
 
   created() {
     dayjs.extend(duration)
 
     const currentWeek = this.getWeek();
-    if (this.isAfterSaturday8_30()) {
-      this.week = (currentWeek + 1).toString();
+    if (this.isAfterSaturday9()) {
+      this.week = (currentWeek).toString();
     } else {
-      this.week = currentWeek.toString();
+      this.week = (currentWeek - 1).toString();
     }
     this.saturdayDate = this.getSaturdayDate(Number(this.week));
 
