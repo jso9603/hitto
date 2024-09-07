@@ -1,12 +1,12 @@
 <template>
   <div :class="['header', headerClass, { 'scrolled': isScrolled }]">
     <template v-if="$route.path === '/' || $route.path === '/home'">
-      <img src="@/assets/ic-system-logo.svg" class="logo" />
+      <img src="@/assets/ic-system-logo.svg" class="logo" @click="$router.replace('/')" />
       <img src="@/assets/ic-system-qr.svg" class="qr" @click="onQr"/>
       <button class="share" @click="onShare">공유</button>
     </template>
 
-    <template v-else-if="$route.path === '/ai' || $route.path === '/dream' || $route.path === '/random' || $route.path === '/select-hope'">
+    <template v-else-if="$route.path === '/ai' || $route.path === '/dream' || $route.path === '/random'">
       <button @click="goBack" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
@@ -14,19 +14,28 @@
       <button class="use" @click="use">안내</button>
     </template>
 
+    <template v-else-if="$route.path === '/select-hope'">
+      <div class="empty"></div>
+      <div class="menu">소망 입력</div>
+      <button @click="goBackHope" class="close">
+        <img src="@/assets/ic-system-close-img.svg" />
+      </button>
+    </template>
+
     <template v-else-if="$route.path === '/qr'">
-      <img src="@/assets/ic-system-logo.svg" class="logo" />
+      <img src="@/assets/ic-system-logo.svg" class="logo" @click="$router.replace('/')" />
     </template>
 
     <template v-else-if="$route.path === '/login'">
-      <img src="@/assets/ic-system-logo.svg" class="logo" />
+      <div class="empty"></div>
+      <img src="@/assets/ic-system-logo.svg" class="logo" @click="$router.replace('/')" />
       <button @click="goBack" class="close">
         <img src="@/assets/ic-system-close-img.svg" />
       </button>
     </template>
 
     <template v-else-if="$route.path === '/my'">
-      <div></div>
+      <div class="empty"></div>
       <div class="menu">나의 모히또</div>
       <img src="@/assets/ic-setting.svg" v-if="isLoggedIn" @click="onSetting" />
     </template>
@@ -63,6 +72,12 @@
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
       <div class="menu">로또 맞추기</div>
+    </template>
+    <template v-else-if="$route.path === '/terms'">
+      <button @click="goBack" class="back">
+        <img src="@/assets/ic-system-back-img.svg" />
+      </button>
+      <div class="menu">약관</div>
     </template>
   </div>
 </template>
@@ -166,6 +181,10 @@ export default class Header extends Vue {
     this.$router.replace('/');
   }
 
+  goBackHope() {
+    this.$emit('goBack');
+  }
+
   onSetting() {
     this.$router.push('/my/setting');
   }
@@ -214,6 +233,11 @@ export default class Header extends Vue {
   width: 24px;
   height: auto;
   cursor: pointer;
+}
+
+.empty {
+  width: 24px;
+  height: 24px;
 }
 
 .back > img {

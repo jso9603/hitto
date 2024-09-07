@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="bar" />
       <div class="modal-header">
-        <h2>생성된 로또 번호를<br/>저장할까요?</h2>
+        <h2>어어~잠깐!<br/>생성된 소중한 로또번호가 사라져요.</h2>
         <p>카카오로 시작하면 번호를 저장하고 관리할 수 있어요!</p>
       </div>
       <div class="modal-body">
@@ -24,7 +24,7 @@
         <button class="kakao-btn" @click="startWithKakao">
           <img src="@/assets/ic-system-kakao.svg" alt="Kakao" /> 카카오로 시작하기
         </button>
-        <button class="later-btn" @click="closePopup">나중에 할게요</button>
+        <button class="later-btn" @click="onHome">나중에 할게요</button>
       </div>
     </div>
   </div>
@@ -35,17 +35,43 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
 export default class LoginPopup extends Vue {
-  @Prop({ type: Array, default: () => [] }) numbers!: number[];
-  @Prop({ type: Boolean, default: false }) visible!: boolean;
+  @Prop({ type: Array, default: () => [] }) numbers!: number[]
+  @Prop({ type: Boolean, default: false }) visible!: boolean
 
   closePopup() {
-    this.$emit('close');
+    this.$emit('close')
   }
 
-  startWithKakao() {
-    // 카카오 시작하기 로직 처리
-    console.log('카카오로 시작');
-    this.closePopup();
+  onHome() {
+    this.$emit('close')
+    this.$router.replace('/')
+  }
+
+  async startWithKakao() {
+    await window.Kakao.Auth.login({
+      success: (res: any) => {
+        console.log(res);
+        window.Kakao.Auth.setAccessToken(res.access_token);
+        console.log('카카오 로그인 성공');
+
+        window.Kakao.API.request({
+          url: '/v2/user/me',
+          success: (res: any) => {
+            console.log('카카오 인가 요청 성공');
+            const kakaoAccount = res.kakao_account;
+            console.log(kakaoAccount)
+
+            this.closePopup()
+          },
+          fail: (error: any) => {
+            console.log(error);
+          },
+        })
+      },
+      fail: (error: any) => {
+        console.log(error);
+      },
+    })
   }
 
   getNumberClass(num: number): string {

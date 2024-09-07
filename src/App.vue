@@ -1,12 +1,20 @@
 <template>
   <div class="app">
-    <Header />
+    <Header @goBack="openPopup" />
+  
     <transition name="fade">
       <div class="noti" v-if="showCopyImage">
         <img src="@/assets/ic-system-noti.svg" />
         <div>링크가 복사되었어요!</div>
       </div>
     </transition>
+
+    <LoginPopup
+      :numbers="myNumbers"
+      :visible="isPopupVisible"
+      @close="isPopupVisible = false"
+    />
+  
     <div class="content">
       <router-view />
     </div>
@@ -16,20 +24,34 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+
 import Header from '@/components/Header.vue'
 import Navigation from '@/components/Navigation.vue'
+import LoginPopup from '@/components/LoginPopup.vue'
+
 import { mapState } from 'vuex'
 
 @Component({
   components: {
     Header,
     Navigation,
+    LoginPopup,
   },
    computed: {
     ...mapState(['showCopyImage']),
   },
 })
 export default class App extends Vue {
+  isPopupVisible = false;
+
+  get myNumbers() {
+    const numbersStr = sessionStorage.getItem('lottoNumbers')
+    const cleanedStr = numbersStr && numbersStr.replace(/^"|"$/g, '')
+    console.log(numbersStr)
+
+    return cleanedStr && cleanedStr.split(',').map(num => Number(num.trim()))
+  }
+
   get showNavigation() {
     const currentPath = this.$route.path.toLowerCase();
 
@@ -37,6 +59,29 @@ export default class App extends Vue {
       return true
     }
     return false
+  }
+
+  private openPopup(): void {
+    this.isPopupVisible = true
+  }
+
+  private closePopup(): void {
+    this.isPopupVisible = false
+  }
+
+  // back 키를 눌렀을 때 실행되는 함수
+  private handleBackButton(): void {
+    if (this.$route.path === '/select-hope') {
+      this.openPopup(); 
+    }
+  }
+
+  mounted() {
+    window.addEventListener('popstate', this.handleBackButton)
+  }
+
+  beforeDestroy() {
+    window.removeEventListener('popstate', this.handleBackButton);
   }
 }
 </script>
