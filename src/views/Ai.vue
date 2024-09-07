@@ -7,12 +7,7 @@
     <div class='typing1' v-html="typedText"></div>
 
     <div class="floating">
-      <div class="participation">
-        <div class="people">
-          <img src="@/assets/ic-system-user1.svg" class="person" />
-          <img src="@/assets/ic-system-user2.svg" class="person" />
-          <img src="@/assets/ic-system-user3.svg" class="person" />
-        </div>
+      <div class="participation">        
         5,230명이 추천 번호를 받았어요.
       </div>
       <button class="primary" @click="$router.push('/random')">시작하기</button>

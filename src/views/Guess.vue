@@ -1,5 +1,5 @@
 <template>
-  <div class="guess">
+  <div class="guess" ref="guessRef">
     <div class="week">{{week}}회</div>
     <div class="date">{{getFormattedDate(saturdayDate)}} 추첨</div>
 
@@ -15,13 +15,15 @@
     <div class="hr__line" />
 
     <GuessParticipants :week="this.week" />
+
     <button
-      class="challenge"
+      :style="{ right: rightValue + 'px' }" 
+      :class="['challenge', { expanded: isScrolled }]"
       :disabled="isButtonDisabled"
       @click="onChallenge"
     >
       <img src="@/assets/ic-system-challenge.svg" />
-      1등 도전하기
+      <span v-if="isScrolled">1등 도전하기</span>
     </button>
   </div>
 </template>
@@ -41,6 +43,10 @@ export default class Guess extends Vue {
   week =''
   saturdayDate = ''
   isButtonDisabled = false
+  private isScrolled: boolean = false
+
+  private rightValue: number = 0
+  private guessWidth: number = 0
 
    getWeek() {
     const t1 = dayjs('20021207')
@@ -51,36 +57,61 @@ export default class Guess extends Vue {
   }
 
   getSaturdayDate(week: number) {
-    const t1 = dayjs('2002-12-07');
-    const saturday = t1.add(week - 1, 'week');
-    return saturday.format('YYYY-MM-DD');
+    const t1 = dayjs('2002-12-07')
+    const saturday = t1.add(week - 1, 'week')
+    return saturday.format('YYYY-MM-DD')
   }
 
   getFormattedDate(dateString: string) {
-    return dayjs(dateString).format('YYYY년 M월 D일');
+    return dayjs(dateString).format('YYYY년 M월 D일')
   }
 
   checkButtonDisabled() {
     const now = dayjs();
-    const saturdaySixPM = dayjs().day(6).hour(18).minute(0).second(0); // 이번 주 토요일 18:00
-    const saturdayMidnight = saturdaySixPM.add(6, 'hours'); // 토요일 18:00에서 6시간 후 (즉, 자정)
+    const saturdaySixPM = dayjs().day(6).hour(18).minute(0).second(0) // 이번 주 토요일 18:00
+    const saturdayMidnight = saturdaySixPM.add(6, 'hours') // 토요일 18:00에서 6시간 후 (즉, 자정)
 
       // 현재 시간이 토요일 18:00부터 자정(6시간) 사이인지 확인
-      this.isButtonDisabled = now.isAfter(saturdaySixPM) && now.isBefore(saturdayMidnight);
+      this.isButtonDisabled = now.isAfter(saturdaySixPM) && now.isBefore(saturdayMidnight)
+  }
+
+  handleScroll(): void {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    this.isScrolled = scrollY > 100 // 스크롤이 100px 이상일 때 버튼을 확대
   }
 
   onChallenge() {
-    this.$router.push(`/challenge?week=${this.week}`);
+    this.$router.push(`/challenge?week=${this.week}`)
+  }
+
+  private setRightValue(): void {
+    const guessElement = this.$refs.guessRef as HTMLElement
+    if (guessElement) {
+      this.guessWidth = guessElement.offsetWidth // guess 요소의 너비를 가져옴
+      this.rightValue = this.guessWidth - 20 // right 값을 너비 + 20px으로 설정
+    }
+  }
+
+  mounted() {
+    this.setRightValue()
+    window.addEventListener('resize', this.setRightValue)
+
+    window.addEventListener('scroll', this.handleScroll)
   }
 
   created() {
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0)
 
     dayjs.extend(duration)
 
-    const currentWeek = this.getWeek();
+    const currentWeek = this.getWeek()
     this.week = this.getWeek().toString()
-    this.saturdayDate = this.getSaturdayDate(currentWeek);
+    this.saturdayDate = this.getSaturdayDate(currentWeek)
+  }
+
+  beforeDestroy(): void {
+    window.removeEventListener('resize', this.setRightValue)
+    window.removeEventListener('scroll', this.handleScroll)
   }
 }
 </script>
@@ -148,18 +179,20 @@ export default class Guess extends Vue {
   align-items: center;
   gap: 4px;
   position: fixed;
-  transform: translateX(-50%);
-  left: 50%;
   bottom: 84px;
   background-color: #4AFF81;
   border: none;
   border-radius: 40px;
-  padding: 16px 20px;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 20px;
+  padding: 16px;
   text-align: center;
   color: #181D23;
   cursor: pointer;
+  transition: width 0.3s ease, height 0.3s ease, border-radius 0.3s ease, padding 0.3s ease;
+}
+
+.expanded {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
 }
 </style>

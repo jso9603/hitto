@@ -11,7 +11,6 @@
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
       <div class="menu">{{ menuName }}</div>
-      <button class="use" @click="use">안내</button>
     </template>
 
     <template v-else-if="$route.path === '/select-hope'">
@@ -41,6 +40,7 @@
     </template>
 
     <template v-else-if="$route.path === '/my/number'">
+      <div class="empty"></div>
       <button @click="goBack" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
@@ -48,6 +48,7 @@
     </template>
 
     <template v-else-if="$route.path === '/my/setting'">
+      <div class="empty"></div>
       <button @click="goBack" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
@@ -55,6 +56,7 @@
     </template>
 
     <template v-else-if="$route.path === '/leave'">
+      <div class="empty"></div>
       <button @click="goBack" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
@@ -62,18 +64,20 @@
     </template>
 
     <template v-else-if="$route.path === '/guess' || $route.path === '/Guess'">
-      <div></div>
+      <div class="empty"></div>
       <div class="menu">{{ menuName }}</div>
       <button class="use" @click="use">안내</button>
     </template>
 
     <template v-else-if="$route.path === '/challenge'">
+      <div class="empty"></div>
       <button @click="goBack" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
       <div class="menu">로또 맞추기</div>
     </template>
     <template v-else-if="$route.path === '/terms'">
+      <div class="empty"></div>
       <button @click="goBack" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
       </button>

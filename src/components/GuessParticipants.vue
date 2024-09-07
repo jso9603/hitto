@@ -4,7 +4,9 @@
       v-if="myData"
       class="participant"
     >
-      <img :src="userImage" />
+      <div class="image-bg">
+        <img :src="userImage" />
+      </div>
       <div class="info">
         <div class="id">{{nickname}}</div>
         <div class="text">{{myData.winningText}}</div>
@@ -21,7 +23,9 @@
       class="participant"
       :style="{ animationDelay: `${index * 0.1}s` }"
     >
-      <img :src="require(`@/assets/ic-system-user${participant.img}.svg`)" />
+      <div class="image-bg">
+        <img :src="require(`@/assets/${participant.img}`)" />
+      </div>
       <div class="info">
         <div class="id">{{participant.id}}</div>
         <div class="text">{{participant.winningText}}</div>
@@ -56,21 +60,21 @@ export default class GuessParticipants extends Vue {
     if (this.user !== null) {
       const lastDigit = parseInt(this.user.uid.slice(-1), 10);
 
-      let imageName = "";
+      let imageName = ''
 
       if (lastDigit >= 1 && lastDigit <= 3) {
-        imageName = 'ic-system-user1.svg';
+        imageName = 'img-sunny-3d.png';
       } else if (lastDigit >= 4 && lastDigit <= 6) {
-        imageName = 'ic-system-user2.svg';
+        imageName = 'img-stella-3d.png';
       } else if (lastDigit >= 7 && lastDigit <= 9) {
-        imageName = 'ic-system-user3.svg';
+        imageName = 'img-stefan-3d.png';
       } else {
-        imageName = 'ic-system-user1.svg';
+        imageName = 'img-sunny-3d.png';
       }
 
       return require(`@/assets/${imageName}`);
     } else {
-      return require(`@/assets/ic-system-user3.svg`);
+      return require(`@/assets/img-stefan-3d.png`);
     }
   }
 
@@ -139,9 +143,19 @@ export default class GuessParticipants extends Vue {
   animation: slideUp 0.5s forwards;
 }
 
-.participant > img {
+.image-bg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 32px;
   height: 32px;
+  background-color: #333333;
+  border-radius: 50%;
+}
+
+.participant > .image-bg > img {
+  width: 24px;
+  height: 24px;
 }
 
 .participant > .info > .id {
