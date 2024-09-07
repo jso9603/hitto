@@ -120,8 +120,10 @@ export default class My extends Vue {
   }
 
   onGeneral(index: number) {
-    if (index === 0) {
-      this.openEmail();
+    if (index === 0 || index === 1) {
+      this.openEmail(index === 0 ? '문의사항' : '광고문의');
+    } else {
+      this.$router.push('/terms');
     }
   }
 
@@ -130,9 +132,9 @@ export default class My extends Vue {
     this.$router.push('/my/number')
   }
 
-  openEmail() {
+  openEmail(subjectTitle: string) {
     const email = 'mohito.project@gmail.com'; 
-    const subject = encodeURIComponent('문의사항');
+    const subject = encodeURIComponent(subjectTitle);
     const body = encodeURIComponent('여기에 내용을 입력하세요.');
 
     const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;

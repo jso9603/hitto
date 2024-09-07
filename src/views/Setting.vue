@@ -3,7 +3,7 @@
     <div class="menu">
       <div class="label">
         <div class="title">
-          연결된 계정
+          연결된 SNS계정
           <div class="email" v-if="user">
             <div class="kakao">
               <img src="@/assets/ic-system-kakao.svg" />
@@ -39,10 +39,13 @@ export default class Setting extends Vue {
   private async handleToggle(newState: boolean) {
     this.toggleState = newState;
 
-    if (!this.toggleState) {
-      await Cookies.remove('user');
-      await alert('로그아웃 되었습니다');
-      await this.$router.push('/');
+    const confirmed = confirm('정말 로그아웃하시겠습니까?');
+    if (confirmed) {
+      if (!this.toggleState) {
+        await Cookies.remove('user');
+        await alert('로그아웃 되었습니다');
+        await this.$router.push('/');
+      }
     }
   }
 

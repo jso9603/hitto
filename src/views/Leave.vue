@@ -178,10 +178,10 @@ img {
   padding: 8px 8px;
   border-radius: 24px;
   border-style: none;
-  color: #181D23;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 20px;
+  color: #202223;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 18px;
   cursor: pointer;
 }
 
@@ -192,11 +192,11 @@ img {
 
 .floating > button.none {
   margin-top: 12px;
-  background-color: #202223;
-  color: #5F6163;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 20px;
+  background-color: #171717;
+  color: #9C9EA0;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 18px;
 }
 
 @keyframes bounce {
