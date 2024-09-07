@@ -11,7 +11,7 @@
 
     <div v-if="isLoading">
       <div class="waitinging">
-        <img src="@/assets/ic-system-stefan.svg" class="bounce-animation" />
+        <img src="@/assets/ic-stefan-2d.svg" class="bounce-animation" />
         <div class="waiting">잠시만 기다려주세요.</div>
       </div>
     </div>

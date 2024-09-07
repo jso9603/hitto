@@ -7,7 +7,7 @@
   
     <div v-if="loading">
       <div class="waitinging">
-        <img src="@/assets/ic-system-stefan.svg" class="bounce-animation" />
+        <img src="@/assets/ic-stefan-2d.svg" class="bounce-animation" />
         <div class="waiting">잠시만 기다려주세요.</div>
       </div>
     </div>
@@ -51,7 +51,7 @@
       </div>
       <div v-else>
         <div class="no-data">
-          <img src="@/assets/ic-system-stefan.svg" />
+          <img src="@/assets/ic-stefan-2d.svg" />
           <div>행운은 도전하는 자에게 찾아옵니다!<br/>경제적 자유로 가는 첫걸음을 지금 시작해보세요!</div>
           <button @click="this.$router.push('/ai')">생성하기</button>
         </div>
