@@ -396,7 +396,7 @@ mainCategories: MainCategory[] = [
   align-items: center;
   width: 100%;
   margin-bottom: 12px;
-  padding: 20px;
+  padding: 18px;
   background-color: #222;
   border-radius: 16px;
   color: #fff;

@@ -316,14 +316,13 @@ export default class Result extends Vue {
 }
 
 .tab-container {
-  width: 100%;
+  padding: 4px;
   background-color: #222222;
   border-radius: 100px;
 }
 
 .tab {
   display: flex;
-  margin-bottom: 24px;
   border-radius: 100px;
   width: 100%;
   position: relative;
@@ -372,7 +371,7 @@ export default class Result extends Vue {
 .tab-content .option-item {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 18px;
   background-color: #222222;
   border-radius: 10px;
   margin-bottom: 8px;
@@ -477,7 +476,6 @@ export default class Result extends Vue {
 }
 
 .floating > button.none {
-  margin-top: 8px;
   background-color: #171717;
   color: #9C9EA0;
   font-size: 15px;

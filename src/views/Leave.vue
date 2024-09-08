@@ -257,7 +257,6 @@ img {
 }
 
 .floating > button.none {
-  margin-top: 12px;
   background-color: #171717;
   color: #9C9EA0;
   font-size: 15px;

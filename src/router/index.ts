@@ -14,6 +14,7 @@ import Challenge from '@/views/Challenge.vue'
 import Setting from '@/views/Setting.vue'
 import Leave from '@/views/Leave.vue'
 import Terms from '@/views/Terms.vue'
+import Test from '@/views/Test.vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -93,6 +94,11 @@ const routes = [
     path: '/terms',
     name: 'terms',
     component: Terms,
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: Test,
   }
 ];
 
