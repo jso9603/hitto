@@ -56,11 +56,11 @@
     </template>
 
     <template v-else-if="$route.path === '/leave'">
-      <div class="empty"></div>
       <button @click="goBack" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
       <div class="menu">탈퇴하기</div>
+      <div class="empty"></div>
     </template>
 
     <template v-else-if="$route.path === '/guess' || $route.path === '/Guess'">
