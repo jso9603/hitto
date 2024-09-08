@@ -492,9 +492,9 @@ mainCategories: MainCategory[] = [
   flex-direction: column;
   gap: 8px;
   color: #ECEEF0;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 22px;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 18px;
   font-variant: common-ligatures tabular-nums;
 }
 

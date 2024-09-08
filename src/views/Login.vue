@@ -306,9 +306,9 @@ h3 {
   border-radius: 40px;
   padding: 14px 29.5px;
   color: #181D23;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
-  line-height: 19px;
+  line-height: 18px;
   border: none;
 }
 
