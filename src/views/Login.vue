@@ -215,21 +215,21 @@ export default class Login extends Vue {
   padding-right: 20px;
   /* iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
   특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음 */
-  /* 타이틀 margin-top: 24px 더해줘야 함 */
-  height: calc(var(--vh, 1vh) * 100 - 78px);
+  /* header: 54px, 하단 bottom: 126px */
+  height: calc(var(--vh, 1vh) * 100 - 180px);
   background-color: #171717;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .contents {
-  position: absolute;
-  top: calc(50% - 184px);
   width: calc(100% - 40px);
 }
 
 h3 {
-  margin-top: 24px;
+  margin-top: 0;
   margin-bottom: 12px;
   font-family: Pretendard;
   font-size: 26px;
