@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <img class="main" src="@/assets/ic-system-main.png" />
+    <img class="main" src="@/assets/img-mohito.png" />
     <div class="desc">ai 통계기반 알고리즘을 통해<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
 
     <div class="boxes">
@@ -9,7 +9,7 @@
         <div class="text">GTP가 분석해주는<br/><span>AI 번호 생성</span></div>
       </div>
       <div class="box" @click="onClick('dream', '꿈해몽 생성')">
-        <img src="@/assets/ic-dreams.svg" alt="dream" />
+        <img src="@/assets/img-stella-2d.png" alt="dream" />
         <div class="text">조상신이 점지해주는<br/><span>꿈해몽 생성</span></div>
       </div>
     </div>

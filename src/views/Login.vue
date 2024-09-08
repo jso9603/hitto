@@ -52,7 +52,7 @@ export default class Login extends Vue {
 
   private benefits = [
     {
-      icon: 'free.svg',
+      icon: 'ic-stefan-2d.svg',
       text: '무료로 ai 로또 번호를 생성해보세요',
     },
     {
@@ -60,7 +60,7 @@ export default class Login extends Vue {
       text: '매주 로또 1등을 맞춰 보세요',
     },
     {
-      icon: 'folder.svg',
+      icon: 'folder.png',
       text: '나만의 로또번호를 관리하고 보관해 보세요',
     },
   ]

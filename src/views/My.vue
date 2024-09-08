@@ -71,7 +71,7 @@ export default class My extends Vue {
     },
     {
       title: '꿈해몽 생성',
-      icon: 'ic-dreams.svg',
+      icon: 'img-stella-2d.png',
       link: '/dream',
     },
   ];

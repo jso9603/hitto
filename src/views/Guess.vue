@@ -16,8 +16,9 @@
 
     <GuessParticipants :week="this.week" />
 
+<!-- :style="{ right: rightValue + 'px' }"  -->
     <button
-      :style="{ right: rightValue + 'px' }" 
+      
       :class="['challenge', { expanded: isScrolled }]"
       :disabled="isButtonDisabled"
       @click="onChallenge"
@@ -179,6 +180,7 @@ export default class Guess extends Vue {
   align-items: center;
   gap: 4px;
   position: fixed;
+  right: 0;
   bottom: 84px;
   background-color: #4AFF81;
   border: none;
@@ -187,12 +189,14 @@ export default class Guess extends Vue {
   text-align: center;
   color: #181D23;
   cursor: pointer;
-  transition: width 0.3s ease, height 0.3s ease, border-radius 0.3s ease, padding 0.3s ease;
+  transform: translateX(calc(-100% - 20px));
+  transition: transform 0.5s ease;
 }
 
 .expanded {
   font-size: 16px;
   font-weight: 700;
   line-height: 20px;
+  transform: translateX(0%);
 }
 </style>

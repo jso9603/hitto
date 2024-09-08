@@ -4,7 +4,7 @@
   
     <transition name="fade">
       <div class="noti" v-if="showCopyImage">
-        <img src="@/assets/ic-system-noti.svg" />
+        <img src="@/assets/img-link.png" />
         <div>링크가 복사되었어요!</div>
       </div>
     </transition>
@@ -70,7 +70,7 @@ export default class App extends Vue {
 
   // back 키를 눌렀을 때 실행되는 함수
   private handleBackButton(): void {
-    if (this.$route.path === '/select-hope') {
+    if (this.$route.path === '/select-hope' && sessionStorage.getItem('lottoNumbers')) {
       this.openPopup(); 
     }
   }

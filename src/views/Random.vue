@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" :class="{ add: !showPage1 }">
     <transition name="fade" mode="out-in">
       <div class="page1" v-if="showPage1" key="page1">
         <div v-if="showMessage">
@@ -13,11 +13,16 @@
       </div>
 
       <div class="page2" v-else key="page2">
-        <div class="img-bg">
+        <div class="img-bg" :style="{ animationDelay: `0s` }">
           <img src='@/assets/img-stefan-3d.png' at="character 이미지" />
         </div>
 
-        <div class='typing2'>"Ai분석으로 번호를 생성했어요!<br/>맘에 드시나요?"</div>
+        <!-- <div class='typing2'>"Ai분석으로 번호를 생성했어요!<br/>맘에 드시나요?"</div> -->
+        <div v-if="showMessage2">
+          <div v-for="(message, index) in messages" :key="index" class="message2" :style="{ animationDelay: `${index * 0.2}s` }">
+            {{ message }}
+          </div>
+        </div>
 
         <div class="result__box">
           <div v-for="(round, index) in lottoNumbers" :key="index" class="round">
@@ -72,8 +77,10 @@ export default class Random extends Vue {
   private circleRadius = 80; // 원의 반지름 (로딩 바)
 
   private messages = ['"스테판이 ai 통계기반"', '로또 번호를 생성하고 있어요"']
+  private messages2 = ['"Ai 분석으로 번호를 생성했어요!', '맘에 드시나요?"']
   private selectedMessage: string | null = null
   private showMessage: boolean = false
+  private showMessage2: boolean = false
 
   private showPage1: boolean = true
 
@@ -82,6 +89,10 @@ export default class Random extends Vue {
   // 확률 높은 숫자들
   highProbNumbers: number[] = [1, 3, 6, 7, 12, 14, 17, 24, 26, 27, 33, 34, 42, 43, 45]
   private lottoNumbers: number[][] = []
+
+  get dynamicHeight() {
+    return `calc(var(--vh, 1vh) * 100 - ${this.showPage1 ? '54px' : '192px'})`;
+  }
 
   oneMore() {
     location.reload(); // 페이지 새로고침
@@ -111,7 +122,6 @@ export default class Random extends Vue {
 
   // 애니메이션 시작
   animateBalls() {
-    console.log('???')
     const ctx = this.canvas?.getContext('2d');
     if (ctx && this.canvas) {
       const width = this.canvas.width;
@@ -318,6 +328,7 @@ export default class Random extends Vue {
 
     setTimeout(() => {
       this.showPage1 = false;
+      this.showMessage2 = true;
       this.generateHighNumbers(1);
     }, 3000);
   }
@@ -429,7 +440,12 @@ export default class Random extends Vue {
   /* iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
   특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음 */
   /* margin-top: 20px까지 제외시킨다. */
-  height: calc(var(--vh, 1vh) * 100 - 78px);
+  height: calc(var(--vh, 1vh) * 100 - 54px);
+}
+
+.add {
+  height: calc(var(--vh, 1vh) * 100 - 192px);
+  transition: height 2s ease;
 }
 
 /* .container {
@@ -447,10 +463,19 @@ export default class Random extends Vue {
   background-color: #171717;
   text-align: center;
 
-  position: absolute;
-  top: calc(50% - 228px); /*디자인 수정되면 바꿔야 함 */
-  left: 50%;
-  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+@keyframes slideUp3 {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .img-bg {
@@ -463,7 +488,10 @@ export default class Random extends Vue {
   margin-right: auto;
   background-color: #4262FF;
   border-radius: 50%;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+
+  /* transform: translateY(100%); */
+  animation: slideUp3 0.5s forwards;
 }
 
 .img-bg > img {
@@ -475,19 +503,10 @@ export default class Random extends Vue {
 }
 
 .page2 {
-  position: absolute;
-  top: calc(50% - 154px); /*디자인 수정되면 바꿔야 함 */
-}
-
-.typing2 {
-  margin-bottom: 32px;
-  width: 100%;
-  color: #fff;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 30px;
-  letter-spacing: -0.5px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .random-animation {
@@ -511,12 +530,12 @@ export default class Random extends Vue {
   font-weight: 700;
   line-height: 30px;
 
-  transform: translateY(100%);
-  animation: slideUp 1s forwards;
+  transform: translateY(50%);
+  animation: slideUp2 1s forwards;
 }
 
 .message:last-child {
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 @keyframes slideUp {
@@ -530,7 +549,44 @@ export default class Random extends Vue {
   }
 }
 
+@keyframes slideUp2 {
+  0% {
+    transform: translateY(50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.message2 {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+
+  opacity: 0;
+  transform: translateY(50%);
+  animation: slideUp2 1s forwards;
+}
+
+.message2:last-child {
+  margin-bottom: 32px;
+}
 
 .typing1 {
   margin-bottom: 8px;
@@ -542,11 +598,12 @@ export default class Random extends Vue {
   color: #fff;
 }
 
-/* .result__box {
-  padding: 32px 20px;
-  background-color: #222222;
-  border-radius: 16px;
-} */
+.result__box {
+  opacity: 0;
+  animation-delay: 3s;
+  animation: fadeIn 3s forwards;
+}
+
 .round {
   display: flex;
   flex-direction: column;
@@ -558,13 +615,14 @@ export default class Random extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .row > div {
   width: 48px;
   height: 48px;
-  margin: 6px;
+  /* margin: 6px; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -602,7 +660,7 @@ export default class Random extends Vue {
   margin-right: auto;
   max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
-  background: linear-gradient(180deg, #171717 0%, #171717 64.38%);
+  background: linear-gradient(180deg, rgba(23, 23, 23, 0) 0%, #171717 15.46%, #171717 82.53%);
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 
