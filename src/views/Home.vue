@@ -30,9 +30,28 @@
       <img class="list" src="@/assets/ic-system-list.png" />
     </div>
 
+    <div class="share">
+      <div class="title">친구, 지인과 함께<br/>로또 1등에 도전해보세요</div>
+      <div class="share-channel">
+        <div class="round kakao">
+          <img src="@/assets/ic-system-kakao.svg" alt="kakao" />
+        </div>
+        <div class="round sms">
+          <img src="@/assets/ic-system-sms.svg" alt="sms" />
+        </div>
+        <div class="round url">
+          URL
+        </div>
+        <div class="round more">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+
     <div class="floating">
       <div class="count__down">
-        <img src="@/assets/ic-system-timer.svg" />
         {{ countdown }}
       </div>
     </div>
@@ -112,10 +131,13 @@ export default class Home extends Vue {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  color: #4AFF81;
+  background: #222222E5;
+  border-radius: 16px;
+  padding: 15px 20px;
+  color: #ECEEF0;
   font-size: 15px;
   font-weight: 500;
-  line-height: 22px;
+  line-height: 18px;
   text-align: center;
   font-variant: common-ligatures tabular-nums;
 }
@@ -202,7 +224,6 @@ export default class Home extends Vue {
 
 .dream {
   margin-top: 40px;
-  margin-bottom: 118px;
 }
 
 .dream > .cloud {
@@ -230,6 +251,79 @@ export default class Home extends Vue {
   margin-top: 40px;
   width: auto;
   height: 280px;
+}
+
+.share {
+  margin-top: 70px;
+  margin-bottom: 166px;
+}
+
+.title {
+  margin-bottom: 20px;
+  color: #ECEEF0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 26px;
+}
+
+.share-channel {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.round {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.kakao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFE600;
+}
+
+.kakao > img,
+.sms > img {
+  width: 24px;
+  height: 24px;
+}
+
+.sms {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4AFF81;
+}
+
+.url {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2E80FA;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.more {
+  background-color: #737577;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.more > div {
+  width: 5px;
+  height: 5px;
+  background-color: #D9D9D9;
+  border-radius: 50%;
 }
 
 .floating {
