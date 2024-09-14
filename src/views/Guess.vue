@@ -107,23 +107,28 @@ export default class Guess extends Vue {
     this.$router.push(`/challenge?week=${this.week}`)
   }
 
-  private setRightValue(): void {
-    const guessElement = this.$refs.guessRef as HTMLElement
-    if (guessElement) {
-      this.guessWidth = guessElement.offsetWidth // guess 요소의 너비를 가져옴
-      this.rightValue = this.guessWidth // right 값을 너비 + 20px으로 설정
-      console.log('right', this.rightValue)
-    }
-  }
-
   mounted() {
-    // // this.setRightValue()
-    // window.addEventListener('resize', this.setRightValue)
-
     this.handleScroll()
     window.addEventListener('scroll', this.handleScroll)
+  }
 
-    // window.addEventListener('DOMContentLoaded', this.handleScroll);
+  isAfterSaturday9() {
+    const now = dayjs();
+    let saturday9 = dayjs().day(6).hour(21).minute(0).second(0);  // 이번 주 토요일 6시
+
+    // dayjs().day(6)를 사용할 때 dayjs가 현재 주의 "토요일"을 참조
+    // 현재 dayjs().day(6)는 토요일을 기준으로 시간을 계산하는데, 일요일이 되면 dayjs().day(6)는 다가오는 토요일(다음 주 토요일)을 참조
+    // 그래서 일요일이 되면 dayjs().day(6)은 일주일 후의 토요일 오후 9시를 참조하게 되며,
+    // 이로 인해 now.isAfter(saturday9)는 false를 반환
+
+    // day(6)를 사용할 때는 현재 요일을 고려하여, 다음 주가 아니라 이번 주의 토요일 9시를 기준으로 할 수 있도록 해야함
+
+    // 만약 현재 시간이 일요일이면 지난 토요일을 참조하도록 처리
+    if (now.day() === 0) {
+      // 일요일일 경우 지난 토요일로 변경 (지난 토요일 9시)
+      saturday9 = dayjs().subtract(1, 'week').day(6).hour(21).minute(0).second(0);
+    }
+    return now.isAfter(saturday9);
   }
 
   created() {
@@ -132,12 +137,17 @@ export default class Guess extends Vue {
     dayjs.extend(duration)
 
     const currentWeek = this.getWeek()
-    this.week = this.getWeek().toString()
-    this.saturdayDate = this.getSaturdayDate(currentWeek)
+    if (this.isAfterSaturday9()) {
+      this.week = (currentWeek).toString();
+    } else {
+      this.week = (currentWeek - 1).toString();
+    }
+    this.saturdayDate = this.getSaturdayDate(Number(this.week));
+
+    console.log('week: ', this.week)
   }
 
   beforeDestroy(): void {
-    window.removeEventListener('resize', this.setRightValue)
     window.removeEventListener('scroll', this.handleScroll)
   }
 }
