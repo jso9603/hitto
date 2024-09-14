@@ -17,8 +17,6 @@
     <div class="hr__line" />
 
     <LottoList :week="Number(week)" :user="user"/>
-
-    <button @click="$router.replace('/')">back</button>
   </div>
 </template>
 

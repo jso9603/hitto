@@ -167,7 +167,6 @@ export default class Result extends Vue {
         sessionStorage.setItem('hope-select', 'false')
       }
       
-      // this.$router.replace('/login?redirect=select-hope')
         const storedNumbers = sessionStorage.getItem('lottoNumbers')
         if (storedNumbers) {
         // 문자열에서 양쪽의 따옴표를 제거하고, 쉼표로 분리하여 배열로 변환 후 숫자로 변환

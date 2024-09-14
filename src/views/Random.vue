@@ -107,16 +107,16 @@ export default class Random extends Vue {
     if (this.canvas) {
       const ctx = this.canvas.getContext('2d');
 
-      // 고해상도 스크린을 위해 배율 설정
-      const dpr = window.devicePixelRatio || 1;
-      // 실제 픽셀 크기와 스타일 크기 분리
-      this.canvas.width = 160 * dpr;  // 실제 픽셀 크기
-      this.canvas.height = 160 * dpr; // 실제 픽셀 크기
+      // // 고해상도 스크린을 위해 배율 설정
+      // const dpr = window.devicePixelRatio || 1;
+      // // 실제 픽셀 크기와 스타일 크기 분리
+      // this.canvas.width = 160 * dpr;  // 실제 픽셀 크기
+      // this.canvas.height = 160 * dpr; // 실제 픽셀 크기
       
-      this.canvas.style.width = '160px';  // 화면 상의 크기
-      this.canvas.style.height = '160px'; // 화면 상의 크기
+      // this.canvas.style.width = '160px';  // 화면 상의 크기
+      // this.canvas.style.height = '160px'; // 화면 상의 크기
       
-      ctx?.scale(dpr, dpr); // 배율 조정
+      // ctx?.scale(dpr, dpr); // 배율 조정
 
       if (ctx) {
         // 공 생성 및 초기화
