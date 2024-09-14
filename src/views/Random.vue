@@ -19,7 +19,7 @@
 
         <!-- <div class='typing2'>"Ai분석으로 번호를 생성했어요!<br/>맘에 드시나요?"</div> -->
         <div v-if="showMessage2">
-          <div v-for="(message, index) in messages" :key="index" class="message2" :style="{ animationDelay: `${index * 0.2}s` }">
+          <div v-for="(message, index) in messages2" :key="index" class="message2" :style="{ animationDelay: `${index * 0.2}s` }">
             {{ message }}
           </div>
         </div>
@@ -99,10 +99,25 @@ export default class Random extends Vue {
   }
 
   // Canvas 초기화 및 공 생성
+  // HTML5 <canvas> 엘리먼트의 width와 height는 디스플레이 해상도와 실제 픽셀 값 간의 불일치로 인해 그래픽이 흐릿하게 보일 수 있음.
+  // 특히 고해상도 디스플레이에서는 더 뚜렷하게 나타날 수 있음.
+  // 이를 해결하기 위해, 캔버스의 CSS 크기와 실제 픽셀 크기를 분리하여 고해상도 디스플레이에서도 선명한 렌더링을 유지하도록
   initCanvas() {
     this.canvas = this.$refs.loadingCanvas as HTMLCanvasElement;
     if (this.canvas) {
       const ctx = this.canvas.getContext('2d');
+
+      // 고해상도 스크린을 위해 배율 설정
+      const dpr = window.devicePixelRatio || 1;
+      // 실제 픽셀 크기와 스타일 크기 분리
+      this.canvas.width = 160 * dpr;  // 실제 픽셀 크기
+      this.canvas.height = 160 * dpr; // 실제 픽셀 크기
+      
+      this.canvas.style.width = '160px';  // 화면 상의 크기
+      this.canvas.style.height = '160px'; // 화면 상의 크기
+      
+      ctx?.scale(dpr, dpr); // 배율 조정
+
       if (ctx) {
         // 공 생성 및 초기화
         for (let i = 0; i < this.ballCount; i++) {

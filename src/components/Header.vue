@@ -70,7 +70,7 @@
     </template>
 
     <template v-else-if="$route.path === '/challenge'">
-      <button @click="goBack" class="back">
+      <button @click="goBackChallenge" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
       <div class="menu">로또 맞추기</div>
@@ -93,100 +93,104 @@ import { getLoggedUserInfo } from '@/utils/user'
 
 @Component
 export default class Header extends Vue {
-  isScrolled: boolean = false;
+  isScrolled: boolean = false
 
   onQr() {
     this.$router.push('/qr')
   }
 
   onShare() {
-  const currentUrl = window.location.href;
+  const currentUrl = window.location.href
 
   // Check if navigator.clipboard.writeText is available
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(currentUrl).then(() => {
-      this.$store.dispatch('showCopyImage');
+      this.$store.dispatch('showCopyImage')
     }).catch(err => {
-      console.error('링크 복사에 실패했습니다:', err);
+      console.error('링크 복사에 실패했습니다:', err)
     });
   } else {
     // Fallback for iOS Safari
-    const textArea = document.createElement('textarea');
-    textArea.value = currentUrl;
+    const textArea = document.createElement('textarea')
+    textArea.value = currentUrl
     // Ensure the textarea is not visible and doesn't cause layout shifts
-    textArea.style.position = 'fixed'; // Fixed position to avoid layout changes
-    textArea.style.top = '0'; 
-    textArea.style.left = '0';
-    textArea.style.width = '1px';
-    textArea.style.height = '1px';
-    textArea.style.padding = '0';
-    textArea.style.border = 'none';
-    textArea.style.outline = 'none';
-    textArea.style.boxShadow = 'none';
-    textArea.style.background = 'transparent';
-    textArea.style.opacity = '0'; // Make it invisible
-    textArea.setAttribute('readonly', '');
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
+    textArea.style.position = 'fixed' // Fixed position to avoid layout changes
+    textArea.style.top = '0'
+    textArea.style.left = '0'
+    textArea.style.width = '1px'
+    textArea.style.height = '1px'
+    textArea.style.padding = '0'
+    textArea.style.border = 'none'
+    textArea.style.outline = 'none'
+    textArea.style.boxShadow = 'none'
+    textArea.style.background = 'transparent'
+    textArea.style.opacity = '0' // Make it invisible
+    textArea.setAttribute('readonly', '')
+    document.body.appendChild(textArea)
+    textArea.focus()
+    textArea.select()
     try {
-      const successful = document.execCommand('copy');
+      const successful = document.execCommand('copy')
       if (successful) {
-        this.$store.dispatch('showCopyImage');
+        this.$store.dispatch('showCopyImage')
       } else {
-        console.error('링크 복사에 실패했습니다.');
+        console.error('링크 복사에 실패했습니다.')
       }
     } catch (err) {
-      console.error('링크 복사에 실패했습니다:', err);
+      console.error('링크 복사에 실패했습니다:', err)
     }
-    document.body.removeChild(textArea);
+    document.body.removeChild(textArea)
   }
 }
 
   get isLoggedIn() {
-    const user = getLoggedUserInfo();
+    const user = getLoggedUserInfo()
 
-    return user ? true : false;
+    return user ? true : false
   }
 
   use() {
-    console.log('use click!');
+    console.log('use click!')
   }
 
   mounted() {
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('scroll', this.handleScroll)
   }
 
   beforeDestroy() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', this.handleScroll)
   }
 
   handleScroll() {
-    this.isScrolled = window.scrollY > 0;
+    this.isScrolled = window.scrollY > 0
   }
 
   get headerClass() {
-    return this.$route.path === '/' ? 'home' : this.$route.path === '/qr' ? 'qr' : 'subpage';
+    return this.$route.path === '/' ? 'home' : this.$route.path === '/qr' ? 'qr' : 'subpage'
   }
 
   get showBackButton() {
-    return this.$route.path !== '/' && this.$route.path !== '/my';
+    return this.$route.path !== '/' && this.$route.path !== '/my'
   }
 
   get login() {
-    return this.$route.path === '/login';
+    return this.$route.path === '/login'
   }
 
   get menuName() {
-    return Cookies.get('menu');
+    return Cookies.get('menu')
   }
 
   goBack() {
-    this.$router.replace('/');
+    this.$router.replace('/')
   }
 
   goBackHope() {
-    this.$emit('goBack');
+    this.$emit('goBack')
+  }
+
+  goBackChallenge() {
+    this.$router.back()
   }
 
   onSetting() {
