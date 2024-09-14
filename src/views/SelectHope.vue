@@ -1,9 +1,10 @@
 <template>
   <div class="container">
-    <div style="display: none;">
-      <button @click="showPopup">팝업 열기</button>
-      <LoginPopup :numbers="[19, 19, 19, 19, 34, 5]" :visible="isPopupVisible" @close="isPopupVisible = false" />
-    </div>
+      <LoginPopup
+        :numbers="LoginPopupNumbers"
+        :visible="isPopupVisible"
+        @close="isPopupVisible = false"
+      />
 
     <div v-if="isLoading">
       <div class="waitinging">
@@ -68,12 +69,13 @@ import dayjs from 'dayjs'
 import Cookies from 'js-cookie'
 import { db } from '../../src/config/firebaseConfig'
 import { collection, addDoc } from 'firebase/firestore'
-import { getLoggedUserInfo } from '@/utils/user'
 import LoginPopup from '@/components/LoginPopup.vue'
 
+import { getLoggedUserInfo } from '@/utils/user'
+
 interface SelectOption {
-  icon: string;
-  text: string;
+  icon: string
+  text: string
 }
 
 @Component({
@@ -84,13 +86,14 @@ interface SelectOption {
 export default class Result extends Vue {
   private activeTab: string = 'select'
   private selectedIndex: number | null = null
+  private LoginPopupNumbers: number[] = []
 
   isLoading = false
 
   impression: string = ''
   placeholderText: string = '진솔한 당첨소감을 작성해보세요.\n꼭 이루어질거예요!'
 
-  isPopupVisible = false;
+  isPopupVisible = false
 
   private selectOptions: SelectOption[] = [
     { icon: '✨', text: '포르쉐 파나메라 사게해주세요.' },
@@ -98,85 +101,109 @@ export default class Result extends Vue {
     { icon: '✈️', text: '몰디브에서 모히또 한잔하고 싶어요.'},
     { icon: '🤱', text: '자녀 교육에 걱정 없게 해주세요!'},
     { icon: '🦄', text: '꿈꾸던 사업을 시작하고 싶어요!'},
-  ];
-
-  showPopup() {
-    this.isPopupVisible = true;
-  }
+  ]
 
   private setActiveTab(tab: string) {
-    this.activeTab = tab;
+    this.activeTab = tab
   }
 
   get indicatorStyle() {
     return {
       transform: this.activeTab === 'select' ? 'translateX(0)' : 'translateX(100%)',
-    };
+    }
   }
 
   private selected(index: number) {
-    this.selectedIndex = index;
+    this.selectedIndex = index
   }
 
   private handleInput(event: Event) {
-    const textarea = document.getElementById('textarea') as HTMLTextAreaElement;
-    const placeholder = document.querySelector('.placeholder') as HTMLDivElement;
+    const textarea = document.getElementById('textarea') as HTMLTextAreaElement
+    const placeholder = document.querySelector('.placeholder') as HTMLDivElement
     
     if (textarea && placeholder) {
       // 텍스트 영역에 입력된 값이 없으면 placeholder를 보여줌
-      placeholder.style.display = textarea.value ? 'none' : 'block';
+      placeholder.style.display = textarea.value ? 'none' : 'block'
     }
 
-    const target = event.target as HTMLTextAreaElement;
+    const target = event.target as HTMLTextAreaElement
     if (target.value.length > 300) {
-      target.value = target.value.slice(0, 300);
+      target.value = target.value.slice(0, 300)
     }
-    this.impression = target.value;
+    this.impression = target.value
   }
 
   private onPlaceholder() {
-    (this.$refs.myTextarea as HTMLTextAreaElement).focus();
+    (this.$refs.myTextarea as HTMLTextAreaElement).focus()
   }
 
   private async onLogin() {
-    const user = getLoggedUserInfo();
+    const user = getLoggedUserInfo()
 
     if (user) {
       try {
         // my에서 탭으로 분류
-        sessionStorage.setItem('type', Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream');
+        sessionStorage.setItem('type', Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream')
         if (this.activeTab === 'select') {
-          sessionStorage.setItem('hope', this.selectedIndex!.toString());
-          sessionStorage.setItem('hope-select', 'true');
+          sessionStorage.setItem('hope', this.selectedIndex!.toString())
+          sessionStorage.setItem('hope-select', 'true')
         } else {
-          sessionStorage.setItem('hope', `${this.impression}`);
-          sessionStorage.setItem('hope-select', 'false');
+          sessionStorage.setItem('hope', `${this.impression}`)
+          sessionStorage.setItem('hope-select', 'false')
         }
 
-        await this.saveLottoNumbers(Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream');
+        await this.saveLottoNumbers(Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream')
       } catch (error) {
-        console.error('Failed to parse user data:', error);
-        alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요');
+        console.error('Failed to parse user data:', error)
+        alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요')
       }
     } else {
-      sessionStorage.setItem('type', Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream');
+      sessionStorage.setItem('type', Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream')
       if (this.activeTab === 'select') {
-        sessionStorage.setItem('hope', this.selectedIndex!.toString());
-        sessionStorage.setItem('hope-select', 'true');
+        sessionStorage.setItem('hope', this.selectedIndex!.toString())
+        sessionStorage.setItem('hope-select', 'true')
       } else {
-        sessionStorage.setItem('hope', `${this.impression}`);
-        sessionStorage.setItem('hope-select', 'false');
+        sessionStorage.setItem('hope', `${this.impression}`)
+        sessionStorage.setItem('hope-select', 'false')
       }
       
-      this.$router.replace('/login?redirect=select-hope');
+      // this.$router.replace('/login?redirect=select-hope')
+        const storedNumbers = sessionStorage.getItem('lottoNumbers')
+        if (storedNumbers) {
+        // 문자열에서 양쪽의 따옴표를 제거하고, 쉼표로 분리하여 배열로 변환 후 숫자로 변환
+        this.LoginPopupNumbers = storedNumbers
+          .replace(/^"|"$/g, '')  // 양 끝의 따옴표 제거
+          .split(',')             // 쉼표로 문자열 분리
+          .map(num => Number(num.trim())) // 각 요소를 숫자로 변환
+      }
+      this.isPopupVisible = true
     }
   }
 
-  private async saveLottoNumbers(collectionName: string) {
-    this.isLoading = true;
+  isAfterSaturday6() {
+    const now = dayjs()
+    let saturday9 = dayjs().day(6).hour(18).minute(0).second(0) // 이번 주 토요일 9시
 
-    const userData = Cookies.get('user') as string;
-    let user = null;
+    // dayjs().day(6)를 사용할 때 dayjs가 현재 주의 "토요일"을 참조
+    // 현재 dayjs().day(6)는 토요일을 기준으로 시간을 계산하는데, 일요일이 되면 dayjs().day(6)는 다가오는 토요일(다음 주 토요일)을 참조
+    // 그래서 일요일이 되면 dayjs().day(6)은 일주일 후의 토요일 오후 9시를 참조하게 되며,
+    // 이로 인해 now.isAfter(saturday9)는 false를 반환
+
+    // day(6)를 사용할 때는 현재 요일을 고려하여, 다음 주가 아니라 이번 주의 토요일 9시를 기준으로 할 수 있도록 해야함
+
+    // 만약 현재 시간이 일요일이면 지난 토요일을 참조하도록 처리
+    if (now.day() === 0) {
+      // 일요일일 경우 지난 토요일로 변경 (지난 토요일 9시)
+      saturday9 = dayjs().subtract(1, 'week').day(6).hour(18).minute(0).second(0)
+    }
+    return now.isAfter(saturday9)
+  }
+
+  private async saveLottoNumbers(collectionName: string) {
+    this.isLoading = true
+
+    const userData = Cookies.get('user') as string
+    let user = null
 
     if (userData) {
       try {
@@ -187,7 +214,14 @@ export default class Result extends Vue {
         const dff = dayjs.duration(t2.diff(t1)).asDays()
 
         // 돌아오는 회차를 저장
-        const round = Math.floor(dff / 7) + 2
+        const currentWeek = Math.floor(dff / 7) + 1
+
+        let round = 0
+        if (this.isAfterSaturday6()) {
+          round = (currentWeek)
+        } else {
+          round = (currentWeek - 1)
+        }
 
         const numbers = [(sessionStorage.getItem('lottoNumbers'))!.replace(/^"|"$/g, '')]
 
@@ -213,7 +247,7 @@ export default class Result extends Vue {
           if (!datas) {
             // sessionStorage에 아무 데이터도 없으면, 배열에 insertData를 넣어서 저장
             const sessionStorageName = Cookies.get('menu') === 'AI 번호 생성' ? 'myNumbers' : 'myDreams'
-            sessionStorage.setItem(sessionStorageName, JSON.stringify(insertData));
+            sessionStorage.setItem(sessionStorageName, JSON.stringify(insertData))
           } else {
             const alreadyDatas = JSON.parse(datas)
 
@@ -248,8 +282,39 @@ export default class Result extends Vue {
       }
     } else {
       user = null
-      this.$router.push('/login')
+      this.showPopup()
     }
+  }
+
+  private handleBackButton(): void {
+    const user = getLoggedUserInfo()
+
+    if (!user && this.$route.path === '/select-hope' && sessionStorage.getItem('lottoNumbers')) {
+      this.showPopup()
+
+      // 히스토리를 조작하여 페이지 이동을 막음
+      history.pushState(null, '', window.location.href)
+    }
+  }
+
+  showPopup() {
+    const storedNumbers = sessionStorage.getItem('lottoNumbers')
+    
+    if (storedNumbers) {
+      // 문자열에서 양쪽의 따옴표를 제거하고, 쉼표로 분리하여 배열로 변환 후 숫자로 변환
+      this.LoginPopupNumbers = storedNumbers
+        .replace(/^"|"$/g, '')  // 양 끝의 따옴표 제거
+        .split(',')             // 쉼표로 문자열 분리
+        .map(num => Number(num.trim())) // 각 요소를 숫자로 변환
+    }
+
+    this.isPopupVisible = true
+  }
+
+  mounted() {
+    // 페이지 로드 시 히스토리 상태 추가 (페이지 이동 막기 위해 pushState 사용)
+    window.history.pushState(null, '', window.location.href)
+    window.addEventListener('popstate', this.handleBackButton)
   }
 
   // redirect (login)

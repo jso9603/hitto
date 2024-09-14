@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator'
 
 @Component
 export default class LoginPopup extends Vue {
@@ -43,6 +43,7 @@ export default class LoginPopup extends Vue {
   }
 
   onHome() {
+    sessionStorage.clear()
     this.$emit('close')
     this.$router.replace('/')
   }
@@ -50,37 +51,37 @@ export default class LoginPopup extends Vue {
   async startWithKakao() {
     await window.Kakao.Auth.login({
       success: (res: any) => {
-        console.log(res);
-        window.Kakao.Auth.setAccessToken(res.access_token);
-        console.log('카카오 로그인 성공');
+        console.log(res)
+        window.Kakao.Auth.setAccessToken(res.access_token)
+        console.log('카카오 로그인 성공')
 
         window.Kakao.API.request({
           url: '/v2/user/me',
           success: (res: any) => {
-            console.log('카카오 인가 요청 성공');
-            const kakaoAccount = res.kakao_account;
+            console.log('카카오 인가 요청 성공')
+            const kakaoAccount = res.kakao_account
             console.log(kakaoAccount)
 
             this.closePopup()
           },
           fail: (error: any) => {
-            console.log(error);
+            console.log(error)
           },
         })
       },
       fail: (error: any) => {
-        console.log(error);
+        console.log(error)
       },
     })
   }
 
   getNumberClass(num: number): string {
-    if (num >= 1 && num <= 10) return 'yellow';
-    if (num >= 11 && num <= 20) return 'blue';
-    if (num >= 21 && num <= 30) return 'red';
-    if (num >= 31 && num <= 40) return 'gray';
-    if (num >= 41 && num <= 45) return 'green';
-    return 'default-color';
+    if (num >= 1 && num <= 10) return 'yellow'
+    if (num >= 11 && num <= 20) return 'blue'
+    if (num >= 21 && num <= 30) return 'red'
+    if (num >= 31 && num <= 40) return 'gray'
+    if (num >= 41 && num <= 45) return 'green'
+    return 'default-color'
   }
 }
 </script>

@@ -29,6 +29,8 @@ import Header from '@/components/Header.vue'
 import Navigation from '@/components/Navigation.vue'
 import LoginPopup from '@/components/LoginPopup.vue'
 
+import { getLoggedUserInfo } from '@/utils/user'
+
 import { mapState } from 'vuex'
 
 @Component({
@@ -42,7 +44,8 @@ import { mapState } from 'vuex'
   },
 })
 export default class App extends Vue {
-  isPopupVisible = false;
+  private isPopupVisible = false
+  private LoginPopupNumbers: number[] = []
 
   get myNumbers() {
     const numbersStr = sessionStorage.getItem('lottoNumbers')
@@ -52,7 +55,7 @@ export default class App extends Vue {
   }
 
   get showNavigation() {
-    const currentPath = this.$route.path.toLowerCase();
+    const currentPath = this.$route.path.toLowerCase()
 
     if (currentPath === '/' || currentPath === '/home' || currentPath === '/guess' || currentPath === '/my') {
       return true
@@ -61,26 +64,22 @@ export default class App extends Vue {
   }
 
   private openPopup(): void {
+    const user = getLoggedUserInfo()
+    const storedNumbers = sessionStorage.getItem('lottoNumbers')
+    
+    if (!user && storedNumbers) {
+      // 문자열에서 양쪽의 따옴표를 제거하고, 쉼표로 분리하여 배열로 변환 후 숫자로 변환
+      this.LoginPopupNumbers = storedNumbers
+        .replace(/^"|"$/g, '')  // 양 끝의 따옴표 제거
+        .split(',')             // 쉼표로 문자열 분리
+        .map(num => Number(num.trim())) // 각 요소를 숫자로 변환
+    }
+
     this.isPopupVisible = true
   }
 
   private closePopup(): void {
     this.isPopupVisible = false
-  }
-
-  // back 키를 눌렀을 때 실행되는 함수
-  private handleBackButton(): void {
-    if (this.$route.path === '/select-hope' && sessionStorage.getItem('lottoNumbers')) {
-      this.openPopup(); 
-    }
-  }
-
-  mounted() {
-    window.addEventListener('popstate', this.handleBackButton)
-  }
-
-  beforeDestroy() {
-    window.removeEventListener('popstate', this.handleBackButton);
   }
 }
 </script>
@@ -94,7 +93,6 @@ body {
   background-color: #171717;
   font-family: 'Pretendard', sans-serif;
 }
-
 
 .app {
   position: relative;
@@ -120,6 +118,11 @@ body {
   margin-left: auto;
   margin-right: auto;
   z-index: 100;
+}
+
+.noti > img {
+  width: 24px;
+  height: 24px;
 }
 
 .fade-enter-active, .fade-leave-active {
