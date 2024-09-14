@@ -14,18 +14,16 @@
     </div>
     <div class="hr__line" />
 
-    <GuessParticipants :week="this.week" />
-
-<!-- :style="{ right: rightValue + 'px' }"  -->
     <button
-      
-      :class="['challenge', { expanded: isScrolled }]"
+      class="challenge"
       :disabled="isButtonDisabled"
       @click="onChallenge"
     >
       <img src="@/assets/ic-system-challenge.svg" />
-      <span v-if="isScrolled">1등 도전하기</span>
+      <span class="text">1등 도전하기</span>
     </button>
+
+    <GuessParticipants :week="this.week" />
   </div>
 </template>
 
@@ -44,7 +42,6 @@ export default class Guess extends Vue {
   week =''
   saturdayDate = ''
   isButtonDisabled = false
-  private isScrolled: boolean = false
 
   private rightValue: number = 0
   private guessWidth: number = 0
@@ -77,8 +74,33 @@ export default class Guess extends Vue {
   }
 
   handleScroll(): void {
-    const scrollY = window.scrollY || document.documentElement.scrollTop;
-    this.isScrolled = scrollY > 100 // 스크롤이 100px 이상일 때 버튼을 확대
+    const challengeElement = document.querySelector('.challenge') as any;
+    const scrollPosition = window.scrollY;
+    const windowWidth = window.innerWidth;
+
+    if (windowWidth <= 576) {
+      // 화면 너비가 576px 이하일 때
+      challengeElement.style.right = '20px'; // 오른쪽 끝에 붙음
+    } else {
+      // 화면 너비가 576px 이상일 때
+      challengeElement.style.right = `${(windowWidth - 576) / 2}px`; // 화면 중앙 기준으로 오른쪽 고정
+    }
+
+    if (scrollPosition === 0) {
+      // 스크롤이 0일 때
+      challengeElement.classList.remove('expanded'); // 너비 줄이기
+    } else {
+      // 스크롤이 내려갈 때
+      if (windowWidth <= 576) {
+        // 화면 너비가 576px 이하일 때
+        challengeElement.style.right = '20px'; // 화면 오른쪽에 붙음
+        challengeElement.classList.add('expanded'); // 너비 늘리기
+        } else {
+          // 화면 너비가 576px 이상일 때
+          challengeElement.classList.add('expanded'); // 너비 늘리기
+        }
+      
+    }
   }
 
   onChallenge() {
@@ -89,15 +111,19 @@ export default class Guess extends Vue {
     const guessElement = this.$refs.guessRef as HTMLElement
     if (guessElement) {
       this.guessWidth = guessElement.offsetWidth // guess 요소의 너비를 가져옴
-      this.rightValue = this.guessWidth - 20 // right 값을 너비 + 20px으로 설정
+      this.rightValue = this.guessWidth // right 값을 너비 + 20px으로 설정
+      console.log('right', this.rightValue)
     }
   }
 
   mounted() {
-    this.setRightValue()
-    window.addEventListener('resize', this.setRightValue)
+    // // this.setRightValue()
+    // window.addEventListener('resize', this.setRightValue)
 
+    this.handleScroll()
     window.addEventListener('scroll', this.handleScroll)
+
+    // window.addEventListener('DOMContentLoaded', this.handleScroll);
   }
 
   created() {
@@ -119,6 +145,8 @@ export default class Guess extends Vue {
 
 <style scoped>
 .guess {
+  position: relative;
+  height: calc(100vh - 64px + env(safe-area-inset-bottom));
   margin-top: 20px;
   padding: 0 20px;
   margin-bottom: calc(94px + env(safe-area-inset-bottom));
@@ -176,11 +204,12 @@ export default class Guess extends Vue {
 }
 
 .challenge {
+  z-index: 100;
   display: flex;
   align-items: center;
   gap: 4px;
   position: fixed;
-  right: 0;
+  right: 20px;
   bottom: 84px;
   background-color: #4AFF81;
   border: none;
@@ -189,14 +218,25 @@ export default class Guess extends Vue {
   text-align: center;
   color: #181D23;
   cursor: pointer;
-  transform: translateX(calc(-100% - 20px));
-  transition: transform 0.5s ease;
+  transition: right 0.5s ease, width 0.5s ease;
+  width: 54px;
+  overflow: hidden;
 }
 
-.expanded {
+.challenge .text {
   font-size: 16px;
   font-weight: 700;
   line-height: 20px;
-  transform: translateX(0%);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.expanded {
+  width: 140px;
+}
+
+.challenge.expanded .text {
+  opacity: 1;
 }
 </style>
