@@ -5,10 +5,6 @@
       <LoginPopup :numbers="[19, 19, 19, 19, 34, 5]" :visible="isPopupVisible" @close="isPopupVisible = false" />
     </div>
 
-    <div class="img-bg">
-      <img src='@/assets/img-stefan-3d.png' at="character 이미지" />
-    </div>
-
     <div v-if="isLoading">
       <div class="waitinging">
         <img src="@/assets/ic-stefan-2d.svg" class="bounce-animation" />
@@ -282,27 +278,6 @@ export default class Result extends Vue {
   width: 100%;
   box-sizing: border-box;
   background-color: #171717;
-}
-
-.img-bg {
-  width: 64px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: #4262FF;
-  border-radius: 50%;
-  margin-bottom: 12px;
-}
-
-.img-bg > img {
-  width: 44px;
-  height: 44px;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .text {
