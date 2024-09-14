@@ -49,13 +49,13 @@
         </div>
       </div>
 
-      <div class="floating">
+      <div :class="['floating', { select: activeTab === 'select' }]">
         <button
           class="primary"
           :disabled="isLoading || activeTab === 'select' ? selectedIndex === null : impression.length  < 1"
           @click="onLogin"
         >
-          {{activeTab === 'select' ? '선택할게요' : '입력했어요'}}
+          {{activeTab === 'select' ? '선택했어요' : '입력했어요'}}
         </button>
         <button class="none" :disabled="isLoading" @click="onLogin">괜찮아요</button>
       </div>
@@ -493,6 +493,26 @@ export default class Result extends Vue {
   max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
   background: linear-gradient(180deg, rgba(23, 23, 23, 0) 0%, #171717 15.46%, #171717 82.53%);
+}
+
+.floating.select {
+  display: flex;
+  gap: 10px;
+  flex-direction: row-reverse;
+}
+
+.floating.select > button.none {
+  width: 100%;
+  min-height: 52px;
+  background-color: #333333;
+  padding: 8px 8px;
+  border-radius: 24px;
+  border-style: none;
+  color: #ECEEF0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 18px;
+  cursor: pointer;
 }
 
 .floating > button {

@@ -43,8 +43,8 @@
         </div>
 
         <div class="floating">
-          <button :disabled="isLoading" class="primary" @click="onSelectedBall">선택할게요</button>
-          <button class="none" @click="oneMore">다시 선택할래요</button>
+          <button class="none" @click="oneMore">다시 선택</button>
+          <button :disabled="isLoading" class="primary" @click="onSelectedBall">선택 완료</button>
         </div>
       </div>
     </transition>
@@ -674,17 +674,19 @@ export default class Random extends Vue {
   margin-left: auto;
   margin-right: auto;
   max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
+  display: flex;
+  gap: 10px;
   padding: 20px;
   background: linear-gradient(180deg, rgba(23, 23, 23, 0) 0%, #171717 15.46%, #171717 82.53%);
-  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  padding-bottom: calc(30px + env(safe-area-inset-bottom));
 }
 
 .floating > button {
   width: 100%;
-  min-height: 52px;
+  min-height: 54px;
   background-color: #4AFF81;
   padding: 8px 8px;
-  border-radius: 24px;
+  border-radius: 40px;
   border-style: none;
   color: #202223;
   font-size: 15px;
@@ -694,7 +696,6 @@ export default class Random extends Vue {
 }
 
 .floating > button.none {
-  margin-top: 12px;
   background-color: #fff;
   color: #202223;
   font-size: 15px;
