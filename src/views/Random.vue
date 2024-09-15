@@ -17,7 +17,6 @@
           <img src='@/assets/img-stefan-3d.png' at="character 이미지" />
         </div>
 
-        <!-- <div class='typing2'>"Ai분석으로 번호를 생성했어요!<br/>맘에 드시나요?"</div> -->
         <div v-if="showMessage2">
           <div v-for="(message, index) in messages2" :key="index" class="message2" :style="{ animationDelay: `${index * 0.2}s` }">
             {{ message }}
