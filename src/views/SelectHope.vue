@@ -68,7 +68,7 @@
             
             {{activeTab === 'select' ? '선택하기' : '입력 완료'}}
           </button>
-          <button v-if="activeTab === 'select'" class="none" :disabled="isLoading" @click="onItsOk">괜찮아요</button>
+          <button v-if="activeTab === 'select'" class="none" :disabled="isLoading" @click="onItsOk">넘어가기</button>
         </div>
       </div>
       
