@@ -29,8 +29,10 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import Cookies from 'js-cookie'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
+
 import GuessParticipants from '@/components/GuessParticipants.vue'
 
 @Component({
@@ -104,7 +106,13 @@ export default class Guess extends Vue {
   }
 
   onChallenge() {
-    this.$router.push(`/challenge?week=${this.week}`)
+    const challengeData = JSON.parse(Cookies.get('challenge') || '{}');
+    if (challengeData && this.week === challengeData.round) {
+      alert('회차당 1번만 제출 가능합니다');
+      return;
+    } else {
+      this.$router.push(`/challenge?week=${this.week}`)
+    }
   }
 
   mounted() {

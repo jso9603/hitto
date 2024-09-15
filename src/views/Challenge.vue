@@ -111,6 +111,12 @@ export default class Challenge extends Vue {
       return;
     }
 
+    const challengeData = JSON.parse(Cookies.get('challenge') || '{}');
+    if (challengeData && this.week === challengeData.round) {
+      alert('회차당 1번만 제출 가능합니다');
+      return;
+    }
+
     const confirmed = confirm('선택하신 번호가 확실합니까?');
     if (confirmed) {
 
@@ -150,14 +156,6 @@ export default class Challenge extends Vue {
 
         this.$router.replace(`/login?redirect=challenge?week=${this.week}`);
       }
-    }
-  }
-
-  mounted() {
-    const challengeData = JSON.parse(Cookies.get('challenge') || '{}');
-    if (challengeData && this.week === challengeData.round) {
-      alert('회차당 1번만 제출 가능합니다');
-      return;
     }
   }
 
