@@ -59,7 +59,7 @@
         <div :class="['floating', { select: activeTab === 'select' }]">
           <button
             class="primary"
-            :disabled="isLoading || activeTab === 'select' ? selectedIndex === null : false"
+            :disabled="isLoading || activeTab === 'select' ? selectedIndex === null : impression.length < 1"
             @click="onLogin"
           >
             <template v-if="activeTab === 'select'">
@@ -483,12 +483,13 @@ export default class Result extends Vue {
   border-radius: 100px;
   width: 100%;
   position: relative;
+  margin: 2px 0;
 }
 
 .tab-item {
   flex: 1;
   text-align: center;
-  padding: 16px 0;
+  padding: 14px 0;
   border-radius: 100px;
   font-size: 14px;
   color: #737577;
