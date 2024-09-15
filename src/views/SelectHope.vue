@@ -416,7 +416,7 @@ export default class Result extends Vue {
 }
 
 .container {
-  margin-bottom: calc(152px + env(safe-area-inset-bottom));
+  margin-bottom: calc(104px + env(safe-area-inset-bottom));
   margin-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
