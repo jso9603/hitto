@@ -40,7 +40,7 @@
     </template>
 
     <template v-else-if="$route.path === '/my/number' && ($route.query.tab === 'lottos' || $route.query.tab === 'dream')">
-      <div class="empty">ddd</div>
+      <div class="empty"></div>
       <div class="menu">나의 로또번호</div>
       <button @click="goClose" class="close">
         <img src="@/assets/ic-system-close-img.svg" />
@@ -194,6 +194,8 @@ export default class Header extends Vue {
   }
 
   goClose() {
+    // 소망 선택 > 괜찮아요 > 로그인 상단 X > 다시 들어갔을 때 오류가 날 가능성
+    sessionStorage.clear()
     this.$router.replace('/')
   }
 

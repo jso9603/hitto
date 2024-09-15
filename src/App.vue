@@ -10,7 +10,7 @@
     </transition>
 
     <LoginPopup
-      :numbers="myNumbers"
+      :numbers="LoginPopupNumbers"
       :visible="isPopupVisible"
       @close="isPopupVisible = false"
     />
@@ -46,13 +46,6 @@ import { mapState } from 'vuex'
 export default class App extends Vue {
   private isPopupVisible = false
   private LoginPopupNumbers: number[] = []
-
-  get myNumbers() {
-    const numbersStr = sessionStorage.getItem('lottoNumbers')
-    const cleanedStr = numbersStr && numbersStr.replace(/^"|"$/g, '')
-
-    return cleanedStr && cleanedStr.split(',').map(num => Number(num.trim()))
-  }
 
   get showNavigation() {
     const currentPath = this.$route.path.toLowerCase()
