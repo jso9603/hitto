@@ -42,8 +42,11 @@
         </div>
 
         <div class="floating">
-          <button class="none" @click="oneMore">다시 선택</button>
-          <button :disabled="isLoading" class="primary" @click="onSelectedBall">선택 완료</button>
+          <button class="none" @click="oneMore">재선택</button>
+          <button :disabled="isLoading" class="primary" @click="onSelectedBall">
+            <img src="@/assets/ic-system-challenge.svg" />
+            선택하기
+          </button>
         </div>
       </div>
     </transition>
@@ -458,7 +461,7 @@ export default class Random extends Vue {
 }
 
 .add {
-  height: calc(var(--vh, 1vh) * 100 - 192px);
+  height: calc(var(--vh, 1vh) * 100 - 158px);
   transition: height 2s ease;
 }
 
@@ -473,7 +476,7 @@ export default class Random extends Vue {
 } */
 
 .page1 {
-  margin-top: 30px;
+  /* margin-top: 30px; */
   background-color: #171717;
   text-align: center;
 
@@ -678,6 +681,7 @@ export default class Random extends Vue {
   padding: 20px;
   background: linear-gradient(180deg, rgba(23, 23, 23, 0) 0%, #171717 15.46%, #171717 82.53%);
   padding-bottom: calc(30px + env(safe-area-inset-bottom));
+  
 }
 
 .floating > button {
@@ -685,20 +689,27 @@ export default class Random extends Vue {
   min-height: 54px;
   background-color: #4AFF81;
   padding: 8px 8px;
-  border-radius: 40px;
+  border-radius: 100px;
   border-style: none;
   color: #202223;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 18px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
   cursor: pointer;
+}
+
+.floating > button.primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 .floating > button.none {
   background-color: #fff;
   color: #202223;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 18px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
 }
 </style>

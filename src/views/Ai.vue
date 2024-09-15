@@ -10,7 +10,10 @@
       <div class="participation">        
         {{ formattedCount }}명이 추천 번호를 받았어요.
       </div>
-      <button class="primary" @click="$router.push('/random')">시작하기</button>
+      <button class="primary" @click="$router.push('/random')">
+        <img src="@/assets/ic-system-challenge.svg" />
+        시작하기
+      </button>
     </div>
   </div>
 </template>
@@ -273,6 +276,10 @@ export default class Ai extends Vue {
   font-weight: 600;
   line-height: 18px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 @keyframes slideUp {

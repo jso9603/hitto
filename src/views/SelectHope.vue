@@ -59,12 +59,16 @@
         <div :class="['floating', { select: activeTab === 'select' }]">
           <button
             class="primary"
-            :disabled="isLoading || activeTab === 'select' ? selectedIndex === null : impression.length  < 1"
+            :disabled="isLoading || activeTab === 'select' ? selectedIndex === null : false"
             @click="onLogin"
           >
-            {{activeTab === 'select' ? '선택했어요' : '입력했어요'}}
+            <template v-if="activeTab === 'select'">
+              <img :src="selectedIndex !== null ? require('@/assets/ic-system-challenge.svg') : require('@/assets/ic-system-challenge-off.svg')" />
+            </template>
+            
+            {{activeTab === 'select' ? '선택하기' : '입력 완료'}}
           </button>
-          <button class="none" :disabled="isLoading" @click="$router.replace('/')">괜찮아요</button>
+          <button v-if="activeTab === 'select'" class="none" :disabled="isLoading" @click="$router.replace('/')">괜찮아요</button>
         </div>
       </div>
       
@@ -624,12 +628,12 @@ export default class Result extends Vue {
   min-height: 52px;
   background-color: #333333;
   padding: 8px 8px;
-  border-radius: 24px;
+  border-radius: 100px;
   border-style: none;
   color: #ECEEF0;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 18px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
   cursor: pointer;
 }
 
@@ -638,26 +642,33 @@ export default class Result extends Vue {
   min-height: 52px;
   background-color: #4AFF81;
   padding: 8px 8px;
-  border-radius: 24px;
+  border-radius: 100px;
   border-style: none;
   color: #181D23;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 18px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
   cursor: pointer;
 }
 
+.floating > button.primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
 .floating > button:disabled {
-  background-color: #414244;
-  color: #181D23;
+  background-color: #333333;
+  color: #737577;
 }
 
 .floating > button.none {
   background-color: #171717;
   color: #9C9EA0;
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 18px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
 }
 
 @keyframes bounce {
