@@ -1,66 +1,75 @@
 <template>
-  <div class="container">
+  <transition name="fade" mode="out-in">
+    <div class="container">
       <LoginPopup
         :numbers="LoginPopupNumbers"
         :visible="isPopupVisible"
         @close="isPopupVisible = false"
       />
 
-    <div v-if="isLoading">
-      <div class="waitinging">
-        <img src="@/assets/ic-stefan-2d.svg" class="bounce-animation" />
-        <div class="waiting">잠시만 기다려주세요.</div>
-      </div>
-    </div>
-
-    <div v-else>
-      <div class="text">"이제 소망을 선택해보세요.<br/>토요일 좋은 일이 생길거예요"</div>
-
-      <div class="tab-container">
-        <div class="tab">
-          <div :class="['tab-item', { active: activeTab === 'select' }]" @click="setActiveTab('select')">소망 선택</div>
-          <div :class="['tab-item', { active: activeTab === 'input' }]" @click="setActiveTab('input')">직접입력</div>
-          <div class="tab-indicator" :style="indicatorStyle"></div>
+      <div v-if="isLoading">
+        <div class="waitinging">
+          <img src="@/assets/ic-stefan-2d.svg" class="bounce-animation" />
+          <div class="waiting">잠시만 기다려주세요.</div>
         </div>
       </div>
-      <div class="tab-content">
-        <div v-if="activeTab === 'select'">
-          <div
-            v-for="(option, index) in selectOptions"
-            :key="index"
-            :class="['option-item', { active: selectedIndex === index }]"
-            @click="selected(index)"
+
+      <div v-else>
+        <div class="img-bg">
+          <img src='@/assets/img-stefan-3d.png' at="character 이미지" />
+        </div>
+
+        <div v-for="(message, index) in texts" :key="index" class="text" :style="{ animationDelay: `${index * 0.2}s` }">
+          {{ message }}
+        </div>
+
+        <div class="tab-container">
+          <div class="tab">
+            <div :class="['tab-item', { active: activeTab === 'select' }]" @click="setActiveTab('select')">소망 선택</div>
+            <div :class="['tab-item', { active: activeTab === 'input' }]" @click="setActiveTab('input')">직접입력</div>
+            <div class="tab-indicator" :style="indicatorStyle"></div>
+          </div>
+        </div>
+        <div class="tab-content">
+          <div v-if="activeTab === 'select'">
+            <div
+              v-for="(option, index) in selectOptions"
+              :key="index"
+              :class="['option-item', { active: selectedIndex === index }]"
+              @click="selected(index)"
+            >
+              <span class="icon">{{ option.icon }}</span>
+              <span class="tab-text">{{ option.text }}</span>
+            </div>
+          </div>
+          <div v-if="activeTab === 'input'" class="textarea-box">
+            <textarea
+              ref="myTextarea"
+              class="custom-textarea"
+              v-model="impression"
+              @input="handleInput"
+            />
+            <div class="placeholder" @click="onPlaceholder" v-if="!impression">{{ placeholderText }}</div>
+            <div class="textarea-footer">
+              <span class="current">{{ impression.length }}<span class="max"> / 300</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div :class="['floating', { select: activeTab === 'select' }]">
+          <button
+            class="primary"
+            :disabled="isLoading || activeTab === 'select' ? selectedIndex === null : impression.length  < 1"
+            @click="onLogin"
           >
-            <span class="icon">{{ option.icon }}</span>
-            <span class="tab-text">{{ option.text }}</span>
-          </div>
-        </div>
-        <div v-if="activeTab === 'input'" class="textarea-box">
-          <textarea
-            ref="myTextarea"
-            class="custom-textarea"
-            v-model="impression"
-            @input="handleInput"
-          />
-          <div class="placeholder" @click="onPlaceholder" v-if="!impression">{{ placeholderText }}</div>
-          <div class="textarea-footer">
-            <span class="current">{{ impression.length }}<span class="max"> / 300</span></span>
-          </div>
+            {{activeTab === 'select' ? '선택했어요' : '입력했어요'}}
+          </button>
+          <button class="none" :disabled="isLoading" @click="$router.replace('/')">괜찮아요</button>
         </div>
       </div>
-
-      <div :class="['floating', { select: activeTab === 'select' }]">
-        <button
-          class="primary"
-          :disabled="isLoading || activeTab === 'select' ? selectedIndex === null : impression.length  < 1"
-          @click="onLogin"
-        >
-          {{activeTab === 'select' ? '선택했어요' : '입력했어요'}}
-        </button>
-        <button class="none" :disabled="isLoading" @click="onLogin">괜찮아요</button>
-      </div>
+      
     </div>
-  </div>
+  </transition>
 </template>
 
 <script lang="ts">
@@ -96,12 +105,21 @@ export default class Result extends Vue {
   isPopupVisible = false
 
   private selectOptions: SelectOption[] = [
-    { icon: '✨', text: '포르쉐 파나메라 사게해주세요.' },
-    { icon: '🏡', text: '반포 아크로리버파크 사게해주세요.' },
-    { icon: '✈️', text: '몰디브에서 모히또 한잔하고 싶어요.'},
-    { icon: '🤱', text: '자녀 교육에 걱정 없게 해주세요!'},
-    { icon: '🦄', text: '꿈꾸던 사업을 시작하고 싶어요!'},
+    { icon: '✨', text: '포르쉐 파나메라 사게해주세요' },
+    { icon: '🏡', text: '반포 아크로리버파크 사게해주세요' },
+    { icon: '✈️', text: '몰디브에서 모히또 한잔하고 싶어요'},
+    { icon: '🏄‍', text: '은퇴해 슬로우 라이프를 즐기고 싶어요'},
+    { icon: '🏖️', text: '바다가 보이는 오션뷰에 살고 싶어요'},
+    { icon: '🤱', text: '자녀 교육에 걱정 없게 해주세요'},
+    { icon: '🦄', text: '꿈꾸던 사업을 시작하고 싶어요'},
+    { icon: '🍵', text: '카페를 열어 사장님 라이프 살래요'},
+    { icon: '🕌', text: '갓물주가 되어 임대수익을 받고싶어요'},
+    { icon: '🇺🇸', text: '해외 ETF투자해 배당수익받고 싶어요'},
+    { icon: '🤑', text: '인생 한방! 비트코인에 올인할래요'},
+    { icon: '🌳', text: '어려운 이웃을 위해 사회에 기부하고 싶어요'},
   ]
+
+  texts = ['"이제 소망을 선택해보세요.', '토요일 좋은 일이 생길거예요"']
 
   private setActiveTab(tab: string) {
     this.activeTab = tab
@@ -334,6 +352,44 @@ export default class Result extends Vue {
 </script>
 
 <style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.8s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+@keyframes slideUp3 {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp2 {
+  0% {
+    transform: translateY(50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .container {
   margin-bottom: calc(152px + env(safe-area-inset-bottom));
   margin-top: 20px;
@@ -345,19 +401,52 @@ export default class Result extends Vue {
 }
 
 .text {
-  margin-bottom: 32px;
   font-size: 20px;
   font-weight: 600;
   line-height: 30px;
   letter-spacing: -0.5px;
   text-align: center;
   color: #fff;
+
+  opacity: 0;
+  transform: translateY(50%);
+  animation: slideUp2 1s forwards;
+  animation-delay: 0.3s;
+}
+
+.img-bg {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #4262FF;
+  border-radius: 50%;
+  margin-bottom: 12px;
+  opacity: 0;
+  transform: translateY(50%);
+  animation: slideUp2 1s forwards;
+}
+
+.img-bg > img {
+  width: 44px;
+  height: 44px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .tab-container {
+  margin-top: 32px;
   padding: 4px;
   background-color: #222222;
   border-radius: 100px;
+
+  opacity: 0;
+  animation: slideUp3 1s forwards;
+  animation-delay: 0.5s;
 }
 
 .tab {
@@ -405,6 +494,10 @@ export default class Result extends Vue {
   margin-top: 20px;
   width: 100%;
   text-align: center;
+
+  opacity: 0;
+  animation: slideUp3 1s forwards;
+  animation-delay: 0.7s;
 }
 
 .tab-content .option-item {
