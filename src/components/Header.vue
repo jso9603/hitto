@@ -39,6 +39,14 @@
       <img src="@/assets/ic-setting.svg" v-if="isLoggedIn" @click="onSetting" />
     </template>
 
+    <template v-else-if="$route.path === '/my/number' && ($route.query.tab === 'lottos' || $route.query.tab === 'dream')">
+      <div class="empty">ddd</div>
+      <div class="menu">나의 로또번호</div>
+      <button @click="goClose" class="close">
+        <img src="@/assets/ic-system-close-img.svg" />
+      </button>
+    </template>
+
     <template v-else-if="$route.path === '/my/number'">
       <button @click="goBack" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
