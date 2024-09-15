@@ -29,8 +29,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import dayjs, { Dayjs } from 'dayjs'
 import Cookies from 'js-cookie'
-import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 
 import GuessParticipants from '@/components/GuessParticipants.vue'
@@ -47,14 +47,6 @@ export default class Guess extends Vue {
 
   private rightValue: number = 0
   private guessWidth: number = 0
-
-   getWeek() {
-    const t1 = dayjs('20021207')
-    const t2 = dayjs()
-    const dff = dayjs.duration(t2.diff(t1)).asDays()
-
-    return Math.floor(dff / 7) + 2
-  }
 
   getSaturdayDate(week: number) {
     const t1 = dayjs('2002-12-07')
@@ -139,19 +131,39 @@ export default class Guess extends Vue {
     return now.isAfter(saturday9);
   }
 
+  getLottoWeek(t2: Dayjs) {
+    const t1 = dayjs('2002-12-07') // 로또 1회차 기준 날짜
+    const currentDate = t2
+    let diffWeeks = currentDate.diff(t1, 'week') // 기준 날짜와의 주차 차이
+    let currentWeek = diffWeeks + 1 // 회차는 1회차부터 시작하므로 1을 더해줌
+
+    // 이번 주 토요일 오후 6시를 계산
+    let saturdaySixPM = currentDate.startOf('week').add(6, 'day').hour(18).minute(0).second(0)
+
+    console.log('현재 날짜:', currentDate.format('YYYY-MM-DD HH:mm'))
+    console.log('이번 주 토요일 오후 6시:', saturdaySixPM.format('YYYY-MM-DD HH:mm'))
+
+    // 만약 현재 시간이 그 주의 토요일 오후 6시 이후라면 다음 회차로 설정
+    if (currentDate.day() === 0 || currentDate.isAfter(saturdaySixPM)) {
+      currentWeek += 1
+      console.log('현재 시간이 토요일 오후 6시 이후입니다.')
+    } else if (currentDate.day() >= 1 && currentDate.day() <= 5) {
+      // 월요일(1) ~ 금요일(5) 사이에는 다음 회차로 미리 더해줌 (1주가 안지나서 그런지 계속 -1되서 보여짐)
+      currentWeek += 1
+    } else {
+      console.log('현재 시간이 토요일 오후 6시 이전입니다.')
+    }
+
+    return currentWeek
+  }
+
   created() {
     window.scrollTo(0, 0)
 
     dayjs.extend(duration)
 
-    const currentWeek = this.getWeek()
-    if (this.isAfterSaturday9()) {
-      this.week = (currentWeek).toString();
-    } else {
-      this.week = (currentWeek - 1).toString();
-    }
-    this.saturdayDate = this.getSaturdayDate(Number(this.week));
-
+    this.week = this.getLottoWeek(dayjs()).toString()
+    this.saturdayDate = this.getSaturdayDate(+this.week)
     console.log('week: ', this.week)
   }
 

@@ -68,21 +68,21 @@ import { collection, query, getDocs, where } from 'firebase/firestore'
 import axios from 'axios'
 
 interface Lotto {
-  totSellamnt: number;
-  returnValue: string;
-  drwNoDate: string;
-  firstWinamnt: number;
-  firstAccumamnt: number;
-  drwNo: number;
-  drwtNo1: number;
-  drwtNo2: number;
-  drwtNo3: number;
-  drwtNo4: number;
-  drwtNo5: number;
-  drwtNo6: number;
-  bnusNo: number;
-  winningNumbers?: any;
-  isBeforeTheDraw?: boolean;
+  totSellamnt: number
+  returnValue: string
+  drwNoDate: string
+  firstWinamnt: number
+  firstAccumamnt: number
+  drwNo: number
+  drwtNo1: number
+  drwtNo2: number
+  drwtNo3: number
+  drwtNo4: number
+  drwtNo5: number
+  drwtNo6: number
+  bnusNo: number
+  winningNumbers?: any
+  isBeforeTheDraw?: boolean
 }
 
 interface User {
@@ -92,17 +92,16 @@ interface User {
 
 @Component
 export default class LottoList extends Vue {
-  @Prop(Number) week!: number;
-  @Prop(Object) user!: User;
+  @Prop(Number) week!: number
+  @Prop(Object) user!: User
 
-  lottoData: any[] = []; // 나의 번호 데이터를 저장할 배열
-  winningNumbers: number[] = []; // 당첨 번호를 저장할 배열
-  loading: boolean = true;
+  lottoData: any[] = [] // 나의 번호 데이터를 저장할 배열
+  winningNumbers: number[] = [] // 당첨 번호를 저장할 배열
+  loading: boolean = true
 
-  private activeTab: string = 'lottos';
+  private activeTab: string = 'lottos'
 
   private onCreate() {
-    console.log('user: ', !this.user)
     if (Object.keys(this.user).length === 0) {
       this.$router.push('/login')
     } else {
@@ -111,39 +110,39 @@ export default class LottoList extends Vue {
   }
 
   private setActiveTab(tab: string) {
-    this.activeTab = tab;
+    this.activeTab = tab
     setTimeout(() => {
-      this.loading = false;
-    }, 1000);
-    this.lottoData = [];
+      this.loading = false
+    }, 1000)
+    this.lottoData = []
 
     this.fetchLottoData(this.user.uid, tab).then(() => {
-      this.$forceUpdate(); // 강제로 뷰를 업데이트
-    });
+      this.$forceUpdate() // 강제로 뷰를 업데이트
+    })
   }
 
   async fetchLottoData(uid: string, dbTable: string) {
-    const storageName = dbTable === 'lottos' ? 'myNumbers' : 'myDreams';
+    const storageName = dbTable === 'lottos' ? 'myNumbers' : 'myDreams'
 
     if (sessionStorage.getItem(storageName)) {
-      const datas = JSON.parse(sessionStorage.getItem(storageName) as string);
-      this.lottoData = datas;
+      const datas = JSON.parse(sessionStorage.getItem(storageName) as string)
+      this.lottoData = datas
 
-      sessionStorage.setItem(storageName, JSON.stringify(this.lottoData));
+      sessionStorage.setItem(storageName, JSON.stringify(this.lottoData))
 
-      this.lottoData = Array.isArray(this.lottoData) ? this.lottoData : [this.lottoData];
+      this.lottoData = Array.isArray(this.lottoData) ? this.lottoData : [this.lottoData]
 
       this.lottoData.sort((a, b) => {
-        return dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1;
-      });
+        return dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1
+      })
 
       // 각 회차에 대해 API 호출
       for (const lotto of this.lottoData) {
         if (this.week < lotto.round) {
-          lotto.isBeforeTheDraw = true;
-          lotto.winningNumbers = [];
+          lotto.isBeforeTheDraw = true
+          lotto.winningNumbers = []
         } else {
-          const response = await axios.get<Lotto>(`/common.do?method=getLottoNumber&drwNo=${lotto.round}`);
+          const response = await axios.get<Lotto>(`/common.do?method=getLottoNumber&drwNo=${lotto.round}`)
           if (response.data.returnValue === 'success') {
             lotto.winningNumbers = [
               response.data.drwtNo1,
@@ -153,38 +152,38 @@ export default class LottoList extends Vue {
               response.data.drwtNo5,
               response.data.drwtNo6,
               response.data.bnusNo,
-            ];
-            lotto.isBeforeTheDraw = false;
+            ]
+            lotto.isBeforeTheDraw = false
           }
         }
       }
 
       setTimeout(() => {
-        this.loading = false;
-      }, 1000);
+        this.loading = false
+      }, 1000)
           
     } else {
       try {
-        const q = query(collection(db, dbTable), where('uid', '==', uid));
+        const q = query(collection(db, dbTable), where('uid', '==', uid))
         const snapshot = await getDocs(q)
         if (!snapshot.empty) {
           snapshot.forEach(doc => {
-            this.lottoData.push(doc.data());
-          });
+            this.lottoData.push(doc.data())
+          })
 
           this.lottoData.sort((a, b) => {
-            return b.date.localeCompare(a.date);
-          });
+            return b.date.localeCompare(a.date)
+          })
 
-          sessionStorage.setItem(storageName, JSON.stringify(this.lottoData));
+          sessionStorage.setItem(storageName, JSON.stringify(this.lottoData))
 
           // 각 회차에 대해 API 호출
           for (const lotto of this.lottoData) {
             if (this.week < lotto.round) {
-              lotto.isBeforeTheDraw = true;
-              lotto.winningNumbers = [];
+              lotto.isBeforeTheDraw = true
+              lotto.winningNumbers = []
             } else {
-              const response = await axios.get<Lotto>(`/common.do?method=getLottoNumber&drwNo=${lotto.round}`);
+              const response = await axios.get<Lotto>(`/common.do?method=getLottoNumber&drwNo=${lotto.round}`)
               if (response.data.returnValue === 'success') {
                 lotto.winningNumbers = [
                   response.data.drwtNo1,
@@ -194,67 +193,67 @@ export default class LottoList extends Vue {
                   response.data.drwtNo5,
                   response.data.drwtNo6,
                   response.data.bnusNo,
-                ];
-                lotto.isBeforeTheDraw = false;
+                ]
+                lotto.isBeforeTheDraw = false
               }
             }
           }
         }
       } catch (error) {
-        console.error('데이터를 가져오는 중 오류 발생:', error);
+        console.error('데이터를 가져오는 중 오류 발생:', error)
       } finally {
         console.log('lottoData: ', this.lottoData)
         setTimeout(() => {
-          this.loading = false;
-        }, 1000);
+          this.loading = false
+        }, 1000)
       }
     }
   }
 
-  created() {
-    this.activeTab = this.$route.query.tab as string || 'lottos';
-    this.fetchLottoData(this.user.uid, this.activeTab);
+  mounted() {
+    this.activeTab = this.$route.query.tab as string || 'lottos'
+    this.fetchLottoData(this.user.uid, this.activeTab)
   }
 
   getFormattedDate(dateString: string) {
-    return dayjs(dateString).format('YYYY년 MM월 DD일');
+    return dayjs(dateString).format('YYYY년 MM월 DD일')
   }
 
   shouldShowDate(lotto: any, index: number) {
     if (index === 0) {
-      return true;
+      return true
     }
-    return lotto.date !== this.lottoData[index - 1].date;
+    return lotto.date !== this.lottoData[index - 1].date
   }
 
   shouldAddMargin(lotto: any, index: number) {
     // 두 번째 result-box부터 with-margin 클래스를 추가
     // 첫 번째 항목은 항상 false
     if (index === 0) {
-      return false;
+      return false
     }
     // 이전 항목과 현재 항목의 날짜가 같은 경우에만 마진 추가
-    return lotto.date === this.lottoData[index - 1].date;
+    return lotto.date === this.lottoData[index - 1].date
   }
 
   isMatchingNumber(lotto: Lotto, num: number): boolean {
-    return lotto.winningNumbers && lotto.winningNumbers.includes(num);
+    return lotto.winningNumbers && lotto.winningNumbers.includes(num)
   }
 
   getResultClass(lotto: any) {
-    const numbersArray = lotto.numbers.flatMap((num: any) => num.split(',').map((n: any) => Number(n.trim())));
-    const matchCount = numbersArray.filter((num: any) => this.isMatchingNumber(lotto, num)).length;
+    const numbersArray = lotto.numbers.flatMap((num: any) => num.split(',').map((n: any) => Number(n.trim())))
+    const matchCount = numbersArray.filter((num: any) => this.isMatchingNumber(lotto, num)).length
   
-    return matchCount >= 3 ? 'bordered' : '';
+    return matchCount >= 3 ? 'bordered' : ''
   }
 
   getNumberClass(num: number) {
-    if (num >= 1 && num <= 10) return 'yellow';
-    if (num >= 11 && num <= 20) return 'blue';
-    if (num >= 21 && num <= 30) return 'red';
-    if (num >= 31 && num <= 40) return 'gray';
-    if (num >= 41 && num <= 45) return 'green';
-    return '';
+    if (num >= 1 && num <= 10) return 'yellow'
+    if (num >= 11 && num <= 20) return 'blue'
+    if (num >= 21 && num <= 30) return 'red'
+    if (num >= 31 && num <= 40) return 'gray'
+    if (num >= 41 && num <= 45) return 'green'
+    return ''
   }
 }
 </script>

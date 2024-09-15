@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import Cookies from 'js-cookie'
 import duration from 'dayjs/plugin/duration'
 import axios from 'axios'
@@ -56,70 +56,61 @@ export default class MyNumber extends Vue {
 
   user: any = {}
 
-  // 이번주 번호
-  getWeek() {
-    const t1 = dayjs('20021207')
-    const t2 = dayjs()
-    const dff = dayjs.duration(t2.diff(t1)).asDays()
-
-    return Math.floor(dff / 7) + 1
-  }
-
   getSaturdayDate(week: number) {
-    const t1 = dayjs('2002-12-07');
-    const saturday = t1.add(week - 1, 'week').day(6); // 주차 계산 후 그 주의 토요일로 이동
-    return saturday.format('YYYY-MM-DD');
+    const t1 = dayjs('2002-12-07')
+    const saturday = t1.add(week - 1, 'week')
+    return saturday.format('YYYY-MM-DD')
   }
 
   async fetchLottoData() {
     try {
-      const response = await axios.get(`/common.do?method=getLottoNumber&drwNo=${this.week}`);
-      this.lottoData = response.data as Lotto;
+      const response = await axios.get(`/common.do?method=getLottoNumber&drwNo=${this.week}`)
+      this.lottoData = response.data as Lotto
     } catch (error) {
-      console.error('로또 데이터를 가져오는 중 오류 발생:', error);
+      console.error('로또 데이터를 가져오는 중 오류 발생:', error)
     }
   }
 
-  isAfterSaturday9() {
-    const now = dayjs();
-    let saturday9 = dayjs().day(6).hour(21).minute(0).second(0);  // 이번 주 토요일 9시
+  getLottoWeek(t2: Dayjs) {
+    const t1 = dayjs('2002-12-07') // 로또 1회차 기준 날짜
+    const currentDate = t2
+    let diffWeeks = currentDate.diff(t1, 'week') // 기준 날짜와의 주차 차이
+    let currentWeek = diffWeeks + 1 // 회차는 1회차부터 시작하므로 1을 더해줌
 
-    // dayjs().day(6)를 사용할 때 dayjs가 현재 주의 "토요일"을 참조
-    // 현재 dayjs().day(6)는 토요일을 기준으로 시간을 계산하는데, 일요일이 되면 dayjs().day(6)는 다가오는 토요일(다음 주 토요일)을 참조
-    // 그래서 일요일이 되면 dayjs().day(6)은 일주일 후의 토요일 오후 9시를 참조하게 되며,
-    // 이로 인해 now.isAfter(saturday9)는 false를 반환
+    // 이번 주 토요일 오후 6시를 계산
+    let saturdaySixPM = currentDate.startOf('week').add(6, 'day').hour(18).minute(0).second(0)
 
-    // day(6)를 사용할 때는 현재 요일을 고려하여, 다음 주가 아니라 이번 주의 토요일 9시를 기준으로 할 수 있도록 해야함
+    console.log('현재 날짜:', currentDate.format('YYYY-MM-DD HH:mm'))
+    console.log('이번 주 토요일 오후 6시:', saturdaySixPM.format('YYYY-MM-DD HH:mm'))
 
-    // 만약 현재 시간이 일요일이면 지난 토요일을 참조하도록 처리
-    if (now.day() === 0) {
-      // 일요일일 경우 지난 토요일로 변경 (지난 토요일 9시)
-      saturday9 = dayjs().subtract(1, 'week').day(6).hour(21).minute(0).second(0);
+    // 만약 현재 시간이 그 주의 토요일 오후 6시 이후라면 다음 회차로 설정
+    if (currentDate.day() === 0 || currentDate.isAfter(saturdaySixPM)) {
+      currentWeek += 1
+      console.log('현재 시간이 토요일 오후 6시 이후입니다.')
+    } else if (currentDate.day() >= 1 && currentDate.day() <= 5) {
+      // 월요일(1) ~ 금요일(5) 사이에는 다음 회차로 미리 더해줌 (1주가 안지나서 그런지 계속 -1되서 보여짐)
+      currentWeek += 1
+    } else {
+      console.log('현재 시간이 토요일 오후 6시 이전입니다.')
     }
-    return now.isAfter(saturday9);
+
+    return currentWeek
   }
 
   created() {
     dayjs.extend(duration)
 
-    const currentWeek = this.getWeek();
-    if (this.isAfterSaturday9()) {
-      this.week = (currentWeek).toString();
-    } else {
-      this.week = (currentWeek - 1).toString();
-    }
-    this.saturdayDate = this.getSaturdayDate(Number(this.week));
+    this.week = (this.getLottoWeek(dayjs()) -1).toString()
+    this.saturdayDate = this.getSaturdayDate(+this.week - 1)
+    this.fetchLottoData()
 
-    this.fetchLottoData();
-
-    const userData = Cookies.get('user') as string;
-    this.user = JSON.parse(userData);
+    const userData = Cookies.get('user') as string
+    this.user = JSON.parse(userData)
   }
 
   getFormattedDate(dateString: string) {
-    return dayjs(dateString).format('YYYY년 M월 D일');
+    return dayjs(dateString).format('YYYY년 M월 D일')
   }
-
 
   get drawnNumbers() {
     return [
@@ -129,36 +120,22 @@ export default class MyNumber extends Vue {
       this.lottoData.drwtNo4,
       this.lottoData.drwtNo5,
       this.lottoData.drwtNo6,
-    ];
+    ]
   }
 
   get bonusNumber() {
-    return this.lottoData.bnusNo;
+    return this.lottoData.bnusNo
   }
 
   getNumberClass(number: number) {
-    if (number >= 1 && number <= 10) return 'yellow';
-    if (number >= 11 && number <= 20) return 'blue';
-    if (number >= 21 && number <= 30) return 'red';
-    if (number >= 31 && number <= 40) return 'gray';
-    if (number >= 41 && number <= 45) return 'green';
-    return '';
+    if (number >= 1 && number <= 10) return 'yellow'
+    if (number >= 11 && number <= 20) return 'blue'
+    if (number >= 21 && number <= 30) return 'red'
+    if (number >= 31 && number <= 40) return 'gray'
+    if (number >= 41 && number <= 45) return 'green'
+    return ''
   }
 }
-/* moment 라이브러리를 사용한 이 함수는 2002년 12월 7일부터 오늘까지의 주차를 계산합니다.
-
-함수의 결과는 다음과 같습니다:
-
-t1은 2002년 12월 7일을 나타냅니다.
-t2는 현재 날짜를 나타냅니다.
-dff는 t1부터 t2까지의 일수를 계산합니다.
-Math.floor(dff/7)+1은 주차를 계산하고 1을 더해 반환합니다.
-결과값은 2002년 12월 7일부터 현재까지 몇 주가 지났는지를 나타내는 숫자입니다. */
-
-/* const t1 = moment('20021207');
-  const t2 = moment();
-  const dff = moment.duration(t2.diff(t1)).asDays();
-  return Math.floor(dff/7)+1; */
 </script>
 
 <style scoped>
