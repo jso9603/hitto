@@ -99,6 +99,7 @@ export default class LottoList extends Vue {
   winningNumbers: number[] = [] // 당첨 번호를 저장할 배열
   loading: boolean = true
 
+  private isUrlTab: boolean = false
   private activeTab: string = 'lottos'
 
   private onCreate() {
@@ -124,7 +125,7 @@ export default class LottoList extends Vue {
   async fetchLottoData(uid: string, dbTable: string) {
     const storageName = dbTable === 'lottos' ? 'myNumbers' : 'myDreams'
 
-    if (sessionStorage.getItem(storageName)) {
+    if (sessionStorage.getItem(storageName) && !this.isUrlTab) {
       const datas = JSON.parse(sessionStorage.getItem(storageName) as string)
       this.lottoData = datas
 
@@ -211,6 +212,7 @@ export default class LottoList extends Vue {
   }
 
   mounted() {
+    this.isUrlTab = this.$route.query.tab ? true : false
     this.activeTab = this.$route.query.tab as string || 'lottos'
     this.fetchLottoData(this.user.uid, this.activeTab)
   }

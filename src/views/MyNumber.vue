@@ -57,9 +57,25 @@ export default class MyNumber extends Vue {
   user: any = {}
 
   getSaturdayDate(week: number) {
+    console.log(week)
     const t1 = dayjs('2002-12-07')
-    const saturday = t1.add(week - 1, 'week')
-    return saturday.format('YYYY-MM-DD')
+    const t2 = dayjs()
+
+    let diffWeeks = t2.diff(t1, 'week') // 기준 날짜와의 주차 차이
+    let currentWeek = diffWeeks + 1 // 회차는 1회차부터 시작하므로 1을 더해줌
+
+    let saturdaySixPM = t2.startOf('week').add(6, 'day').hour(18).minute(0).second(0)
+
+     if (t2.day() === 0 || t2.isAfter(saturdaySixPM)) {
+       const saturday = t1.add(currentWeek, 'week')
+       return saturday.format('YYYY-MM-DD')
+     } else if (t2.day() >= 1 && t2.day() <= 5) {
+       const saturday = t1.add(currentWeek - 1, 'week')
+       return saturday.format('YYYY-MM-DD')
+     } else {
+       const saturday = t1.add(currentWeek, 'week')
+       return saturday.format('YYYY-MM-DD')
+     }
   }
 
   async fetchLottoData() {
