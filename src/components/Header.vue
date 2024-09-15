@@ -28,7 +28,7 @@
     <template v-else-if="$route.path === '/login'">
       <div class="empty"></div>
       <img src="@/assets/ic-system-logo.svg" class="logo" @click="$router.replace('/')" />
-      <button @click="goBack" class="close">
+      <button @click="goClose" class="close">
         <img src="@/assets/ic-system-close-img.svg" />
       </button>
     </template>
@@ -182,6 +182,10 @@ export default class Header extends Vue {
   }
 
   goBack() {
+    this.$router.back()
+  }
+
+  goClose() {
     this.$router.replace('/')
   }
 
