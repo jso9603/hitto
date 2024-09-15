@@ -1,6 +1,6 @@
 <template>
-  <div class="app">
-    <Header @goBack="openPopup" />
+  <div :class="['app', { 'overlay': isPopupVisible }]">
+    <Header @goBack="openPopup" :class="{ 'popup-active': isPopupVisible }" />
   
     <transition name="fade">
       <div class="noti" v-if="showCopyImage">
@@ -77,10 +77,6 @@ export default class App extends Vue {
 
     this.isPopupVisible = true
   }
-
-  private closePopup(): void {
-    this.isPopupVisible = false
-  }
 }
 </script>
 
@@ -96,6 +92,13 @@ body {
 
 .app {
   position: relative;
+}
+
+.app.overlay {
+  width: 100%;
+  height: 100%;
+  background-color: #00000066;
+  z-index: 10000;
 }
 
 .noti {

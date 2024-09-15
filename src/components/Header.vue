@@ -222,6 +222,11 @@ export default class Header extends Vue {
   margin-right: auto;
 }
 
+.header.popup-active {
+  background-color: #00000066;
+  z-index: 10;
+}
+
 .header.scrolled {
   /* 블러효과 (https://www.zappy.ai/kr 참고) */
   backdrop-filter: blur(10px);
