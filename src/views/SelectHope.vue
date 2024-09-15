@@ -68,7 +68,7 @@
             
             {{activeTab === 'select' ? '선택하기' : '입력 완료'}}
           </button>
-          <button v-if="activeTab === 'select'" class="none" :disabled="isLoading" @click="$router.replace('/')">괜찮아요</button>
+          <button v-if="activeTab === 'select'" class="none" :disabled="isLoading" @click="onItsOk">괜찮아요</button>
         </div>
       </div>
       
@@ -159,6 +159,10 @@ export default class Result extends Vue {
     (this.$refs.myTextarea as HTMLTextAreaElement).focus()
   }
 
+  private onItsOk() {
+    this.onLogin()
+  }
+
   private async onLogin() {
     const user = getLoggedUserInfo()
 
@@ -167,7 +171,7 @@ export default class Result extends Vue {
         // my에서 탭으로 분류
         sessionStorage.setItem('type', Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream')
         if (this.activeTab === 'select') {
-          sessionStorage.setItem('hope', this.selectedIndex!.toString())
+          sessionStorage.setItem('hope', this.selectedIndex === null ? '' : this.selectedIndex!.toString())
           sessionStorage.setItem('hope-select', 'true')
         } else {
           sessionStorage.setItem('hope', `${this.impression}`)
@@ -178,11 +182,12 @@ export default class Result extends Vue {
       } catch (error) {
         console.error('Failed to parse user data:', error)
         alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요')
+        return
       }
     } else {
       sessionStorage.setItem('type', Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream')
       if (this.activeTab === 'select') {
-        sessionStorage.setItem('hope', this.selectedIndex!.toString())
+        sessionStorage.setItem('hope', this.selectedIndex === null ? '' : this.selectedIndex!.toString())
         sessionStorage.setItem('hope-select', 'true')
       } else {
         sessionStorage.setItem('hope', `${this.impression}`)
@@ -255,12 +260,13 @@ export default class Result extends Vue {
 
         try {
           // lottos or dream 컬렉션에 새로운 문서 추가
+          const winningText = this.activeTab === 'select' ? this.selectedIndex === null ? '' : this.selectOptions[this.selectedIndex!].text : this.impression
           await addDoc(collection(db, collectionName), {
             date: dayjs().format('YYYYMMDD HH:MM'),
             numbers,
             uid: user.uid,
             round,
-            winningText: this.activeTab === 'select' ? this.selectOptions[this.selectedIndex!].text : this.impression,
+            winningText: winningText,
           })
 
           const datas = Cookies.get('menu') === 'AI 번호 생성' ? sessionStorage.getItem('myNumbers') : sessionStorage.getItem('myDreams')
@@ -269,7 +275,7 @@ export default class Result extends Vue {
             numbers,
             uid: user.uid,
             round,
-            winningText: this.activeTab === 'select' ? this.selectOptions[this.selectedIndex!].text : this.impression,
+            winningText: winningText,
           }
 
           if (!datas) {
