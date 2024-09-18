@@ -85,11 +85,7 @@ import { collection, addDoc } from 'firebase/firestore'
 import LoginPopup from '@/components/LoginPopup.vue'
 
 import { getLoggedUserInfo } from '@/utils/user'
-
-interface SelectOption {
-  icon: string
-  text: string
-}
+import { SelectOption } from '../models/Select'
 
 @Component({
   components: {

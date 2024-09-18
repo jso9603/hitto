@@ -68,24 +68,7 @@ import { collection, query, getDocs, where } from 'firebase/firestore'
 import axios from 'axios'
 
 import { User } from '../models/User'
-
-interface Lotto {
-  totSellamnt: number
-  returnValue: string
-  drwNoDate: string
-  firstWinamnt: number
-  firstAccumamnt: number
-  drwNo: number
-  drwtNo1: number
-  drwtNo2: number
-  drwtNo3: number
-  drwtNo4: number
-  drwtNo5: number
-  drwtNo6: number
-  bnusNo: number
-  winningNumbers?: any
-  isBeforeTheDraw?: boolean
-}
+import { Lotto } from '../models/Lotto'
 
 @Component
 export default class LottoList extends Vue {

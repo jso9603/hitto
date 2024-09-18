@@ -68,19 +68,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+
 import { db } from '../../src/config/firebaseConfig'
 import { collection, getDocs } from 'firebase/firestore'
 
-interface SubCategory {
-  name: string;
-  items: string[];
-}
-
-interface MainCategory {
-  name: string;
-  icon: string;
-  subCategories: SubCategory[];
-}
+import { MainCategory } from '../models/Category'
 
 @Component
 export default class Dream extends Vue {
@@ -277,84 +269,84 @@ mainCategories: MainCategory[] = [
         }
       ]
     }
-  ];
+  ]
 
   onMainCategory(index: number) {
-    this.selectedMainCategory = index;
-    this.showPage = 2;
+    this.selectedMainCategory = index
+    this.showPage = 2
   }
 
   onSubCategory(index: number) {
-    this.selectedSubCategory = index;
-    this.showPage = 3;
+    this.selectedSubCategory = index
+    this.showPage = 3
   }
 
   onLastCategory(index: number) {
-    this.selectedLastCategory = index;
+    this.selectedLastCategory = index
 
     this.$router.push('/random')
   }
 
   // 숫자를 포맷팅 (1,000 형태로 표시)
   get formattedCount(): string {
-    return this.currentCount.toLocaleString();
+    return this.currentCount.toLocaleString()
   }
 
   // Firestore에서 counting 필드 가져오기
   private async getCountingFromFirestore() {
     try {
-      const querySnapshot = await getDocs(collection(db, 'counting'));
+      const querySnapshot = await getDocs(collection(db, 'counting'))
       if (!querySnapshot.empty) {
-        const doc = querySnapshot.docs[0]; // 첫 번째 문서 가져오기
-        const counting = doc.data().counting;
-        return counting || 0;
+        const doc = querySnapshot.docs[0] // 첫 번째 문서 가져오기
+        const counting = doc.data().counting
+        return counting || 0
       }
-      return 0;
+      return 0
     } catch (error) {
-      console.error('Error getting counting from Firestore:', error);
-      return 0;
+      console.error('Error getting counting from Firestore:', error)
+      return 0
     }
   }
 
   // 세션에 값을 저장하기
   private setSessionCount(value: number): void {
-    sessionStorage.setItem('counting', value.toString());
+    sessionStorage.setItem('counting', value.toString())
   }
 
   // 세션에서 값을 가져오기
   private getSessionCount(): number {
-    const count = sessionStorage.getItem('counting');
-    return count ? parseInt(count, 10) : 0;
+    const count = sessionStorage.getItem('counting')
+    return count ? parseInt(count, 10) : 0
   }
 
   // 카운팅 애니메이션
   private startCounting(): void {
-    const duration = 3000;
-    const steps = 100; // 카운팅 업데이트 횟수 (프레임 수)
-    const stepTime = Math.floor(duration / steps); // 각 프레임의 시간 간격 (밀리초)
-    const increment = Math.ceil(this.targetCount / steps); // 한 번에 더해질 숫자
+    const duration = 3000
+    const steps = 100 // 카운팅 업데이트 횟수 (프레임 수)
+    const stepTime = Math.floor(duration / steps) // 각 프레임의 시간 간격 (밀리초)
+    const increment = Math.ceil(this.targetCount / steps) // 한 번에 더해질 숫자
 
     this.intervalId = window.setInterval(() => {
       if (this.currentCount < this.targetCount) {
-        this.currentCount += increment;
+        this.currentCount += increment
         if (this.currentCount >= this.targetCount) {
-          this.currentCount = this.targetCount; // 목표값을 초과하지 않도록 설정
-          clearInterval(this.intervalId!); // 카운팅이 완료되면 멈춤
+          this.currentCount = this.targetCount // 목표값을 초과하지 않도록 설정
+          clearInterval(this.intervalId!) // 카운팅이 완료되면 멈춤
         }
       }
-    }, stepTime);
+    }, stepTime)
   }
 
   async mounted() {
     // 세션에 값이 있는지 확인하고, 없으면 Firestore에서 값을 가져옴
-    let count = this.getSessionCount();
+    let count = this.getSessionCount()
     if (count === 0) {
-      count = await this.getCountingFromFirestore(); // Firestore에서 데이터 가져오기
-      this.setSessionCount(count); // 세션에 저장
+      count = await this.getCountingFromFirestore() // Firestore에서 데이터 가져오기
+      this.setSessionCount(count) // 세션에 저장
     }
-    this.targetCount = count; // 카운팅 목표값 설정
+    this.targetCount = count // 카운팅 목표값 설정
 
-    this.startCounting();
+    this.startCounting()
   }
 }
 </script>

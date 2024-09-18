@@ -8,17 +8,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator"
 
-// Ball 인터페이스 정의 (타입스크립트에서 사용할 타입)
-interface Ball {
-  x: number;
-  y: number;
-  radius: number;
-  dx: number;
-  dy: number;
-  color: string;
-}
+import { Ball } from '../models/Ball'
 
 @Component
 export default class Test extends Vue {

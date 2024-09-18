@@ -56,14 +56,12 @@
 import { Component, Vue } from 'vue-property-decorator'
 import dayjs from 'dayjs'
 import Cookies from 'js-cookie'
+
 import { db } from '../../src/config/firebaseConfig'
 import { collection, addDoc } from 'firebase/firestore'
-import { getLoggedUserInfo } from '@/utils/user'
 
-interface SelectOption {
-  icon: string;
-  text: string;
-}
+import { getLoggedUserInfo } from '@/utils/user'
+import { SelectOption } from '../models/Select'
 
 @Component
 export default class Challenge extends Vue {
@@ -81,46 +79,46 @@ export default class Challenge extends Vue {
   private selectedIndex: number | null = null
 
   private selected(index: number) {
-    this.selectedIndex = index;
+    this.selectedIndex = index
   }
 
   selectNumber(number: number) {
-    const index = this.selectedNumbers.indexOf(number);
+    const index = this.selectedNumbers.indexOf(number)
     if (index > -1) {
-      this.selectedNumbers.splice(index, 1); // 이미 선택된 경우, 선택 해제
+      this.selectedNumbers.splice(index, 1) // 이미 선택된 경우, 선택 해제
     } else {
-      this.selectedNumbers.length === 6 ? alert('6개까지만 선택할 수 있습니다.') : this.selectedNumbers.push(number); // 선택되지 않은 경우, 선택
+      this.selectedNumbers.length === 6 ? alert('6개까지만 선택할 수 있습니다.') : this.selectedNumbers.push(number) // 선택되지 않은 경우, 선택
     }
   }
 
   getClass(number: number) {
     if (this.selectedNumbers.includes(number)) {
-      return 'selected'; // 선택된 경우
+      return 'selected' // 선택된 경우
     }
-    return ''; // 선택되지 않은 경우
+    return '' // 선택되지 않은 경우
   }
 
   async onSave() {
     if (this.selectedNumbers.length < 6) {
-      alert('숫자는 6개를 선택해주세요');
-      return;
+      alert('숫자는 6개를 선택해주세요')
+      return
     }
     
     if (this.selectedIndex === null) {
-      alert('소망도 선택해주세요');
-      return;
+      alert('소망도 선택해주세요')
+      return
     }
 
-    const challengeData = JSON.parse(Cookies.get('challenge') || '{}');
+    const challengeData = JSON.parse(Cookies.get('challenge') || '{}')
     if (challengeData && this.week === challengeData.round) {
-      alert('회차당 1번만 제출 가능합니다');
-      return;
+      alert('회차당 1번만 제출 가능합니다')
+      return
     }
 
-    const confirmed = confirm('선택하신 번호가 확실합니까?');
+    const confirmed = confirm('선택하신 번호가 확실합니까?')
     if (confirmed) {
 
-      const user = getLoggedUserInfo();
+      const user = getLoggedUserInfo()
       if (user) {
         try {
           // 저장
@@ -134,53 +132,53 @@ export default class Challenge extends Vue {
             winningText: this.selectOptions[this.selectedIndex].text,
             type: 'challange',
           }
-          Cookies.set('challenge', JSON.stringify(data), { expires: 14 });
+          Cookies.set('challenge', JSON.stringify(data), { expires: 14 })
 
-          await addDoc(collection(db, 'lottos'), data);
+          await addDoc(collection(db, 'lottos'), data)
 
-          await alert('더보기 > 내 번호 관리에서 확인하실 수 있습니다.');
+          await alert('더보기 > 내 번호 관리에서 확인하실 수 있습니다.')
 
-          sessionStorage.removeItem('challenge-number');
-          sessionStorage.removeItem('challenge-winning');
-          sessionStorage.removeItem('challenge-round');
+          sessionStorage.removeItem('challenge-number')
+          sessionStorage.removeItem('challenge-winning')
+          sessionStorage.removeItem('challenge-round')
 
-          await this.$router.replace('/my/number?tab=lottos');
+          await this.$router.replace('/my/number?tab=lottos')
         } catch (error) {
-          console.error('Failed to parse user data:', error);
-          alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요');
+          console.error('Failed to parse user data:', error)
+          alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요')
         }
       } else {
-        sessionStorage.setItem('challenge-number', [this.selectedNumbers.join(', ')].toString());
-        sessionStorage.setItem('chanllenge-winning', this.selectedIndex.toString());
-        sessionStorage.setItem('challenge-round', this.week);
+        sessionStorage.setItem('challenge-number', [this.selectedNumbers.join(', ')].toString())
+        sessionStorage.setItem('chanllenge-winning', this.selectedIndex.toString())
+        sessionStorage.setItem('challenge-round', this.week)
 
-        this.$router.replace(`/login?redirect=challenge?week=${this.week}`);
+        this.$router.replace(`/login?redirect=challenge?week=${this.week}`)
       }
     }
   }
 
   created() {
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0)
 
-    this.week = this.$route.query.week as string;
+    this.week = this.$route.query.week as string
 
     if (
       sessionStorage.getItem('challenge-number') &&
       sessionStorage.getItem('chanllenge-winning') &&
       sessionStorage.getItem('challenge-round')
     ) {
-      const storedNumbers = sessionStorage.getItem('challenge-number');
+      const storedNumbers = sessionStorage.getItem('challenge-number')
 
       if (storedNumbers) {
         this.selectedNumbers = storedNumbers
           .split(',') 
-          .map(num => parseInt(num.trim(), 10));
+          .map(num => parseInt(num.trim(), 10))
       }
 
-      const storedWinning = sessionStorage.getItem('chanllenge-winning');
+      const storedWinning = sessionStorage.getItem('chanllenge-winning')
 
       if (storedWinning) {
-        this.selectedIndex = Number(storedWinning);
+        this.selectedIndex = Number(storedWinning)
       }
     }
   }

@@ -26,23 +26,9 @@ import dayjs, { Dayjs } from 'dayjs'
 import Cookies from 'js-cookie'
 import duration from 'dayjs/plugin/duration'
 import axios from 'axios'
-import LottoList from '@/components/LottoList.vue'
 
-interface Lotto {
-  totSellamnt: number,  // 총 상금
-  returnValue: string,  // 성공 혹은 실패
-  drwNoDate: string,  // 날짜
-  firstWinamnt: number,  // 1등 상금액
-  firstAccumamnt: number, // ?
-  drwNo: number,  // 회차
-  drwtNo1: number,  // 로또번호 1
-  drwtNo2: number,  // 로또번호 2
-  drwtNo3: number,  // 로또번호 3
-  drwtNo4: number,  // 로또번호 4
-  drwtNo5: number,  // 로또번호 5
-  drwtNo6: number,  // 로또번호 6
-  bnusNo: number, // 로또 보너스 번호
-}
+import LottoList from '@/components/LottoList.vue'
+import { Lotto } from '../models/Lotto'
 
 @Component({
   components: {
