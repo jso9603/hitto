@@ -28,7 +28,6 @@
     <div class="menu">
       <div class="title">서비스</div>
         <div v-for="item in services" :key="item.title" class="service-item" @click="$router.push(item.link)">
-          <img :src="require(`@/assets/${item.icon}`)" class="service-icon" />
           <span class="service-title">{{ item.title }}</span>
           <img src="@/assets/ic-system-arrow-right.svg" />
       </div>
@@ -37,7 +36,6 @@
     <div class="menu">
       <div class="title">저장소</div>
       <div v-for="item in repositories" :key="item.title" class="service-item" @click="onNumber(item.title)">
-        <img :src="require(`@/assets/${item.icon}`)" class="service-icon" />
         <span class="service-title">{{ item.title }}</span>
         <img src="@/assets/ic-system-arrow-right.svg" />
       </div>
@@ -46,7 +44,6 @@
     <div class="menu">
       <div class="title">일반</div>
       <div v-for="(item, i) in general" :key="item.title" class="service-item" @click="onGeneral(i)">
-        <img :src="require(`@/assets/${item.icon}`)" class="service-icon" />
         <span class="service-title">{{ item.title }}</span>
         <img src="@/assets/ic-system-arrow-right.svg" />
       </div>
@@ -66,35 +63,29 @@ export default class My extends Vue {
   services = [
     {
       title: 'Ai 로또생성',
-      icon: 'ic-ai.svg',
       link: '/ai',
     },
     {
       title: '꿈해몽 생성',
-      icon: 'img-stella-2d.png',
       link: '/dream',
     },
   ];
 
   repositories = [
     {
-      title: '나의 번호 관리',
-      icon: 'ic-system-star.png',
+      title: '나의 번호 관리'
     }
   ];
 
   general = [
     {
       title: '문의하기',
-      icon: 'ic-cs.svg',
     },
     {
       title: '광고 문의',
-      icon: 'ic-inquiry.svg',
     },
     {
       title: '개인 정보 보호 및 약관',
-      icon: 'ic-terms.svg',
     },
   ];
 
