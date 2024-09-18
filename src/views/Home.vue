@@ -33,16 +33,16 @@
     <div class="share">
       <div class="title">친구, 지인과 함께<br/>로또 1등에 도전해보세요</div>
       <div class="share-channel">
-        <div class="round kakao">
+        <div class="round kakao" @click="shareKakao">
           <img src="@/assets/ic-system-kakao.svg" alt="kakao" />
         </div>
-        <div class="round sms">
+        <div class="round sms" @click="shareSms">
           <img src="@/assets/ic-system-sms.svg" alt="sms" />
         </div>
-        <div class="round url">
+        <div class="round url" @click="shareUrl">
           URL
         </div>
-        <div class="round more">
+        <div class="round more" @click="shareNative">
           <div></div>
           <div></div>
           <div></div>
@@ -70,7 +70,7 @@ dayjs.extend(weekday)
 
 @Component
 export default class Home extends Vue {
-  countdown: string = '';
+  countdown: string = ''
 
   onClick(type: string, menu: string) {
     Cookies.set('menu', menu)
@@ -79,19 +79,19 @@ export default class Home extends Vue {
   }
 
   mounted() {
-    this.updateCountdown();
-    setInterval(this.updateCountdown, 1000);
+    this.updateCountdown()
+    setInterval(this.updateCountdown, 1000)
   }
 
   getNextSaturday(): dayjs.Dayjs {
-    const now = dayjs();
-    let nextSaturday = now.weekday(6).hour(20).minute(30).second(0);
+    const now = dayjs()
+    let nextSaturday = now.weekday(6).hour(20).minute(30).second(0)
 
     if (now.isAfter(nextSaturday)) {
-      nextSaturday = nextSaturday.add(1, 'week');
+      nextSaturday = nextSaturday.add(1, 'week')
     }
 
-    return nextSaturday;
+    return nextSaturday
   }
 
   updateCountdown() {
@@ -109,6 +109,98 @@ export default class Home extends Vue {
       this.countdown = `${hours}시 ${minutes}분 ${seconds}초 남음`;
     } else {
       this.countdown = `${days}일 ${hours}시 ${minutes}분 ${seconds}초 남음`;
+    }
+  }
+
+  shareKakao() {
+    window.Kakao.Share.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: '모두의 희망로또',
+        description: '친구, 지인과 함께 로또 1등에 도전해보세요.',
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/hitto-1b119.appspot.com/o/img-mohito.png?alt=media&token=83f16f0c-842a-47e8-a293-94de4e4c56fd',
+        link: {
+          mobileWebUrl: 'https://mohito.co.kr',
+          webUrl: 'https://mohito.co.kr',
+        },
+      },
+      buttons: [
+        {
+          title: '웹으로 보기',
+          link: {
+            mobileWebUrl: 'https://mohito.co.kr',
+            webUrl: 'https://mohito.co.kr',
+          },
+        },
+      ],
+    })
+  }
+
+  shareSms() {
+    const message = '모두의 희망로또: https://mohito.co.kr'
+    const phoneNumber = ''
+    window.location.href = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`
+  }
+
+  shareUrl() {
+    const currentUrl = 'https://mohito.co.kr'
+
+    // Check if navigator.clipboard.writeText is available
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(currentUrl).then(() => {
+        this.$store.dispatch('showCopyImage')
+      }).catch(err => {
+        console.error('링크 복사에 실패했습니다:', err)
+      })
+    } else {
+      // Fallback for iOS Safari
+      const textArea = document.createElement('textarea')
+      textArea.value = currentUrl
+      // Ensure the textarea is not visible and doesn't cause layout shifts
+      textArea.style.position = 'fixed' // Fixed position to avoid layout changes
+      textArea.style.top = '0'
+      textArea.style.left = '0'
+      textArea.style.width = '1px'
+      textArea.style.height = '1px'
+      textArea.style.padding = '0'
+      textArea.style.border = 'none'
+      textArea.style.outline = 'none'
+      textArea.style.boxShadow = 'none'
+      textArea.style.background = 'transparent'
+      textArea.style.opacity = '0' // Make it invisible
+      textArea.setAttribute('readonly', '')
+      document.body.appendChild(textArea)
+      textArea.focus()
+      textArea.select()
+      try {
+        const successful = document.execCommand('copy')
+        if (successful) {
+          this.$store.dispatch('showCopyImage')
+        } else {
+          console.error('링크 복사에 실패했습니다.')
+        }
+      } catch (err) {
+        console.error('링크 복사에 실패했습니다:', err)
+      }
+      document.body.removeChild(textArea)
+    }
+  }
+
+  shareNative() {
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      navigator.share({
+        title: '모두의 희망로또',
+        text: '친구, 지인과 함께 로또 1등에 도전해보세요.',
+        url: 'https://mohito.co.kr',
+      })
+      .then(() => {
+        console.log('공유 성공')
+      })
+      .catch((error: any) => {
+        console.error('공유 실패:', error)
+      })
+    } else {
+      alert('이 브라우저에서는 지원되지 않습니다.')
     }
   }
 }
