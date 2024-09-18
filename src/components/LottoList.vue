@@ -1,8 +1,11 @@
 <template>
   <div class="list">
-    <div class="tab">
-      <div :class="['tab-item', { active: activeTab === 'lottos' }]" @click="setActiveTab('lottos')">Ai 로또</div>
-      <div :class="['tab-item', { active: activeTab === 'dream' }]" @click="setActiveTab('dream')">꿈해몽</div>
+    <div class="tab-container">
+      <div class="tab">
+        <div :class="['tab-item', { active: activeTab === 'lottos' }]" @click="setActiveTab('lottos')">자동 번호</div>
+        <div :class="['tab-item', { active: activeTab === 'dream' }]" @click="setActiveTab('dream')">수동 번호</div>
+        <div class="tab-indicator" :style="indicatorStyle"></div>
+      </div>
     </div>
   
     <div v-if="loading">
@@ -82,6 +85,12 @@ export default class LottoList extends Vue {
   private isUrlTab: boolean = false
   private activeTab: string = 'lottos'
 
+  get indicatorStyle() {
+    return {
+      transform: this.activeTab === 'select' ? 'translateX(0)' : 'translateX(100%)',
+    }
+  }
+
   private onCreate() {
     if (Object.keys(this.user).length === 0) {
       this.$router.push('/login')
@@ -108,7 +117,11 @@ export default class LottoList extends Vue {
     // sessionStorage에서 데이터 로드
     const cachedData = sessionStorage.getItem(storageName)
     if (cachedData && !this.isUrlTab) {
+      console.log('ee')
       this.lottoData = JSON.parse(cachedData)
+
+      this.lottoData = this.lottoData.filter((lotto: any) => lotto.round == this.week)
+      console.log(this.lottoData)
       this.processLottoData(this.lottoData)
       this.loading = false
 
@@ -125,6 +138,7 @@ export default class LottoList extends Vue {
         })
 
         this.lottoData.sort((a, b) => dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1)
+        this.lottoData = this.lottoData.filter((lotto: any) => lotto.round == this.week)
         sessionStorage.setItem(storageName, JSON.stringify(this.lottoData))
       }
     } catch (error) {
@@ -162,6 +176,7 @@ export default class LottoList extends Vue {
   }
 
   mounted() {
+    console.log('week: ', this.week)
     this.isUrlTab = this.$route.query.tab ? true : false
     this.activeTab = this.$route.query.tab as string || 'lottos'
     this.fetchLottoData(this.user.uid, this.activeTab)
@@ -219,6 +234,55 @@ export default class LottoList extends Vue {
 </script>
 
 <style scoped>
+.tab-container {
+  margin-top: 32px;
+  padding: 4px;
+  background-color: #222222;
+  border-radius: 100px;
+}
+
+.tab {
+  display: flex;
+  border-radius: 100px;
+  width: 100%;
+  position: relative;
+  margin: 2px 0;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 14px 0;
+  border-radius: 100px;
+  font-size: 14px;
+  color: #737577;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 18px;
+  z-index: 1;
+}
+
+.tab-indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 50%; /* 탭 인디케이터 너비는 두 개의 탭에 맞춰 50%로 설정 */
+  /* background-color: #ECEEF0; */
+  border-radius: 100px;
+  transition: transform 0.3s ease; /* 슬라이드 트랜지션 */
+  z-index: 0; /* 텍스트 뒤에 배경 인디케이터를 배치 */
+}
+
+.tab-item.active {
+  color: #202223;
+  background-color: #ECEEF0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 18px;
+}
+
 .lotto-result {
   margin-top: 24px;
   color: #9C9EA0;
@@ -361,56 +425,6 @@ export default class LottoList extends Vue {
 
 .default-color {
   background-color: #333;
-}
-
-.tab {
-  display: flex;
-  margin-bottom: 20px;
-}
-
-.tab-item {
-  margin-right: 20px;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  color: #5F6163;
-  transition: border-color 0.3s, background-color 0.3s;
-  font-size: 20px;
-  line-height: 24px;
-  font-weight: 700;
-}
-
-.tab-item.active {
-  color: #fff;
-}
-
-.tab-content {
-  margin-top: 20px;
-  width: 100%;
-  text-align: center;
-}
-
-.tab-content .option-item {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 20px;
-  background-color: #222222;
-  border-radius: 10px;
-  margin-bottom: 8px;
-  cursor: pointer;
-}
-
-.option-item.active {
-  background-color: #fff;
-}
-
-.tab-content .option-item .text {
-  margin-left: 10px;
-  color: #fff;
-}
-
-.option-item.active .text {
-  color: #000;
 }
 
 @keyframes bounce {
