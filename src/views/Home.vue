@@ -137,7 +137,7 @@ export default class Home extends Vue {
   }
 
   shareSms() {
-    const message = '모두의 희망로또: https://mohito.co.kr'
+    const message = '친구와 함께 로또1등 당첨 도전해보세요. 모두의 희망로또!: https://mohito.co.kr'
     const phoneNumber = ''
     window.location.href = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`
   }

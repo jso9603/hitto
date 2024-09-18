@@ -66,9 +66,13 @@ export default class App extends Vue {
         .replace(/^"|"$/g, '')  // 양 끝의 따옴표 제거
         .split(',')             // 쉼표로 문자열 분리
         .map(num => Number(num.trim())) // 각 요소를 숫자로 변환
-    }
 
-    this.isPopupVisible = true
+        if (this.LoginPopupNumbers.length === 6) {
+          setTimeout(() => {
+            this.isPopupVisible = true
+          }, 500)
+        }
+    }
   }
 }
 </script>
