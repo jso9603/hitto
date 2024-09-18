@@ -105,88 +105,58 @@ export default class LottoList extends Vue {
   async fetchLottoData(uid: string, dbTable: string) {
     const storageName = dbTable === 'lottos' ? 'myNumbers' : 'myDreams'
 
-    if (sessionStorage.getItem(storageName) && !this.isUrlTab) {
-      const datas = JSON.parse(sessionStorage.getItem(storageName) as string)
-      this.lottoData = datas
+    // sessionStorage에서 데이터 로드
+    const cachedData = sessionStorage.getItem(storageName)
+    if (cachedData && !this.isUrlTab) {
+      this.lottoData = JSON.parse(cachedData)
+      this.processLottoData(this.lottoData)
+      this.loading = false
 
-      sessionStorage.setItem(storageName, JSON.stringify(this.lottoData))
+      return
+    }
 
-      this.lottoData = Array.isArray(this.lottoData) ? this.lottoData : [this.lottoData]
+    try {
+      const q = query(collection(db, dbTable), where('uid', '==', uid))
+      const snapshot = await getDocs(q)
 
-      this.lottoData.sort((a, b) => {
-        return dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1
-      })
+      if (!snapshot.empty) {
+        snapshot.forEach(doc => {
+          this.lottoData.push(doc.data())
+        })
 
-      // 각 회차에 대해 API 호출
-      for (const lotto of this.lottoData) {
-        if (this.week < lotto.round) {
-          lotto.isBeforeTheDraw = true
-          lotto.winningNumbers = []
+        this.lottoData.sort((a, b) => dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1)
+        sessionStorage.setItem(storageName, JSON.stringify(this.lottoData))
+      }
+    } catch (error) {
+      console.error('데이터를 가져오는 중 오류 발생:', error)
+    } finally {
+      console.log('lottoData: ', this.lottoData)
+      this.processLottoData(this.lottoData)
+      setTimeout(() => {
+        this.loading = false
+      }, 800)
+    }
+  }
+
+  private async processLottoData(lottoData: any[]) {
+    for (const lotto of lottoData) {
+      if (this.week < lotto.round) {
+        lotto.isBeforeTheDraw = true
+        lotto.winningNumbers = []
+      } else {
+        const cachedWinningNumbers = sessionStorage.getItem(`winningNumbers_${lotto.round}`)
+        if (cachedWinningNumbers) {
+          lotto.winningNumbers = JSON.parse(cachedWinningNumbers)
         } else {
           const response = await axios.get<Lotto>(`/common.do?method=getLottoNumber&drwNo=${lotto.round}`)
           if (response.data.returnValue === 'success') {
             lotto.winningNumbers = [
-              response.data.drwtNo1,
-              response.data.drwtNo2,
-              response.data.drwtNo3,
-              response.data.drwtNo4,
-              response.data.drwtNo5,
-              response.data.drwtNo6,
-              response.data.bnusNo,
+              response.data.drwtNo1, response.data.drwtNo2, response.data.drwtNo3,
+              response.data.drwtNo4, response.data.drwtNo5, response.data.drwtNo6, response.data.bnusNo
             ]
-            lotto.isBeforeTheDraw = false
+            sessionStorage.setItem(`winningNumbers_${lotto.round}`, JSON.stringify(lotto.winningNumbers))
           }
         }
-      }
-
-      setTimeout(() => {
-        this.loading = false
-      }, 1000)
-          
-    } else {
-      try {
-        const q = query(collection(db, dbTable), where('uid', '==', uid))
-        const snapshot = await getDocs(q)
-        if (!snapshot.empty) {
-          snapshot.forEach(doc => {
-            this.lottoData.push(doc.data())
-          })
-
-          this.lottoData.sort((a, b) => {
-            return dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1
-          })
-
-          sessionStorage.setItem(storageName, JSON.stringify(this.lottoData))
-
-          // 각 회차에 대해 API 호출
-          for (const lotto of this.lottoData) {
-            if (this.week < lotto.round) {
-              lotto.isBeforeTheDraw = true
-              lotto.winningNumbers = []
-            } else {
-              const response = await axios.get<Lotto>(`/common.do?method=getLottoNumber&drwNo=${lotto.round}`)
-              if (response.data.returnValue === 'success') {
-                lotto.winningNumbers = [
-                  response.data.drwtNo1,
-                  response.data.drwtNo2,
-                  response.data.drwtNo3,
-                  response.data.drwtNo4,
-                  response.data.drwtNo5,
-                  response.data.drwtNo6,
-                  response.data.bnusNo,
-                ]
-                lotto.isBeforeTheDraw = false
-              }
-            }
-          }
-        }
-      } catch (error) {
-        console.error('데이터를 가져오는 중 오류 발생:', error)
-      } finally {
-        console.log('lottoData: ', this.lottoData)
-        setTimeout(() => {
-          this.loading = false
-        }, 1000)
       }
     }
   }
@@ -196,6 +166,14 @@ export default class LottoList extends Vue {
     this.activeTab = this.$route.query.tab as string || 'lottos'
     this.fetchLottoData(this.user.uid, this.activeTab)
   }
+
+  // 로딩 시간 측정
+  // const startTime = performance.now()
+  // this.fetchLottoData(this.user.uid, this.activeTab).then(() => {
+  //   const endTime = performance.now() // 로딩 끝난 시간
+  //   const loadingTime = endTime - startTime // 로딩 시간 계산
+  //   console.log(`로딩 시간: ${loadingTime} ms`)
+  // })
 
   getFormattedDate(dateString: string) {
     return dayjs(dateString).format('YYYY년 MM월 DD일')
