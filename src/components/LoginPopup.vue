@@ -37,10 +37,7 @@ import Cookies from 'js-cookie'
 import { db } from '../../src/config/firebaseConfig'
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore'
 
-interface User {
-  uid: string;
-  email: string;
-}
+import { User } from '../models/User'
 
 @Component
 export default class LoginPopup extends Vue {
@@ -78,30 +75,30 @@ export default class LoginPopup extends Vue {
 
             try {
             // 이메일로 기존 유저 검색
-            const q = query(collection(db, 'users'), where('email', '==', kakaoAccount.email));
-            const querySnapshot = await getDocs(q);
+            const q = query(collection(db, 'users'), where('email', '==', kakaoAccount.email))
+            const querySnapshot = await getDocs(q)
 
             if (!querySnapshot.empty) {
               // 이메일이 이미 존재할 경우
-              const existingUserDoc = querySnapshot.docs[0];
-              const existingUser = existingUserDoc.data() as User;
-              console.log('이미 존재하는 사용자:', existingUser);
+              const existingUserDoc = querySnapshot.docs[0]
+              const existingUser = existingUserDoc.data() as User
+              console.log('이미 존재하는 사용자:', existingUser)
 
-              Cookies.set('user', JSON.stringify(existingUser), {expires: 30});
+              Cookies.set('user', JSON.stringify(existingUser), {expires: 30})
             } else {
               // 새로운 유저 생성
               const newUser = {
                 email: kakaoAccount.email,
                 uid: `uid_${Date.now()}` // 고유한 uid 생성
-              };
+              }
 
               // Firestore에 사용자 추가
               await addDoc(collection(db, 'users'), newUser)
               console.log('새로운 사용자 추가:', newUser)
-              Cookies.set('user', JSON.stringify(newUser), {expires: 30});
+              Cookies.set('user', JSON.stringify(newUser), {expires: 30})
             }
           } catch (e) {
-            console.error('사용자 저장 중 오류 발생:', e);
+            console.error('사용자 저장 중 오류 발생:', e)
           }
 
             this.closePopup()

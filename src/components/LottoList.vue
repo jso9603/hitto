@@ -67,6 +67,8 @@ import { db } from '../config/firebaseConfig'
 import { collection, query, getDocs, where } from 'firebase/firestore'
 import axios from 'axios'
 
+import { User } from '../models/User'
+
 interface Lotto {
   totSellamnt: number
   returnValue: string
@@ -83,11 +85,6 @@ interface Lotto {
   bnusNo: number
   winningNumbers?: any
   isBeforeTheDraw?: boolean
-}
-
-interface User {
-  email: string,
-  uid: string,
 }
 
 @Component
