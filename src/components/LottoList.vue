@@ -173,7 +173,7 @@ export default class LottoList extends Vue {
           })
 
           this.lottoData.sort((a, b) => {
-            return b.date.localeCompare(a.date)
+            return dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1
           })
 
           sessionStorage.setItem(storageName, JSON.stringify(this.lottoData))
