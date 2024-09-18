@@ -262,7 +262,7 @@ export default class Result extends Vue {
           // lottos or dream 컬렉션에 새로운 문서 추가
           const winningText = this.activeTab === 'select' ? this.selectedIndex === null ? '' : this.selectOptions[this.selectedIndex!].text : this.impression
           await addDoc(collection(db, collectionName), {
-            date: dayjs().format('YYYYMMDD HH:MM'),
+            date: dayjs().format('YYYYMMDD HH:mm:SS'),
             numbers,
             uid: user.uid,
             round,
@@ -271,7 +271,7 @@ export default class Result extends Vue {
 
           const datas = Cookies.get('menu') === 'AI 번호 생성' ? sessionStorage.getItem('myNumbers') : sessionStorage.getItem('myDreams')
           const insertData = {
-            date: dayjs().format('YYYYMMDD HH:MM'),
+            date: dayjs().format('YYYYMMDD HH:mm:SS'),
             numbers,
             uid: user.uid,
             round,

@@ -127,7 +127,7 @@ export default class Challenge extends Vue {
           const numbers = [this.selectedNumbers.join(', ')]
 
           const data = {
-            date: dayjs().format('YYYYMMDD HH:MM'),
+            date: dayjs().format('YYYYMMDD HH:mm:SS'),
             numbers,
             uid: user.uid,
             round: this.week,
