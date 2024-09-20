@@ -100,7 +100,9 @@ body {
 
 .noti {
   width: calc(100% - 80px);
-  max-width: 576px;
+  max-width: calc(576px - 80px);
+  margin-left: auto;
+  margin-right: auto;
   padding: 18px 20px;
   display: flex;
   align-items: center;
