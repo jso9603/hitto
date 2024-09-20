@@ -125,14 +125,14 @@ export default class Challenge extends Vue {
           const numbers = [this.selectedNumbers.join(', ')]
 
           const data = {
-            date: dayjs().format('YYYYMMDD HH:mm:SS'),
+            date: dayjs().format('YYYYMMDD HH:mm:ss'),
             numbers,
             uid: user.uid,
             round: this.week,
             winningText: this.selectOptions[this.selectedIndex].text,
             type: 'challange',
           }
-          sessionStorage.setItem('myChallenge', JSON.stringify(data))
+          sessionStorage.setItem(`myChallenge-${this.week}`, JSON.stringify(data))
           Cookies.set('challenge', JSON.stringify(data), { expires: 14 })
 
           await addDoc(collection(db, 'manual'), data)

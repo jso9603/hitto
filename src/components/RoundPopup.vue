@@ -14,14 +14,9 @@
             :class="['round-button', { selected: selectedRound === previousRounds[index] }]"
             @click="selectRound(round)"
           >
-            <div class="lotto-numbers">
-              <div class="label">{{ round }}회</div>
-            </div>
+            <div class="lotto-numbers">{{ round }}회</div>
           </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button @click="onConfirm">확인</button>
       </div>
     </div>
   </div>
@@ -36,7 +31,7 @@ export default class LoginPopup extends Vue {
   @Prop({ type: String, default: '' }) current!: string
   @Prop({ type: Boolean, default: false }) visible!: boolean
 
-  selectedRound = +this.current
+  selectedRound = 0
 
   get previousRounds() {
     const currentRound = Number(this.round)
@@ -60,6 +55,10 @@ export default class LoginPopup extends Vue {
 
   onConfirm() {
     this.$emit('selected', this.round)
+  }
+
+  mounted() {
+    this.selectedRound = +this.round
   }
 }
 </script>
@@ -123,6 +122,9 @@ export default class LoginPopup extends Vue {
 }
 
 .round-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-basis: calc(33.33% - 8px); /* 한 줄에 3개 표시 */
   justify-content: center;
   align-items: center;
@@ -145,23 +147,5 @@ export default class LoginPopup extends Vue {
 
 .round-button:not(.selected):hover {
   border: 1px solid #cccccc; /* 선택되지 않은 버튼에 마우스를 올릴 때 */
-}
-
-.modal-footer {
-  margin-top: 24px;
-}
-
-button {
-  width: 100%;
-  min-height: 54px;
-  background-color: #4AFF81;
-  padding: 8px 8px;
-  border-radius: 24px;
-  border-style: none;
-  color: #202223;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 18px;
-  cursor: pointer;
 }
 </style>

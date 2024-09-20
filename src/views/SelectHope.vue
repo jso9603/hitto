@@ -162,23 +162,7 @@ export default class Result extends Vue {
   private async onLogin() {
     const user = getLoggedUserInfo()
 
-    if (user) {
-      try {
-        if (this.activeTab === 'select') {
-          sessionStorage.setItem('hope', this.selectedIndex === null ? '' : this.selectedIndex!.toString())
-          sessionStorage.setItem('hope-select', 'true')
-        } else {
-          sessionStorage.setItem('hope', `${this.impression}`)
-          sessionStorage.setItem('hope-select', 'false')
-        }
-
-        await this.saveLottoNumbers()
-      } catch (error) {
-        console.error('Failed to parse user data:', error)
-        alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요')
-        return
-      }
-    } else {
+    try {
       if (this.activeTab === 'select') {
         sessionStorage.setItem('hope', this.selectedIndex === null ? '' : this.selectedIndex!.toString())
         sessionStorage.setItem('hope-select', 'true')
@@ -186,17 +170,16 @@ export default class Result extends Vue {
         sessionStorage.setItem('hope', `${this.impression}`)
         sessionStorage.setItem('hope-select', 'false')
       }
-      
-      //   const storedNumbers = sessionStorage.getItem('lottoNumbers')
-      //   if (storedNumbers) {
-      //   // 문자열에서 양쪽의 따옴표를 제거하고, 쉼표로 분리하여 배열로 변환 후 숫자로 변환
-      //   this.LoginPopupNumbers = storedNumbers
-      //     .replace(/^"|"$/g, '')  // 양 끝의 따옴표 제거
-      //     .split(',')             // 쉼표로 문자열 분리
-      //     .map(num => Number(num.trim())) // 각 요소를 숫자로 변환
-      // }
-      // this.isPopupVisible = true
-      this.$router.replace('/login?redirect=select-hope')
+
+      if (user) {
+        await this.saveLottoNumbers()
+      } else {
+        this.$router.replace('/login?redirect=select-hope')
+      }
+    } catch (error) {
+      console.error('Failed to parse user data:', error)
+      alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요')
+      return
     }
   }
 
@@ -255,16 +238,16 @@ export default class Result extends Vue {
           // automatic or dream 컬렉션에 새로운 문서 추가
           const winningText = this.activeTab === 'select' ? this.selectedIndex === null ? '' : this.selectOptions[this.selectedIndex!].text : this.impression
           await addDoc(collection(db, 'automatic'), {
-            date: dayjs().format('YYYYMMDD HH:mm:SS'),
+            date: dayjs().format('YYYYMMDD HH:mm:ss'),
             numbers,
             uid: user.uid,
             round,
             winningText: winningText,
           })
 
-          const datas = sessionStorage.getItem('myNumbers')
+          const datas = sessionStorage.getItem(`myNumbers-${round}`)
           const insertData = {
-            date: dayjs().format('YYYYMMDD HH:mm:SS'),
+            date: dayjs().format('YYYYMMDD HH:mm:ss'),
             numbers,
             uid: user.uid,
             round,
@@ -273,7 +256,7 @@ export default class Result extends Vue {
 
           if (!datas) {
             // sessionStorage에 아무 데이터도 없으면, 배열에 insertData를 넣어서 저장
-            sessionStorage.setItem('myNumbers', JSON.stringify(insertData))
+            sessionStorage.setItem(`myNumbers-${round}`, JSON.stringify(insertData))
           } else {
             const alreadyDatas = JSON.parse(datas)
 
@@ -284,7 +267,7 @@ export default class Result extends Vue {
               return dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1
             })
 
-            sessionStorage.setItem('myNumbers', JSON.stringify(updatedData))
+            sessionStorage.setItem(`myNumbers-${round}`, JSON.stringify(updatedData))
           }
 
           sessionStorage.removeItem('hope')

@@ -55,8 +55,9 @@
       <div v-else>
         <div class="no-data">
           <img src="@/assets/ic-stefan-2d.svg" />
-          <div>행운은 도전하는 자에게 찾아옵니다!<br/>경제적 자유로 가는 첫걸음을 지금 시작해보세요!</div>
-          <button @click="onCreate">생성하기</button>
+          <div>Opps!</div>
+          <div>생성이력이 없어요.</div>
+          <!-- <button @click="onCreate">생성하기</button> -->
         </div>
       </div>
     </div>
@@ -115,12 +116,11 @@ export default class LottoList extends Vue {
     const storageName = dbTable === 'automatic' ? 'myNumbers' : 'myChallenge'
 
     // sessionStorage에서 데이터 로드
-    const cachedData = sessionStorage.getItem(storageName)
+    const cachedData = sessionStorage.getItem(`${storageName}-${this.week}`)
     if (cachedData && !this.isUrlTab) {
-      console.log('ee')
       this.lottoData = JSON.parse(cachedData)
 
-      this.lottoData = this.lottoData.filter((lotto: any) => lotto.round == this.week)
+      // this.lottoData = this.lottoData.filter((lotto: any) => lotto.round == this.week)
       console.log(this.lottoData)
       this.processLottoData(this.lottoData)
       this.loading = false
@@ -128,18 +128,27 @@ export default class LottoList extends Vue {
       return
     }
 
+    // TODO: pagination
     try {
-      const q = query(collection(db, dbTable), where('uid', '==', uid))
+      const q = query(
+        collection(db, dbTable),
+        where('uid', '==', uid),
+        where('round', '==', this.week)
+      )
       const snapshot = await getDocs(q)
+      console.log(dbTable, this.week, uid)
 
       if (!snapshot.empty) {
         snapshot.forEach(doc => {
           this.lottoData.push(doc.data())
         })
 
+        console.log(this.lottoData)
+        
+
         this.lottoData.sort((a, b) => dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1)
-        this.lottoData = this.lottoData.filter((lotto: any) => lotto.round == this.week)
-        sessionStorage.setItem(storageName, JSON.stringify(this.lottoData))
+        sessionStorage.setItem(`${storageName}-${this.week}`, JSON.stringify(this.lottoData))
+        // this.lottoData = this.lottoData.filter((lotto: any) => lotto.round == this.week)
       }
     } catch (error) {
       console.error('데이터를 가져오는 중 오류 발생:', error)
@@ -176,7 +185,6 @@ export default class LottoList extends Vue {
   }
 
   mounted() {
-    console.log('week: ', this.week)
     this.isUrlTab = this.$route.query.tab ? true : false
     this.activeTab = this.$route.query.tab as string || 'automatic'
     this.fetchLottoData(this.user.uid, this.activeTab)
