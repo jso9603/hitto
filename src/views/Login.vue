@@ -38,6 +38,7 @@ import Cookies from 'js-cookie'
 import { db } from '../../src/config/firebaseConfig'
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore'
 
+import { getCounting } from '@/utils/counting'
 import { User } from '../models/User'
 
 @Component
@@ -121,7 +122,6 @@ export default class Login extends Vue {
   storeDispache(user: User) {
     Cookies.set('user', JSON.stringify(user), {expires: 30})
 
-
     this.redirectUrl ? this.$router.replace(`/${this.redirectUrl}`) : this.$router.go(-1)
   }
 
@@ -155,47 +155,13 @@ export default class Login extends Vue {
     }, stepTime)
   }
 
-  // Firestore에서 counting 필드 가져오기
-  private async getCountingFromFirestore() {
-    try {
-      const querySnapshot = await getDocs(collection(db, 'counting'))
-      if (!querySnapshot.empty) {
-        const doc = querySnapshot.docs[0] // 첫 번째 문서 가져오기
-        const counting = doc.data().counting
-        return counting || 0
-      }
-      return 0
-    } catch (error) {
-      console.error('Error getting counting from Firestore:', error)
-      return 0
-    }
-  }
-
-  // 세션에 값을 저장하기
-  private setSessionCount(value: number): void {
-    sessionStorage.setItem('counting', value.toString())
-  }
-
-  // 세션에서 값을 가져오기
-  private getSessionCount(): number {
-    const count = sessionStorage.getItem('counting')
-    return count ? parseInt(count, 10) : 0
-  }
-
   async mounted() {
     window.addEventListener('resize', this.setViewportHeight)
     window.addEventListener('orientationchange', this.setViewportHeight)
 
     this.setViewportHeight()
 
-    // 세션에 값이 있는지 확인하고, 없으면 Firestore에서 값을 가져옴
-    let count = this.getSessionCount()
-    if (count === 0) {
-      count = await this.getCountingFromFirestore() // Firestore에서 데이터 가져오기
-      this.setSessionCount(count) // 세션에 저장
-    }
-    this.targetCount = count // 카운팅 목표값 설정
-
+    this.targetCount = await getCounting()
     this.startCounting()
   }
 
