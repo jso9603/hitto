@@ -95,20 +95,20 @@ export default class Home extends Vue {
   }
 
   updateCountdown() {
-    const now = dayjs();
-    const nextSaturday = this.getNextSaturday();
-    const diff = nextSaturday.diff(now);
-    const durationObj = dayjs.duration(diff);
+    const now = dayjs()
+    const nextSaturday = this.getNextSaturday()
+    const diff = nextSaturday.diff(now)
+    const durationObj = dayjs.duration(diff)
 
-    const days = Math.floor(durationObj.asDays());
-    const hours = durationObj.hours();
-    const minutes = durationObj.minutes();
-    const seconds = durationObj.seconds();
+    const days = Math.floor(durationObj.asDays())
+    const hours = durationObj.hours()
+    const minutes = durationObj.minutes()
+    const seconds = durationObj.seconds()
 
     if (days === 0) {
-      this.countdown = `${hours}시 ${minutes}분 ${seconds}초 남음`;
+      this.countdown = `${hours}시 ${minutes}분 ${seconds}초 남음`
     } else {
-      this.countdown = `${days}일 ${hours}시 ${minutes}분 ${seconds}초 남음`;
+      this.countdown = `${days}일 ${hours}시 ${minutes}분 ${seconds}초 남음`
     }
   }
 

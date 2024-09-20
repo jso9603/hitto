@@ -39,7 +39,7 @@
       <img src="@/assets/ic-setting.svg" v-if="isLoggedIn" @click="onSetting" />
     </template>
 
-    <template v-else-if="$route.path === '/my/number' && ($route.query.tab === 'lottos' || $route.query.tab === 'dream')">
+    <template v-else-if="$route.path === '/my/number' && ($route.query.tab === 'automatic' || $route.query.tab === 'manual')">
       <div class="empty"></div>
       <div class="menu">나의 로또번호</div>
       <button @click="goClose" class="close">
@@ -116,7 +116,7 @@ export default class Header extends Vue {
       this.$store.dispatch('showCopyImage')
     }).catch(err => {
       console.error('링크 복사에 실패했습니다:', err)
-    });
+    })
   } else {
     // Fallback for iOS Safari
     const textArea = document.createElement('textarea')

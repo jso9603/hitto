@@ -132,9 +132,10 @@ export default class Challenge extends Vue {
             winningText: this.selectOptions[this.selectedIndex].text,
             type: 'challange',
           }
+          sessionStorage.setItem('myChallenge', JSON.stringify(data))
           Cookies.set('challenge', JSON.stringify(data), { expires: 14 })
 
-          await addDoc(collection(db, 'lottos'), data)
+          await addDoc(collection(db, 'manual'), data)
 
           await alert('더보기 > 내 번호 관리에서 확인하실 수 있습니다.')
 
@@ -142,7 +143,7 @@ export default class Challenge extends Vue {
           sessionStorage.removeItem('challenge-winning')
           sessionStorage.removeItem('challenge-round')
 
-          await this.$router.replace('/my/number?tab=lottos')
+          await this.$router.replace('/my/number?tab=manual')
         } catch (error) {
           console.error('Failed to parse user data:', error)
           alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요')

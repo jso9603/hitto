@@ -2,8 +2,8 @@
   <div class="list">
     <div class="tab-container">
       <div class="tab">
-        <div :class="['tab-item', { active: activeTab === 'lottos' }]" @click="setActiveTab('lottos')">자동 번호</div>
-        <div :class="['tab-item', { active: activeTab === 'dream' }]" @click="setActiveTab('dream')">수동 번호</div>
+        <div :class="['tab-item', { active: activeTab === 'automatic' }]" @click="setActiveTab('automatic')">자동 번호</div>
+        <div :class="['tab-item', { active: activeTab === 'manual' }]" @click="setActiveTab('manual')">수동 번호</div>
         <div class="tab-indicator" :style="indicatorStyle"></div>
       </div>
     </div>
@@ -83,7 +83,7 @@ export default class LottoList extends Vue {
   loading: boolean = true
 
   private isUrlTab: boolean = false
-  private activeTab: string = 'lottos'
+  private activeTab: string = 'automatic'
 
   get indicatorStyle() {
     return {
@@ -112,7 +112,7 @@ export default class LottoList extends Vue {
   }
 
   async fetchLottoData(uid: string, dbTable: string) {
-    const storageName = dbTable === 'lottos' ? 'myNumbers' : 'myDreams'
+    const storageName = dbTable === 'automatic' ? 'myNumbers' : 'myChallenge'
 
     // sessionStorage에서 데이터 로드
     const cachedData = sessionStorage.getItem(storageName)
@@ -178,7 +178,7 @@ export default class LottoList extends Vue {
   mounted() {
     console.log('week: ', this.week)
     this.isUrlTab = this.$route.query.tab ? true : false
-    this.activeTab = this.$route.query.tab as string || 'lottos'
+    this.activeTab = this.$route.query.tab as string || 'automatic'
     this.fetchLottoData(this.user.uid, this.activeTab)
   }
 

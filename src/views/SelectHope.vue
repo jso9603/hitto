@@ -164,8 +164,6 @@ export default class Result extends Vue {
 
     if (user) {
       try {
-        // my에서 탭으로 분류
-        sessionStorage.setItem('type', Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream')
         if (this.activeTab === 'select') {
           sessionStorage.setItem('hope', this.selectedIndex === null ? '' : this.selectedIndex!.toString())
           sessionStorage.setItem('hope-select', 'true')
@@ -174,14 +172,13 @@ export default class Result extends Vue {
           sessionStorage.setItem('hope-select', 'false')
         }
 
-        await this.saveLottoNumbers(Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream')
+        await this.saveLottoNumbers()
       } catch (error) {
         console.error('Failed to parse user data:', error)
         alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요')
         return
       }
     } else {
-      sessionStorage.setItem('type', Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream')
       if (this.activeTab === 'select') {
         sessionStorage.setItem('hope', this.selectedIndex === null ? '' : this.selectedIndex!.toString())
         sessionStorage.setItem('hope-select', 'true')
@@ -240,7 +237,7 @@ export default class Result extends Vue {
     return currentWeek
   }
 
-  private async saveLottoNumbers(collectionName: string) {
+  private async saveLottoNumbers() {
     this.isLoading = true
 
     const userData = Cookies.get('user') as string
@@ -255,9 +252,9 @@ export default class Result extends Vue {
         const numbers = [(sessionStorage.getItem('lottoNumbers'))!.replace(/^"|"$/g, '')]
 
         try {
-          // lottos or dream 컬렉션에 새로운 문서 추가
+          // automatic or dream 컬렉션에 새로운 문서 추가
           const winningText = this.activeTab === 'select' ? this.selectedIndex === null ? '' : this.selectOptions[this.selectedIndex!].text : this.impression
-          await addDoc(collection(db, collectionName), {
+          await addDoc(collection(db, 'automatic'), {
             date: dayjs().format('YYYYMMDD HH:mm:SS'),
             numbers,
             uid: user.uid,
@@ -265,7 +262,7 @@ export default class Result extends Vue {
             winningText: winningText,
           })
 
-          const datas = Cookies.get('menu') === 'AI 번호 생성' ? sessionStorage.getItem('myNumbers') : sessionStorage.getItem('myDreams')
+          const datas = sessionStorage.getItem('myNumbers')
           const insertData = {
             date: dayjs().format('YYYYMMDD HH:mm:SS'),
             numbers,
@@ -276,8 +273,7 @@ export default class Result extends Vue {
 
           if (!datas) {
             // sessionStorage에 아무 데이터도 없으면, 배열에 insertData를 넣어서 저장
-            const sessionStorageName = Cookies.get('menu') === 'AI 번호 생성' ? 'myNumbers' : 'myDreams'
-            sessionStorage.setItem(sessionStorageName, JSON.stringify(insertData))
+            sessionStorage.setItem('myNumbers', JSON.stringify(insertData))
           } else {
             const alreadyDatas = JSON.parse(datas)
 
@@ -288,8 +284,7 @@ export default class Result extends Vue {
               return dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1
             })
 
-            const sessionStorageName = Cookies.get('menu') === 'AI 번호 생성' ? 'myNumbers' : 'myDreams'
-            sessionStorage.setItem(sessionStorageName, JSON.stringify(updatedData))
+            sessionStorage.setItem('myNumbers', JSON.stringify(updatedData))
           }
 
           sessionStorage.removeItem('hope')
@@ -299,7 +294,7 @@ export default class Result extends Vue {
           setTimeout(() => {
             this.isLoading = false
 
-            this.$router.push(`/my/number?tab=${Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream'}`)
+            this.$router.push('/my/number?tab=automatic')
           }, 2000)
           
         } catch (e) {
@@ -358,7 +353,7 @@ export default class Result extends Vue {
         this.activeTab = 'input'
       }
       
-      this.saveLottoNumbers(Cookies.get('menu') === 'AI 번호 생성' ? 'lottos' : 'dream')
+      this.saveLottoNumbers()
     }
   }
 }

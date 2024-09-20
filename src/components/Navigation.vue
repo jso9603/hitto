@@ -24,47 +24,47 @@ export default class Navigation extends Vue {
   get homeIcon() {
     return this.$route.path === '/' || this.$route.path === '/home'
       ? require('@/assets/img-home-enable.svg')
-      : require('@/assets/img-home-disable.svg');
+      : require('@/assets/img-home-disable.svg')
   }
 
   get benefitsIcon() {
     return this.$route.path === '/guess'
       ? require('@/assets/img-game-enable.svg')
-      : require('@/assets/img-game-disable.svg');
+      : require('@/assets/img-game-disable.svg')
   }
 
   get moreIcon() {
     return this.$route.path === '/my'
       ? require('@/assets/img-all-enable.svg')
-      : require('@/assets/img-all-disable.svg');
+      : require('@/assets/img-all-disable.svg')
   }
 
   get isHomeActive() {
-    return this.$route.path === '/' || this.$route.path === '/home';
+    return this.$route.path === '/' || this.$route.path === '/home'
   }
 
   get isBenefitsActive() {
-    return this.$route.path === '/guess';
+    return this.$route.path === '/guess'
   }
 
   get isMoreActive() {
-    return this.$route.path === '/my';
+    return this.$route.path === '/my'
   }
 
   onTab(tab: string) {
     switch(tab) {
       case 'home':
-        this.$router.push('/');
-        break;
+        this.$router.push('/')
+        break
       case 'challenge':
-        Cookies.set('menu', '로또 맞추기');
-        this.$router.push('/guess');
-        break;
+        Cookies.set('menu', '로또 맞추기')
+        this.$router.push('/guess')
+        break
       case 'more':
-        this.$router.push('/my');
-        break;
+        this.$router.push('/my')
+        break
       default:
-        break;
+        break
     }
   }
 }

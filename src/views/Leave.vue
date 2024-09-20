@@ -64,7 +64,7 @@ export default class Leave extends Vue {
         const batch = writeBatch(db) // Firestore 배치 생성
 
         // 삭제해야 할 컬렉션들
-        const collections = ['dream', 'lottos', 'users']
+        const collections = ['manual', 'automatic', 'users']
 
         for (const collectionName of collections) {
           // 해당 컬렉션에서 uid가 같은 문서들을 쿼리
