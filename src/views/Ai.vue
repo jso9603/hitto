@@ -132,19 +132,19 @@ export default class Ai extends Vue {
   position: absolute;
   top: calc(50% - 178px);
   
-  width: 64px;
-  height: 64px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #4262FF;
   border-radius: 50%;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .ai > .img-bg > img {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
@@ -153,9 +153,9 @@ export default class Ai extends Vue {
 .typing1 {
   width: 100%;
   color: #ECEEF0;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
-  line-height: 30px;
+  line-height: 32px;
   letter-spacing: -0.5px;
   text-align: center;
 
@@ -203,9 +203,9 @@ export default class Ai extends Vue {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 15px;
   color: #ECEEF0;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 16px;
   line-height: 22px;
   font-variant: common-ligatures tabular-nums;

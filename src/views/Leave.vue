@@ -140,8 +140,8 @@ export default class Leave extends Vue {
 }
 
 img {
-  width: 64px;
-  height: 64px;
+  width: 60px;
+  height: 60px;
 }
 
 .title {
@@ -153,7 +153,7 @@ img {
 }
 
 .desc {
-  margin-top: 24px;
+  margin-top: 12px;
   font-size: 15px;
   font-weight: 400;
   line-height: 22px;
@@ -198,9 +198,9 @@ img {
 }
 
 .floating > .participation {
-  margin-bottom: 16px;
+  margin-bottom: 15px;
   font-size: 15px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 22px;
   text-align: center;
   color: #fff;

@@ -141,7 +141,7 @@ export default class LoginPopup extends Vue {
 
 .modal-content {
   background: #fff;
-  padding: 0 20px calc(28px + env(safe-area-inset-bottom));
+  padding: 0 20px calc(20px + env(safe-area-inset-bottom));
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
   width: 100%;

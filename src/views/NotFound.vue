@@ -1,7 +1,7 @@
 <template>
   <div class="not-found">
     <img src="@/assets/img-stefan-404.png" alt="not-found" />
-    <div class="title">Opps!</div>
+    <div class="title">페이지를 찾을 수 없어요</div>
     <div class="text">
       페이지가 길을 잃었네요<br/>
       아마도 몰디브에서 모히또 한 잔 마시는 중일지도!
@@ -51,28 +51,27 @@ export default class NotFound extends Vue {
 
 img {
   margin-bottom: 16px;
-  width: 64px;
-  height: 64px;
+  width: 60px;
+  height: 60px;
 }
 
 .title {
-  margin-top: 16px;
-  font-size: 22px;
+  margin-bottom: 12px;
+  font-size: 20px;
   font-weight: 700;
-  line-height: 26px;
+  line-height: 24px;
   color: #FFF;
 }
 
 .text {
-  margin-top: 16px;
+  margin-bottom: 24px;
   font-size: 15px;
   font-weight: 400;
   line-height: 23px;
-  color: #ECEEF0;
+  color: #9C9EA0;
 }
 
 button {
-  margin-top: 16px;
   padding: 12px 20px;
   background-color: #ECEEF0;
   border-radius: 44px;

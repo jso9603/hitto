@@ -8,7 +8,7 @@
         <img src="@/assets/ic-ai.svg" alt="ai" />
         <div class="text">GTP가 분석해주는<br/><span>AI 번호 생성</span></div>
       </div>
-      <div class="box" @click="onClick('dream', '꿈해몽 생성')">
+      <div class="box" @click="onClick('dream', '꿈해몽')">
         <img src="@/assets/img-stella-2d.png" alt="dream" />
         <div class="text">조상신이 점지해주는<br/><span>꿈해몽 생성</span></div>
       </div>
@@ -52,6 +52,7 @@
 
     <div class="floating">
       <div class="count__down">
+        <div class="timer">당첨까지 남은 시간</div>
         {{ countdown }}
       </div>
     </div>
@@ -106,9 +107,9 @@ export default class Home extends Vue {
     const seconds = durationObj.seconds()
 
     if (days === 0) {
-      this.countdown = `${hours}시 ${minutes}분 ${seconds}초 남음`
+      this.countdown = `${hours} : ${minutes} : ${seconds}`
     } else {
-      this.countdown = `${days}일 ${hours}시 ${minutes}분 ${seconds}초 남음`
+      this.countdown = `${days}일 ${hours} : ${minutes} : ${seconds}`
     }
   }
 
@@ -218,18 +219,27 @@ export default class Home extends Vue {
   height: auto;
 }
 
+.timer {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16.71px;
+  text-align: center;
+  color: #BABCBE;
+}
+
 .count__down {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   gap: 4px;
-  background: #222222E5;
-  border-radius: 16px;
-  padding: 15px 20px;
-  color: #ECEEF0;
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 18px;
+  background: #222222F0;
+  border-radius: 20px;
+  padding: 20px;
+  color: #4AFF81;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 22px;
   text-align: center;
   font-variant: common-ligatures tabular-nums;
 }
@@ -428,48 +438,5 @@ export default class Home extends Vue {
   max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
   background: linear-gradient(360deg, #171717 50%, rgba(23, 23, 23, 0) 100%);
-}
-
-.floating > .participation {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 20px;
-  color: #ECEEF0;
-  font-weight: 600;
-  font-size: 15px;
-  line-height: 18px;
-}
-
-.floating > .participation > .people {
-  display: flex;
-  flex-direction: row;
-}
-
-.floating > .participation > .people > .person:not(:first-child) {
-  margin-left: -6px;
-}
-
-.floating > .participation > .people > .person {
-  width: 24px;
-  height: 24px;
-  background-color: #414244;
-  border-radius: 50%;
-  border: 1px solid #181D23;
-}
-
-.floating > button {
-  width: 100%;
-  min-height: 52px;
-  background-color: #4AFF81;
-  padding: 8px 8px;
-  border-radius: 24px;
-  border-style: none;
-  color: #181D23;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 20px;
-  cursor: pointer;
 }
 </style>

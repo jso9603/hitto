@@ -5,6 +5,7 @@ import Backup from '@/views/Backup.vue'
 import Random from '@/views/Random.vue'
 import SelectHope from '@/views/SelectHope.vue'
 import Dream from '@/views/Dream.vue'
+import Category from '@/views/Category.vue'
 import Login from '@/views/Login.vue'
 import My from '@/views/My.vue'
 import Qr from '@/views/Qr.vue'
@@ -50,6 +51,11 @@ const routes = [
     path: '/dream',
     name: 'Dream',
     component: Dream,
+  },
+  {
+    path: '/category',
+    name: 'Category',
+    component: Category,
   },
   {
     path: '/login',

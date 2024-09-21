@@ -13,8 +13,8 @@
       </div>
 
       <div class="page2" v-else key="page2">
-        <div class="img-bg" :style="{ animationDelay: `0s` }">
-          <img src='@/assets/img-stefan-3d.png' at="character 이미지" />
+        <div :class="['img-bg', background]" :style="{ animationDelay: `0s` }">
+          <img :src="require(`@/assets/${charater}`)" at="character 이미지" />
         </div>
 
         <div v-if="showMessage2">
@@ -55,6 +55,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import Cookies from 'js-cookie'
 
 import { Ball } from '../models/Ball'
 
@@ -71,8 +72,8 @@ export default class Random extends Vue {
   private circleCenter = { x: 80, y: 80 } // canvas의 중앙
   private circleRadius = 80 // 원의 반지름 (로딩 바)
 
-  private messages = ['"스테판이 ai 통계기반"', '로또 번호를 생성하고 있어요"']
-  private messages2 = ['"Ai 분석으로 번호를 생성했어요!', '맘에 드시나요?"']
+  private messages: string[] = []
+  private messages2 = ['로또 번호를 생성했어요!', '맘에 드시나요?']
   private selectedMessage: string | null = null
   private showMessage: boolean = false
   private showMessage2: boolean = false
@@ -80,6 +81,8 @@ export default class Random extends Vue {
   private showPage1: boolean = true
 
   private isLoading = false
+  charater = ''
+  background = ''
 
   // 확률 높은 숫자들
   highProbNumbers: number[] = [1, 3, 6, 7, 12, 14, 17, 24, 26, 27, 33, 34, 42, 43, 45]
@@ -343,6 +346,13 @@ export default class Random extends Vue {
     }, 3000)
   }
 
+  created() {
+    this.background = Cookies.get('menu')!.includes('꿈해몽') ? 'yellow-bg' : 'blue-bg'
+    this.charater = Cookies.get('menu')!.includes('꿈해몽') ? 'img-stella-3d.png' : 'img-stefan-3d.png'
+
+    this.messages = this.background === 'blue-bg' ? ['스테판이 ai 통계기반', '로또 번호를 생성하고 있어요'] : ['스텔라가 ai 통계기반', '로또 번호를 생성하고 있어요']
+  }
+
   mounted() {
     window.addEventListener('resize', this.setViewportHeight)
     window.addEventListener('orientationchange', this.setViewportHeight)
@@ -489,14 +499,13 @@ export default class Random extends Vue {
 }
 
 .img-bg {
-  width: 64px;
-  height: 64px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-left: auto;
   margin-right: auto;
-  background-color: #4262FF;
   border-radius: 50%;
   margin-bottom: 16px;
 
@@ -504,9 +513,17 @@ export default class Random extends Vue {
   animation: slideUp3 0.5s forwards;
 }
 
+.img-bg.yellow-bg {
+  background-color: #FCD53F;
+}
+
+.img-bg.blue-bg {
+  background-color: #0085FF;
+}
+
 .img-bg > img {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
@@ -536,7 +553,7 @@ export default class Random extends Vue {
   /* animation: slideUp 2s ease-in-out forwards; */
   opacity: 0;
   color: #fff;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   line-height: 30px;
 
@@ -580,12 +597,11 @@ export default class Random extends Vue {
 }
 
 .message2 {
-
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   line-height: 30px;
 

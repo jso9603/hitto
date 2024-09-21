@@ -60,7 +60,7 @@ export default class Login extends Vue {
     },
     {
       icon: 'folder.png',
-      text: '나만의 로또번호를 관리하고 보관해 보세요',
+      text: '로또번호를 보관하고 관리해 보세요',
     },
   ]
 
@@ -295,13 +295,13 @@ h3 {
 }
 
 .floating > .participation {
-  margin-bottom: 16px;
+  margin-bottom: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   color: #fff;
-  font-weight: 300;
+  font-weight: 500;
   font-size: 15px;
 }
 

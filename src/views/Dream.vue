@@ -1,67 +1,20 @@
 <template>
-  <div class="container">
-    <div class="page1" key="page1" v-if="showPage === 1">
-      <div class="talk">"기묘한 꿈을 꾸웠느냐"</div>
-      <div class="main__category">
-        <div
-          v-for="(category, index) in mainCategories"
-          :key="index"
-          :value="index"
-          @click="onMainCategory(index)"
-          :class="{ selected: index === selectedMainCategory }"
-          :style="{ animationDelay: `${index * 0.1}s` }"
-        >
-          {{category.icon}}
-          <span>{{ category.name }}</span>
-          <img :src="index === selectedMainCategory ? require('@/assets/ic-system-dream-select.svg') : require('@/assets/ic-system-dream-unselect.svg')" />
-        </div>
-      </div>
+  <div class="dream">
+    <div class="img-bg">
+      <img src='@/assets/img-stella-3d.png' at="character 이미지" />
     </div>
-
-    <div class="page2" key="page2" v-else-if="showPage === 2">
-      <div class="title">
-        {{mainCategories[selectedMainCategory].icon}}
-        <span>{{mainCategories[selectedMainCategory].name}}</span>
-      </div>
-      <div class="sub__category">
-        <div
-          v-for="(subCategory, index) in mainCategories[selectedMainCategory].subCategories" :key="index" :value="index"
-          @click="onSubCategory(index)"
-          :class="{ selected: index === selectedSubCategory }"
-          :style="{ animationDelay: `${index * 0.1}s` }"
-        >
-          {{ subCategory.name }}
-          <img :src="index === selectedSubCategory ? require('@/assets/ic-system-dream-select.svg') : require('@/assets/ic-system-dream-unselect.svg')" />
-        </div>
-      </div>
-    </div>
-
-    <div class="page3" key="page3" v-else>
-      <div class="title">
-        {{mainCategories[selectedMainCategory].subCategories[selectedSubCategory].name}}
-      </div>
-      <div class="sub__category">
-        <div
-          v-for="(item, index) in mainCategories[selectedMainCategory].subCategories[selectedSubCategory].items" :key="index"
-          @click="onLastCategory(index)"
-          :class="{ selected: index === selectedLastCategory }"
-          :style="{ animationDelay: `${index * 0.1}s` }"
-        >
-          {{ item }}
-          <img :src="index === selectedLastCategory ? require('@/assets/ic-system-dream-select.svg') : require('@/assets/ic-system-dream-unselect.svg')" />
-        </div>
-      </div>
-    </div>
+    
+    <div class='typing1' v-html="typedText"></div>
 
     <div class="floating">
-      <div class="participation">
-        <div class="people">
-          <div class="person" />
-          <div class="person" />
-          <div class="person" />
-        </div>
-        {{ formattedCount }}명이 당첨 소감에 참여했어요
+      <div class="participation">        
+        {{ formattedCount }}명이 꿈해몽 번호를 받았어요.
       </div>
+      <button class="primary" @click="$router.push('/category')">
+        <img src="@/assets/ic-system-challenge.svg" />
+        시작하기
+      </button>
+      <div class="disclamer">본 서비스에서 제공하는 캐릭터 정보와 생성번호는 참고 용도이며,<br/>그로 인한 결과는 법적 책임은 사용자에게 있습니다.</div>
     </div>
   </div>
 </template>
@@ -71,219 +24,19 @@ import { Component, Vue } from 'vue-property-decorator'
 
 import { getCounting } from '@/utils/counting'
 
-import { MainCategory } from '../models/Category'
-
 @Component
 export default class Dream extends Vue {
-selectedMainCategory: number | null = null
-selectedSubCategory: number | null = null
-selectedLastCategory: number | null = null
+  typedText = ''
 
-private currentCount: number = 0
-private targetCount: number = 0
-private intervalId: number | null = null
+  private currentCount: number = 0
+  private targetCount: number = 0
+  private intervalId: number | null = null
 
-private showPage: number = 1
-
-mainCategories: MainCategory[] = [
-  {
-    name: '가족 및 인간관계',
-    icon: '🤱',
-    subCategories: [
-      {
-        name: '부모님과 관련된 꿈',
-        items: [
-          '부모님과 함께 저녁을 먹는 꿈을 꿨어요.',
-          '부모님께 혼나는 꿈을 꿨어요.',
-          '부모님과 여행을 가는 꿈을 꿨어요.',
-          '부모님과 대화를 나누는 꿈을 꿨어요.',
-          '부모님께 선물을 받는 꿈을 꿨어요.',
-          '부모님이 아프신 꿈을 꿨어요.',
-          '부모님께서 나를 자랑하는 꿈을 꿨어요.',
-          '부모님과 함께 집안일을 하는 꿈을 꿨어요.',
-          '부모님께서 나에게 조언을 주시는 꿈을 꿨어요.',
-          '부모님께서 나를 걱정하시는 꿈을 꿨어요.'
-        ]
-      },
-      {
-        name: '형제/자매와 관련된 꿈',
-        items: [
-          '형제와 다투는 꿈을 꿨어요.',
-          '형제와 함께 놀이터에서 노는 꿈을 꿨어요.',
-          '형제와 함께 공부하는 꿈을 꿨어요.',
-          '형제와 함께 TV를 보는 꿈을 꿨어요.',
-          '형제와 경쟁하는 꿈을 꿨어요.',
-          '형제가 나를 도와주는 꿈을 꿨어요.',
-          '형제가 나에게 선물을 주는 꿈을 꿨어요.',
-          '형제와 함께 게임을 하는 꿈을 꿨어요.',
-          '형제와 함께 모험을 떠나는 꿈을 꿨어요.',
-          '형제와 함께 식사하는 꿈을 꿨어요.'
-        ]
-      },
-      {
-        name: '연인과 관련된 꿈',
-        items: [
-          '연인과 손을 잡고 산책하는 꿈을 꿨어요.',
-          '연인과 다투는 꿈을 꿨어요.',
-          '연인에게서 프로포즈를 받는 꿈을 꿨어요.',
-          '연인과 헤어지는 꿈을 꿨어요.',
-          '연인과 결혼하는 꿈을 꿨어요.',
-          '연인과 함께 영화 보는 꿈을 꿨어요.',
-          '연인이 나를 떠나는 꿈을 꿨어요.',
-          '연인과 함께 요리하는 꿈을 꿨어요.',
-          '연인이 나를 안아주는 꿈을 꿨어요.',
-          '연인과 함께 여행 가는 꿈을 꿨어요.'
-        ]
-      },
-      {
-        name: '친구와 관련된 꿈',
-        items: [
-          '친구들과 파티를 하는 꿈을 꿨어요.',
-          '친구와 함께 여행을 떠나는 꿈을 꿨어요.',
-          '친구와 중요한 비밀을 나누는 꿈을 꿨어요.',
-          '친구와 함께 놀러 가는 꿈을 꿨어요.',
-          '친구가 나에게 도움을 주는 꿈을 꿨어요.',
-          '친구와 다투는 꿈을 꿨어요.',
-          '친구에게서 선물을 받는 꿈을 꿨어요.',
-          '친구와 함께 공부하는 꿈을 꿨어요.',
-          '친구와 함께 스포츠를 즐기는 꿈을 꿨어요.',
-          '친구와 함께 사진을 찍는 꿈을 꿨어요.'
-        ]
-      },
-      {
-        name: '조부모님과 관련된 꿈',
-        items: [
-          '할머니와 할아버지께서 집에 오시는 꿈을 꿨어요.',
-          '조부모님과 함께 시간을 보내는 꿈을 꿨어요.',
-          '조부모님께서 나에게 조언해주시는 꿈을 꿨어요.',
-          '조부모님께 선물을 받는 꿈을 꿨어요.',
-          '조부모님께서 나를 위해 기도해주시는 꿈을 꿨어요.',
-          '조부모님께서 나를 칭찬하시는 꿈을 꿨어요.',
-          '조부모님과 함께 여행을 가는 꿈을 꿨어요.',
-          '조부모님께서 나를 위해 요리해주시는 꿈을 꿨어요.',
-          '조부모님과 함께 사진을 찍는 꿈을 꿨어요.',
-          '조부모님과 함께 놀이터에서 노는 꿈을 꿨어요.'
-        ]
-      }
-    ]
-  },
-  {
-    name: '재물 및 금전운',
-    icon: '🏡',
-    subCategories: [
-      {
-        name: '돈과 관련된 꿈',
-        items: [
-          '지갑을 잃어버리는 꿈을 꿨어요.',
-          '큰 돈을 주워서 기분 좋은 꿈을 꿨어요.',
-          '돈이 가득한 가방을 발견하는 꿈을 꿨어요.',
-          '돈을 기부하는 꿈을 꿨어요.',
-          '돈을 받는 꿈을 꿨어요.',
-          '돈을 빌려주는 꿈을 꿨어요.',
-          '돈이 쌓여 있는 방을 발견하는 꿈을 꿨어요.',
-          '돈을 세는 꿈을 꿨어요.',
-          '돈이 불타는 꿈을 꿨어요.',
-          '돈을 은행에 입금하는 꿈을 꿨어요.'
-        ]
-      },
-      {
-        name: '복권/로또와 관련된 꿈',
-        items: [
-          '복권에 당첨되는 꿈을 꿨어요.',
-          '로또 번호를 맞추는 꿈을 꿨어요.',
-          '복권을 사는 꿈을 꿨어요.',
-          '복권을 잃어버리는 꿈을 꿨어요.',
-          '복권을 친구에게 주는 꿈을 꿨어요.',
-          '로또를 구매하는 꿈을 꿨어요.',
-          '복권 당첨금을 수령하는 꿈을 꿨어요.',
-          '복권을 찢는 꿈을 꿨어요.',
-          '로또 번호를 계산하는 꿈을 꿨어요.',
-          '복권 추첨 방송을 보는 꿈을 꿨어요.'
-        ]
-      },
-      {
-        name: '금고와 관련된 꿈',
-        items: [
-          '금고에서 돈을 꺼내는 꿈을 꿨어요.',
-          '금고를 열어보니 보물이 가득한 꿈을 꿨어요.',
-          '금고가 사라지는 꿈을 꿨어요.',
-          '금고를 잃어버리는 꿈을 꿨어요.',
-          '금고를 잠그는 꿈을 꿨어요.',
-          '금고를 여는 비밀번호를 잊어버리는 꿈을 꿨어요.',
-          '금고 안에 비밀 서류를 발견하는 꿈을 꿨어요.',
-          '금고가 고장 나는 꿈을 꿨어요.',
-          '금고를 훔치는 꿈을 꿨어요.',
-          '금고에 보석을 넣는 꿈을 꿨어요.'
-        ]
-      },
-      {
-          name: '은행과 관련된 꿈',
-          items: [
-            '은행에서 대출을 받는 꿈을 꿨어요.',
-            '은행 직원과 대화하는 꿈을 꿨어요.',
-            '은행에서 돈을 인출하는 꿈을 꿨어요.',
-            '은행에 예금하는 꿈을 꿨어요.',
-            '은행 계좌를 개설하는 꿈을 꿨어요.',
-            '은행에서 돈을 잃어버리는 꿈을 꿨어요.',
-            '은행에서 대기하는 꿈을 꿨어요.',
-            '은행에서 강도를 만나는 꿈을 꿨어요.',
-            '은행에서 통장을 잃어버리는 꿈을 꿨어요.',
-            '은행에 돈을 기부하는 꿈을 꿨어요.'
-          ]
-        },
-        {
-          name: '투자와 관련된 꿈',
-          items: [
-            '주식이 폭등하는 꿈을 꿨어요.',
-            '투자 상담을 받는 꿈을 꿨어요.',
-            '주식이 갑자기 하락하는 꿈을 꿨어요.',
-            '부동산에 투자하는 꿈을 꿨어요.',
-            '주식 계좌를 확인하는 꿈을 꿨어요.',
-            '투자로 큰 돈을 버는 꿈을 꿨어요.',
-            '투자 실패로 돈을 잃는 꿈을 꿨어요.',
-            '금에 투자하는 꿈을 꿨어요.',
-            '주식이 상장하는 꿈을 꿨어요.',
-            '친구와 투자 이야기를 나누는 꿈을 꿨어요.'
-          ]
-        }
-      ]
-    },
-    {
-      name: '건강 및 질병',
-      icon: '💊',
-      subCategories: [
-        {
-          name: '병원과 관련된 꿈',
-          items: [
-            '병원에서 진찰을 받는 꿈을 꿨어요.',
-            '병원에 입원하는 꿈을 꿨어요.',
-            '병원에서 검사 결과를 듣는 꿈을 꿨어요.',
-            '병원에서 수술을 받는 꿈을 꿨어요.',
-            '병원에서 의사와 대화하는 꿈을 꿨어요.',
-            '병원에서 간호를 받는 꿈을 꿨어요.',
-            '병원에서 가족을 만나는 꿈을 꿨어요.',
-            '병원에서 길을 잃는 꿈을 꿨어요.',
-            '병원에서 치료를 받는 꿈을 꿨어요.'
-          ]
-        }
-      ]
-    }
-  ]
-
-  onMainCategory(index: number) {
-    this.selectedMainCategory = index
-    this.showPage = 2
-  }
-
-  onSubCategory(index: number) {
-    this.selectedSubCategory = index
-    this.showPage = 3
-  }
-
-  onLastCategory(index: number) {
-    this.selectedLastCategory = index
-
-    this.$router.push('/random')
+  // iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
+  // 특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음
+  setViewportHeight = () => {
+    const vh = window.innerHeight * 0.01
+    document.documentElement.style.setProperty('--vh', `${vh}px`)
   }
 
   // 숫자를 포맷팅 (1,000 형태로 표시)
@@ -310,148 +63,151 @@ mainCategories: MainCategory[] = [
   }
 
   async mounted() {
-    this.targetCount = await getCounting()
+    window.addEventListener('resize', this.setViewportHeight)
+    window.addEventListener('orientationchange', this.setViewportHeight)
+
+    this.setViewportHeight()
+
+    const dream = await getCounting()
+    this.targetCount = +dream - 235
     this.startCounting()
+
+    const contents: string =
+      '기묘한 꿈을 꾸셨나요?\n조상신이 전하는\n특별한 기회를 잡아보세요!'
+    let saveInterval: number | undefined
+
+    let index = 0
+    this.typedText = ''
+    clearInterval(saveInterval) // 기존 interval 종료
+
+    saveInterval = window.setInterval(() => {
+      if (index >= contents.length - 1) {
+        clearInterval(saveInterval) // 인덱스가 범위에 도달하면 interval 종료
+      }
+
+      if (contents[index] === '\n') {
+        // 두 줄바꿈(\n\n)을 확인하여 두 번째 줄바꿈에만 스타일 적용
+        if (contents[index + 1] === '\n') {
+          this.typedText += '<div class="spacer"></div>' // 두 번째 줄바꿈에 여백을 추가
+          index += 2 // 두 개의 줄바꿈을 건너뜀
+        } else {
+          this.typedText += '<br />'
+          index++
+        }
+      } else {
+        if (index >= contents.lastIndexOf('"자~ 이제 시작해볼까요?"')) {
+          this.typedText += `<span>${contents[index++]}</span>`
+        } else {
+          this.typedText += contents[index++]
+        }
+      }
+    }, 50);
+  }
+
+  beforeDestroy(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId)
+    }
   }
 }
 </script>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.8s ease;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
-
-@keyframes slideUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.container {
+.dream {
+  margin: 0;
   padding: 0 20px;
-  width: calc(100% - 40px);
-  box-sizing: border-box;
-}
-
-.talk {
-  margin-top: 24px;
-  margin-bottom: 36px;
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 30px;
-  letter-spacing: -0.5px;
-  text-align: center;
-  color: #fff;
-}
-
-.main__category div {
   display: flex;
   align-items: center;
-  width: 100%;
-  margin-bottom: 12px;
-  padding: 18px;
-  background-color: #222;
-  border-radius: 16px;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
-  cursor: pointer;
+  justify-content: center;
+  flex-direction: column;
 
-  opacity: 0;
-  transform: translateY(100%);
-  animation: slideUp 0.5s forwards;
+  /* iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
+  특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음 */
+  /* margin-top: 20px까지 제외시킨다. */
+  height: calc(var(--vh, 1vh) * 100 - 78px);
+  position: relative;
 }
 
-.main__category div span {
-  margin-left: 10px;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
-  letter-spacing: -0.5px;
+.dream > .img-bg {
+  position: absolute;
+  top: calc(50% - 178px);
+  
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FCD53F;
+  border-radius: 50%;
+  margin-bottom: 16åpx;
 }
 
-.main__category div img {
+.dream > .img-bg > img {
+  width: 42px;
+  height: 42px;
+  text-align: center;
   margin-left: auto;
+  margin-right: auto;
 }
 
-
-.main__category div.selected {
-  background-color: #fff;
-  color: #202223;
-}
-
-
-.title {
-  margin-top: 24px;
-  margin-bottom: 32px;
-  color: #fff;
+.typing1 {
+  width: 100%;
+  color: #ECEEF0;
   font-size: 22px;
   font-weight: 700;
-  line-height: 26px;
+  line-height: 32px;
+  letter-spacing: -0.5px;
+  text-align: center;
+
+  position: absolute;
+  top: calc(50% - 100px); /* 텍스트의 높이 294px의 절반인 147px을 보정 */
+  white-space: pre-wrap;
 }
 
-.title span {
-  margin-left: 2px;
+::v-deep .spacer {
+  display: block;
+  margin-top: 20px; /* 줄바꿈 사이 여백 */
 }
 
-.sub__category div {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 12px;
-  padding: 20px;
-  background-color: #222;
-  border-radius: 16px;
-  color: #fff;
+.startBtn {
+  margin-top: 20px;
+  background-color: #4AFF81;
+  padding: 16.5px 20px;
+  border-radius: 40px;
+  border-style: none;
+  color: #181D23;
   font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
-  cursor: pointer;
+  font-weight: 700;
+  line-height: 20px;
 
   opacity: 0;
-  transform: translateY(100%);
-  animation: slideUp 0.5s forwards;
-}
-
-.sub__category div span {
-  margin-left: 2px;
-}
-
-.sub__category div img {
-  margin-left: auto;
-}
-
-
-.sub__category div.selected {
-  background-color: #fff;
-  color: #202223;
+  /* animation: fadeIn 2s forwards;  */
+  animation: slideUp 1s ease-in-out forwards;
 }
 
 .floating {
   position: fixed;
   bottom: 0;
-  left: 50%;
-  transform: translate(-50%, 0);
-  width: calc(100% - 40px);
-  padding: 30px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 64.38%);
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
+  padding: 20px;
+  background: linear-gradient(180deg, #171717 0%, #171717 64.38%);
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 
 .floating > .participation {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
   gap: 8px;
+  margin-bottom: 15px;
   color: #ECEEF0;
-  font-weight: 600;
-  font-size: 15px;
-  line-height: 18px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
   font-variant: common-ligatures tabular-nums;
 }
 
@@ -465,10 +221,60 @@ mainCategories: MainCategory[] = [
 }
 
 .floating > .participation > .people > .person {
+  /* background-color: #414244; */
+  border-radius: 50%;
+  /* border: 1px solid #181D23; */
+}
+
+.floating > .participation > .people > img {
   width: 32px;
   height: 32px;
-  background-color: #414244;
-  border-radius: 50%;
-  border: 1.33px solid #181D23;
+}
+
+.floating > button {
+  width: 100%;
+  min-height: 52px;
+  background-color: #4AFF81;
+  padding: 8px 8px;
+  border-radius: 24px;
+  border-style: none;
+  color: #181D23;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 19px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.disclamer {
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 19px;
+  color: #737577;
+  text-align: center;
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(30%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>

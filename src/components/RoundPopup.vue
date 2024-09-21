@@ -4,7 +4,7 @@
       <div class="bar" />
       <div class="modal-header">
         <h2>회차를 선택해주세요</h2>
-        <p>현재회차와 이전 회차 결과를 검색할 수 있어요</p>
+        <!-- <p>현재회차와 이전 회차 결과를 검색할 수 있어요</p> -->
       </div>
       <div class="modal-body">
         <div class="round-buttons">
@@ -64,6 +64,7 @@ export default class LoginPopup extends Vue {
 </script>
 
 <style scoped>
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -79,7 +80,7 @@ export default class LoginPopup extends Vue {
 
 .modal-content {
   background: #fff;
-  padding: 0 20px calc(28px + env(safe-area-inset-bottom));
+  padding: 0 20px calc(20px + env(safe-area-inset-bottom));
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
   width: 100%;
@@ -96,7 +97,7 @@ export default class LoginPopup extends Vue {
 }
 
 .modal-header h2 {
-  margin-bottom: 8px;
+  margin-bottom: 20px;
   font-size: 20px;
   font-weight: 700;
   line-height: 28px;
@@ -131,10 +132,10 @@ export default class LoginPopup extends Vue {
   width: 80px;
   height: 44px;
   border-radius: 24px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #ECEEF0;
   background-color: #ffffff;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
   color: #333333;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -145,6 +146,7 @@ export default class LoginPopup extends Vue {
   background-color: #202223; /* 선택된 버튼의 배경색 */
   border: none;
   color: #ffffff; /* 선택된 버튼의 글자색 */
+  font-weight: 600;
 }
 
 .round-button:not(.selected):hover {

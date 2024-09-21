@@ -15,8 +15,8 @@
       </div>
 
       <div v-else>
-        <div class="img-bg">
-          <img src='@/assets/img-stefan-3d.png' at="character 이미지" />
+        <div :class="['img-bg', background]">
+          <img :src="require(`@/assets/${charater}`)" at="character 이미지" />
         </div>
 
         <div v-for="(message, index) in texts" :key="index" class="text" :style="{ animationDelay: `${index * 0.2}s` }">
@@ -100,9 +100,12 @@ export default class Result extends Vue {
   isLoading = false
 
   impression: string = ''
-  placeholderText: string = '진솔한 당첨소감을 작성해보세요.\n꼭 이루어질거예요!'
+  placeholderText: string = '진솔한 당첨소감을 작성해보세요.'
 
   isPopupVisible = false
+
+  charater = ''
+  background = ''
 
   private selectOptions: SelectOption[] = [
     { icon: '✨', text: '포르쉐 파나메라 사게해주세요' },
@@ -119,7 +122,7 @@ export default class Result extends Vue {
     { icon: '🌳', text: '어려운 이웃을 위해 사회에 기부하고 싶어요'},
   ]
 
-  texts = ['"이제 소망을 선택해보세요.', '토요일 좋은 일이 생길거예요"']
+  texts = ['이제 소망을 선택해보세요.', '토요일 좋은 일이 생길거예요']
 
   private setActiveTab(tab: string) {
     this.activeTab = tab
@@ -327,6 +330,9 @@ export default class Result extends Vue {
 
   // redirect (login)
   created() {
+    this.background = Cookies.get('menu')!.includes('꿈해몽') ? 'yellow-bg' : 'blue-bg'
+    this.charater = Cookies.get('menu')!.includes('꿈해몽') ? 'img-stella-3d.png' : 'img-stefan-3d.png'
+
     if (sessionStorage.getItem('hope') && sessionStorage.getItem('lottoNumbers')) {
       if (sessionStorage.getItem('hope-select') === 'true') {
         this.selectedIndex = Number(sessionStorage.getItem('hope'))
@@ -406,24 +412,31 @@ export default class Result extends Vue {
 }
 
 .img-bg {
-  width: 64px;
-  height: 64px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-left: auto;
   margin-right: auto;
-  background-color: #4262FF;
   border-radius: 50%;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   opacity: 0;
   transform: translateY(50%);
   animation: slideUp2 1s forwards;
 }
 
+.img-bg.yellow-bg {
+  background-color: #FCD53F;
+}
+
+.img-bg.blue-bg {
+  background-color: #0085FF;
+}
+
 .img-bg > img {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
@@ -434,6 +447,7 @@ export default class Result extends Vue {
   padding: 4px;
   background-color: #222222;
   border-radius: 100px;
+  height: 42px;
 
   opacity: 0;
   animation: slideUp3 1s forwards;
@@ -445,7 +459,6 @@ export default class Result extends Vue {
   border-radius: 100px;
   width: 100%;
   position: relative;
-  margin: 2px 0;
 }
 
 .tab-item {
@@ -457,7 +470,7 @@ export default class Result extends Vue {
   color: #737577;
   cursor: pointer;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 18px;
   z-index: 1;
 }
@@ -476,8 +489,8 @@ export default class Result extends Vue {
 
 .tab-item.active {
   color: #202223;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
   line-height: 18px;
 }
 
@@ -496,8 +509,8 @@ export default class Result extends Vue {
   align-items: center;
   padding: 18px;
   background-color: #222222;
-  border-radius: 10px;
-  margin-bottom: 8px;
+  border-radius: 16px;
+  margin-bottom: 12px;
   cursor: pointer;
   font-weight: 600;
 }
@@ -507,7 +520,7 @@ export default class Result extends Vue {
 }
 
 .tab-content .option-item .tab-text {
-  margin-left: 10px;
+  margin-left: 12px;
   color: #fff;
 }
 
@@ -516,9 +529,9 @@ export default class Result extends Vue {
 }
 
 .textarea-box {
-  padding: 16px 20px;
+  padding: 20px;
   border-radius: 10px;
-  background-color: #2a2a2a;
+  background-color: #222222;
   position: relative;
 }
 
@@ -528,7 +541,7 @@ export default class Result extends Vue {
   height: 46px;
   border: none;
   outline: none;
-  background-color: #2a2a2a;
+  background-color: #222222;
   color: #b3b3b3;
   resize: none;
   font-size: 15px;
@@ -543,7 +556,7 @@ export default class Result extends Vue {
   color: #9C9EA0;
   white-space: pre-line;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 23px;
   text-align: left;
 }
@@ -557,14 +570,15 @@ export default class Result extends Vue {
 }
 
 .textarea-footer span {
-  color: #FFFFFF;
-  font-size: 13px;
-  line-height: 17px;
+  color: #ECEEF0;
+  font-size: 14px;
   font-weight: 400;
 }
 
 .textarea-footer span.max {
-  color: #D3D5D9;
+  color: #737577;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 .floating {

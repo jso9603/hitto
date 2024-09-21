@@ -10,8 +10,10 @@
   
     <div v-if="loading">
       <div class="waitinging">
-        <img src="@/assets/ic-stefan-2d.svg" class="bounce-animation" />
-        <div class="waiting">잠시만 기다려주세요.</div>
+        <div class="bg-img bounce-animation">
+          <img src="@/assets/ic-stefan-2d.svg"/>
+        </div>
+        <div class="waiting">잠시만 기달려주세요</div>
       </div>
     </div>
     <div v-else>
@@ -47,10 +49,11 @@
       </div>
       <div v-else>
         <div class="no-data">
-          <img src="@/assets/ic-stefan-2d.svg" />
-          <div>Opps!</div>
-          <div>생성이력이 없어요.</div>
-          <!-- <button @click="onCreate">생성하기</button> -->
+          <div class="bg-img">
+            <img src="@/assets/ic-stefan-2d.svg" />
+          </div>
+          <div class="no-data-title">생성이력이 없어요</div>
+          <div class="no-data-text">행운은 도전하는 자에게 찾아옵니다<br/>경제적 자유로 가는 첫 걸음, 모히또</div>
         </div>
       </div>
     </div>
@@ -256,10 +259,11 @@ export default class LottoList extends Vue {
 
 <style scoped>
 .tab-container {
-  margin-top: 32px;
+  margin: 32px auto 24px;
   padding: 4px;
   background-color: #222222;
   border-radius: 100px;
+  height: 42px;
 }
 
 .tab {
@@ -267,7 +271,6 @@ export default class LottoList extends Vue {
   border-radius: 100px;
   width: 100%;
   position: relative;
-  margin: 2px 0;
 }
 
 .tab-item {
@@ -279,7 +282,7 @@ export default class LottoList extends Vue {
   color: #737577;
   cursor: pointer;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 18px;
   z-index: 1;
 }
@@ -298,8 +301,8 @@ export default class LottoList extends Vue {
 
 .tab-item.active {
   color: #202223;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
   line-height: 18px;
 }
 
@@ -394,11 +397,37 @@ export default class LottoList extends Vue {
 
 .no-data {
   text-align: center;
-  margin: 40px 0;
+  margin: 72px 0;
 }
 
-.no-data div {
-  margin: 12px auto 16px;
+.bg-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #0085FF;
+}
+
+.bg-img > img {
+  width: 32px;
+  height: 32px;
+}
+
+.no-data > .no-data-title {
+  margin-top: 16px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  text-align: center;
+  color: #FFF;
+}
+
+.no-data > .no-data-text {
+  margin-top: 12px;
   font-size: 15px;
   font-weight: 400;
   line-height: 23px;
@@ -473,11 +502,11 @@ export default class LottoList extends Vue {
 }
 
 .waitinging {
-  padding: 40px 20px;
+  padding: 48px 20px;
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .waiting {

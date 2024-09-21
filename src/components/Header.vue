@@ -6,7 +6,7 @@
       <button class="share" @click="onShare">공유</button>
     </template>
 
-    <template v-else-if="$route.path === '/ai' || $route.path === '/dream' || $route.path === '/random'">
+    <template v-else-if="$route.path === '/ai' || $route.path === '/dream' || $route.path === '/category' || $route.path === '/random'">
       <button @click="goBack" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
@@ -15,7 +15,7 @@
 
     <template v-else-if="$route.path === '/select-hope'">
       <div class="empty"></div>
-      <div class="menu">소망 입력</div>
+      <div class="menu">소망 선택</div>
       <button @click="goBackHope" class="close">
         <img src="@/assets/ic-system-close-img.svg" />
       </button>
@@ -282,7 +282,6 @@ export default class Header extends Vue {
   color: #fff;
   font-size: 18px;
   font-weight: 600;
-  line-height: 26px;
 }
 
 img.logo {

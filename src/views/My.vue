@@ -73,7 +73,7 @@ export default class My extends Vue {
 
   repositories = [
     {
-      title: '나의 번호 관리'
+      title: '나의 로또 번호'
     }
   ];
 
@@ -170,19 +170,19 @@ export default class My extends Vue {
 }
 
 .summary > .img-bg {
-  width: 64px;
-  height: 64px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #4262FF;
   border-radius: 50%;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .summary > .img-bg > img {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   text-align: center;
 }
 
