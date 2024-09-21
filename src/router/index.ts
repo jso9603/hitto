@@ -15,6 +15,7 @@ import Setting from '@/views/Setting.vue'
 import Leave from '@/views/Leave.vue'
 import Terms from '@/views/Terms.vue'
 import Test from '@/views/Test.vue'
+import NotFound from '@/views/NotFound.vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -99,6 +100,11 @@ const routes = [
     path: '/test',
     name: 'test',
     component: Test,
+  },
+  {
+    path: '*',
+    name: 'NotFound',
+    component: NotFound,
   }
 ];
 
