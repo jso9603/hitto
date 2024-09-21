@@ -70,11 +70,18 @@ export default class Challenge extends Vue {
   selectedNumbers: number[] = []
 
   private selectOptions: SelectOption[] = [
-    { icon: '✨', text: '포르쉐 파나메라 사게해주세요.' },
-    { icon: '🏡', text: '반포 아크로리버파크 사게해주세요.' },
-    { icon: '✈️', text: '몰디브에서 모히또 한잔하고 싶어요.'},
-    { icon: '🤱', text: '자녀 교육에 걱정 없게 해주세요!'},
-    { icon: '🦄', text: '꿈꾸던 사업을 시작하고 싶어요!'},
+    { icon: '✨', text: '포르쉐 파나메라 사게해주세요' },
+    { icon: '🏡', text: '반포 아크로리버파크 사게해주세요' },
+    { icon: '✈️', text: '몰디브에서 모히또 한잔하고 싶어요'},
+    { icon: '🏄‍', text: '은퇴해 슬로우 라이프를 즐기고 싶어요'},
+    { icon: '🏖️', text: '바다가 보이는 오션뷰에 살고 싶어요'},
+    { icon: '🤱', text: '자녀 교육에 걱정 없게 해주세요'},
+    { icon: '🦄', text: '꿈꾸던 사업을 시작하고 싶어요'},
+    { icon: '🍵', text: '카페를 열어 사장님 라이프 살래요'},
+    { icon: '🕌', text: '갓물주가 되어 임대수익을 받고싶어요'},
+    { icon: '🇺🇸', text: '해외 ETF투자해 배당수익받고 싶어요'},
+    { icon: '🤑', text: '인생 한방! 비트코인에 올인할래요'},
+    { icon: '🌳', text: '어려운 이웃을 위해 사회에 기부하고 싶어요'},
   ]
   private selectedIndex: number | null = null
 

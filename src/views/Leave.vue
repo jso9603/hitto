@@ -198,7 +198,7 @@ img {
 }
 
 .floating > .participation {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   font-size: 15px;
   font-weight: 400;
   line-height: 22px;
@@ -214,9 +214,9 @@ img {
   border-radius: 24px;
   border-style: none;
   color: #202223;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 18px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 19px;
   cursor: pointer;
 }
 
@@ -229,7 +229,7 @@ img {
   background-color: #171717;
   color: #9C9EA0;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 18px;
 }
 

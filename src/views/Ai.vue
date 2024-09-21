@@ -14,6 +14,7 @@
         <img src="@/assets/ic-system-challenge.svg" />
         시작하기
       </button>
+      <div class="disclamer">본 서비스에서 제공하는 캐릭터 정보와 생성번호는 참고 용도이며,<br/>그로 인한 결과는 법적 책임은 사용자에게 있습니다.</div>
     </div>
   </div>
 </template>
@@ -202,7 +203,7 @@ export default class Ai extends Vue {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   color: #ECEEF0;
   font-weight: 400;
   font-size: 16px;
@@ -238,14 +239,23 @@ export default class Ai extends Vue {
   border-radius: 24px;
   border-style: none;
   color: #181D23;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 18px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 19px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
+}
+
+.disclamer {
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 19px;
+  color: #737577;
+  text-align: center;
 }
 
 @keyframes slideUp {

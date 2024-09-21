@@ -173,7 +173,7 @@ export default class LoginPopup extends Vue {
   font-weight: 400;
   line-height: 22px;
   text-align: left;
-  color: #5F6163;
+  color: #737577;
 }
 
 .modal-footer {
@@ -188,15 +188,15 @@ export default class LoginPopup extends Vue {
   padding: 20px;
   border-radius: 16px;
   color: #DEE0E2;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
-  line-height: 18px;
+  line-height: 20px;
 }
 
 .lotto-numbers .label {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
-  line-height: 18px;
+  line-height: 20px;
   color: #DEE0E2;
 }
 
@@ -224,29 +224,34 @@ export default class LoginPopup extends Vue {
   justify-content: center;
   align-items: center;
   color: white;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
-  line-height: 15px;
+  line-height: 16px;
 }
 
 .yellow {
-  background-color: #fec03e;
+  border: 1px solid #DD9A17;
+  color: #DD9A17;
 }
 
 .blue {
-  background-color: #4790ff;
+  border: 1px solid #0085FF;
+  color: #0085FF;
 }
 
 .red {
-  background-color: #e64d3d;
+  border: 1px solid #E64D3D;
+  color: #E64D3D;
 }
 
 .gray {
-  background-color: #bec3c7;
+  border: 1px solid #9C9EA0;
+  color: #9C9EA0;
 }
 
 .green {
-  background-color: #2ecd70;
+  border: 1px solid #33C759;
+  color: #33C759
 }
 
 .result {
@@ -261,9 +266,9 @@ export default class LoginPopup extends Vue {
   width: 100%;
   padding: 15px;
   border-radius: 40px;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 18px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 19px;
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -271,6 +276,8 @@ export default class LoginPopup extends Vue {
 }
 
 .kakao-btn img {
+  width: 20px;
+  height: 20px;
   margin-right: 8px;
 }
 
@@ -278,13 +285,13 @@ export default class LoginPopup extends Vue {
   margin-top: 8px;
   background-color: transparent;
   color: #333;
-  border: 1px solid #ccc;
+  border: 1px solid #BABCBE;
   width: 100%;
   padding: 15px;
   border-radius: 40px;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 18px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 19px;
   cursor: pointer;
 }
 </style>

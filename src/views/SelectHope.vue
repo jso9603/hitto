@@ -595,7 +595,7 @@ export default class Result extends Vue {
   color: #ECEEF0;
   font-size: 16px;
   font-weight: 700;
-  line-height: 20px;
+  line-height: 19px;
   cursor: pointer;
 }
 
@@ -609,7 +609,7 @@ export default class Result extends Vue {
   color: #181D23;
   font-size: 16px;
   font-weight: 700;
-  line-height: 20px;
+  line-height: 19px;
   cursor: pointer;
 }
 

@@ -270,12 +270,16 @@ h3 {
   border-radius: 40px;
   padding: 14px 29.5px;
   color: #181D23;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 18px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 19px;
   border: none;
 }
 
+.floating > button > img {
+  width: 22px;
+  height: 22px;
+}
 
 .floating {
   position: fixed;

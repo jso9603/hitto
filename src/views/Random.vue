@@ -673,7 +673,7 @@ export default class Random extends Vue {
   gap: 10px;
   padding: 20px;
   background: linear-gradient(180deg, rgba(23, 23, 23, 0) 0%, #171717 15.46%, #171717 82.53%);
-  padding-bottom: calc(30px + env(safe-area-inset-bottom));
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
   
 }
 
@@ -687,7 +687,7 @@ export default class Random extends Vue {
   color: #202223;
   font-size: 16px;
   font-weight: 700;
-  line-height: 20px;
+  line-height: 19px;
   cursor: pointer;
 }
 
@@ -703,6 +703,6 @@ export default class Random extends Vue {
   color: #202223;
   font-size: 16px;
   font-weight: 700;
-  line-height: 20px;
+  line-height: 19px;
 }
 </style>
