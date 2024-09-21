@@ -109,6 +109,10 @@ export default class LottoList extends Vue {
   private calculateRank(lottoData: LottoData): string {
     // 사용자가 찍은 번호 (문자열을 숫자 배열로 변환)
     const userNumbers = lottoData.numbers[0].split(', ').map(Number)
+    if (lottoData.winningNumbers === undefined) {
+      return '추첨 대기'
+    }
+
     // 당첨 번호 6개
     const winningNumbers = lottoData.winningNumbers.slice(0, 6)
     // 보너스 번호
