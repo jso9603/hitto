@@ -15,3 +15,12 @@ export interface Lotto {
   winningNumbers?: any // 당첨 번호를 저장할 배열
   isBeforeTheDraw?: boolean // 당첨 전
 }
+
+export interface LottoData {
+  date: string
+  numbers: string[]
+  round: number
+  uid: string
+  winningNumbers: number[] // 해당 회차 당첨 번호 (마지막: 보너스 번호)
+  winningText: string // 당첨 소망 메시지
+}

@@ -20,7 +20,12 @@
       <span v-if="isRoundMatched">예정</span>
     </div>
 
-    <LottoList :week="Number(currentRound)" :user="user" :key="currentRound"/>
+    <LottoList
+      :week="Number(currentRound)"
+      :user="user"
+      :key="currentRound"
+      :isRoundMatched="isRoundMatched"
+    />
   </div>
 </template>
 

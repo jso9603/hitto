@@ -15,17 +15,16 @@
       </div>
     </div>
     <div v-else>
-      <div v-if="lottoData.length > 0">
+      <div v-if="lottoData.length > 0" class="result-zone">
         <div
           v-for="(lotto, index) in lottoData"
           :key="lotto.id || index"
-          :class="['lotto-result', shouldAddMargin(lotto, index) ? 'with-margin' : '']"
+          class="lotto-result"
         >
-          <div v-if="shouldShowDate(lotto, index)" class="date">
-            {{ getFormattedDate(lotto.date) }}
-            <div v-if="lotto.isBeforeTheDraw" class="failed"> 추첨 전</div>
-            </div>
           <div class="box" :class="getResultClass(lotto)">
+            <div v-if="isRoundMatched" class="before-the-draw">추첨 대기</div>
+            <div v-if="!isRoundMatched" class="draw" v-html="calculateRank(lotto)"></div>
+            <div class="date">{{ getFormattedDate(lotto.date) }}</div>
             <div class="numbers">
               <div v-for="(set, setIndex) in lotto.numbers" :key="setIndex" class="number-set">
                 <div
@@ -42,13 +41,7 @@
                   </div>
               </div>
             </div>
-            <template v-if="lotto.winningText">
-              <div class="hr__line-1" />
-              <div class="winning-text">
-                <img class="cloud" src="@/assets/ic-system-cloud.png" />
-                {{ lotto.winningText }}
-              </div>
-            </template>
+            <button class="open-card">열기</button>
           </div>
         </div>
       </div>
@@ -72,21 +65,22 @@ import { collection, query, getDocs, where } from 'firebase/firestore'
 import axios from 'axios'
 
 import { User } from '../models/User'
-import { Lotto } from '../models/Lotto'
+import { Lotto, LottoData } from '../models/Lotto'
 
 @Component
 export default class LottoList extends Vue {
   @Prop(Number) week!: number
   @Prop(Object) user!: User
+  @Prop(Boolean) isRoundMatched!: boolean
 
-  lottoData: any[] = [] // 나의 번호 데이터를 저장할 배열
+  lottoData: LottoData[] = [] // 나의 번호 데이터를 저장할 배열
   winningNumbers: number[] = [] // 당첨 번호를 저장할 배열
   loading: boolean = true
 
   private isUrlTab: boolean = false
   private activeTab: string = 'automatic'
 
-  get indicatorStyle() {
+  private get indicatorStyle() {
     return {
       transform: this.activeTab === 'select' ? 'translateX(0)' : 'translateX(100%)',
     }
@@ -112,6 +106,35 @@ export default class LottoList extends Vue {
     })
   }
 
+  private calculateRank(lottoData: LottoData): string {
+    // 사용자가 찍은 번호 (문자열을 숫자 배열로 변환)
+    const userNumbers = lottoData.numbers[0].split(', ').map(Number)
+    // 당첨 번호 6개
+    const winningNumbers = lottoData.winningNumbers.slice(0, 6)
+    // 보너스 번호
+    const bonusNumber = lottoData.winningNumbers[6]
+
+    // 일치하는 번호 개수
+    const matchedNumbers = userNumbers.filter(num => winningNumbers.includes(num)).length
+    // 보너스 번호 일치 여부
+    const isBonusMatched = userNumbers.includes(bonusNumber)
+
+    // 등수 계산
+    if (matchedNumbers === 6) {
+      return '<span>1등</span> 당첨'
+    } else if (matchedNumbers === 5 && isBonusMatched) {
+      return '<span>2등</span> 당첨'
+    } else if (matchedNumbers === 5) {
+      return '<span>3등</span> 당첨'
+    } else if (matchedNumbers === 4) {
+      return '<span>4등</span> 당첨'
+    } else if (matchedNumbers === 3) {
+      return '<span>5등</span> 당첨'
+    } else {
+      return '낙첨'
+    }
+  }
+
   async fetchLottoData(uid: string, dbTable: string) {
     const storageName = dbTable === 'automatic' ? 'myNumbers' : 'myChallenge'
 
@@ -120,7 +143,6 @@ export default class LottoList extends Vue {
     if (cachedData && !this.isUrlTab) {
       this.lottoData = JSON.parse(cachedData)
 
-      // this.lottoData = this.lottoData.filter((lotto: any) => lotto.round == this.week)
       console.log(this.lottoData)
       this.processLottoData(this.lottoData)
       this.loading = false
@@ -136,19 +158,14 @@ export default class LottoList extends Vue {
         where('round', '==', this.week)
       )
       const snapshot = await getDocs(q)
-      console.log(dbTable, this.week, uid)
 
       if (!snapshot.empty) {
         snapshot.forEach(doc => {
-          this.lottoData.push(doc.data())
+          this.lottoData.push(doc.data() as any)
         })
-
-        console.log(this.lottoData)
-        
 
         this.lottoData.sort((a, b) => dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1)
         sessionStorage.setItem(`${storageName}-${this.week}`, JSON.stringify(this.lottoData))
-        // this.lottoData = this.lottoData.filter((lotto: any) => lotto.round == this.week)
       }
     } catch (error) {
       console.error('데이터를 가져오는 중 오류 발생:', error)
@@ -199,36 +216,26 @@ export default class LottoList extends Vue {
   // })
 
   getFormattedDate(dateString: string) {
-    return dayjs(dateString).format('YYYY년 MM월 DD일')
-  }
-
-  shouldShowDate(lotto: any, index: number) {
-    if (index === 0) {
-      return true
-    }
-    return lotto.date !== this.lottoData[index - 1].date
-  }
-
-  shouldAddMargin(lotto: any, index: number) {
-    // 두 번째 result-box부터 with-margin 클래스를 추가
-    // 첫 번째 항목은 항상 false
-    if (index === 0) {
-      return false
-    }
-    // 이전 항목과 현재 항목의 날짜가 같은 경우에만 마진 추가
-    return lotto.date === this.lottoData[index - 1].date
+    return dayjs(dateString).format('MM월 DD일')
   }
 
   isMatchingNumber(lotto: Lotto, num: number): boolean {
     return lotto.winningNumbers && lotto.winningNumbers.includes(num)
   }
 
-  getResultClass(lotto: any) {
-    const numbersArray = lotto.numbers.flatMap((num: any) => num.split(',').map((n: any) => Number(n.trim())))
-    const matchCount = numbersArray.filter((num: any) => this.isMatchingNumber(lotto, num)).length
-  
-    return matchCount >= 3 ? 'bordered' : ''
+  getResultClass(lottoData: LottoData) {
+  const userNumbers = lottoData.numbers.flatMap((num: any) => num.split(',').map((n: any) => Number(n.trim())))
+
+  if (lottoData.winningNumbers === undefined) {
+    return ''
   }
+
+  const winningNumbers = lottoData.winningNumbers.slice(0, 6)
+  const matchCount = userNumbers.filter((num: any) => winningNumbers.includes(num)).length
+
+  let rank = matchCount >= 3 ? 'bordered' : ''
+  return rank
+}
 
   getNumberClass(num: number) {
     if (num >= 1 && num <= 10) return 'yellow'
@@ -291,45 +298,60 @@ export default class LottoList extends Vue {
   line-height: 18px;
 }
 
-.lotto-result {
-  margin-top: 24px;
-  color: #9C9EA0;
+.result-zone {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
-.lotto-result.with-margin {
-  margin-top: 8px;
+.lotto-result {
+  width: calc(50% - 6px);
+  margin-top: 12px;
+  color: #9C9EA0;
 }
 
 .box {
   background-color: #222222;
-  padding: 24px 20px;
+  padding: 16px;
   border-radius: 16px;
 }
 
 .box.bordered {
-  border: 1px solid #4AFF81;
+  border: 1px solid #5F6163;
+}
+
+.before-the-draw {
+  margin-bottom: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #ECEEF0;
+}
+
+::v-deep .draw {
+  margin-bottom: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #ECEEF0;
+}
+
+::v-deep .draw > span {
+  color: #4AFF81;
 }
 
 .date {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 15px;
-  margin-bottom: 10px;
-}
-
-.date > .failed {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 400;
-  line-height: 14px;
-  text-align: center;
-  color: #4AFF81;
-  border: 1px solid #4AFF81;
-  padding:  4px 6px 3px 6px;
-  border-radius: 100px;
+  line-height: 16px;
+  color: #9C9EA0;
 }
 
 .numbers {
+  margin-top: 28px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -339,46 +361,30 @@ export default class LottoList extends Vue {
 .number-set {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  /* width: 100%; */
+  width: 130px;
 }
 
 .number-circle {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: #333;
+  border: 1px solid #414244;
+  color: #414244;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 13px;
-  color: white;
+  font-weight: 500;
+  line-height: 16px;
 }
 
 .bonus-number {
   margin-left: 10px;
   font-size: 20px;
-}
-
-.hr__line-1 {
-  margin: 16px 0;
-  height: 1px;
-  background-color: #333333;
-}
-
-.winning-text {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 10px;
-  font-size: 15px;
-  line-height: 23px;
-  color: #ECEEF0;
-}
-
-.winning-text > img {
-  width: 22px;
-  height: 22px;
 }
 
 .no-data {
@@ -412,27 +418,41 @@ export default class LottoList extends Vue {
 }
 
 .yellow {
-  background: linear-gradient(180deg, #FEC03E 0%, #C08405 100%);
+  border: 1px solid #FFBD00;
+  color: #FFBD00;
 }
 
 .blue {
-  background: linear-gradient(180deg, #4790FF 0%, #2260BE 100%);
+  border: 1px solid #0085FF;
+  color: #0085FF;
 }
 
 .red {
-  background: linear-gradient(180deg, #E64D3D 0%, #B62E20 100%);
+  border: 1px solid #E64D3D;
+  color: #E64D3D;
 }
 
 .gray {
-  background: linear-gradient(180deg, #BEC3C7 0%, #7C8388 100%);
+  border: 1px solid #9C9EA0;
+  color: #9C9EA0;
 }
 
 .green {
-  background: linear-gradient(180deg, #2ECD70 0%, #09893E 100%);
+  border: 1px solid #33C759;
+  color: #33C759
 }
 
-.default-color {
-  background-color: #333;
+.open-card {
+  margin-top: 28px;
+  width: 100%;
+  padding: 10px 14px 10px 14px;
+  border-radius: 100px;
+  border: 1px solid #222222;
+  background-color: #333333;
+  color: #ECEEF0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16px;
 }
 
 @keyframes bounce {
