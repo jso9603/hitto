@@ -3,11 +3,11 @@
     <div class="menu">
       <div class="label">
         <div class="title">
-          연결된 SNS계정
+          카카오톡 계정
           <div class="email" v-if="user">
-            <div class="kakao">
+            <!-- <div class="kakao">
               <img src="@/assets/ic-system-kakao.svg" />
-            </div>
+            </div> -->
             {{user.email}}
           </div>
         </div>
@@ -101,17 +101,14 @@ export default class Setting extends Vue {
   color: #ECEEF0;
 }
 
-.menu > .label > .title {
-  margin-bottom: 4px;
-}
-
 .menu > .label > .title > .email {
+  margin-top: 4px;
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 14px;
   font-weight: 400;
-  line-height: 22px;
+  line-height: 20px;
   color: #9C9EA0;
 }
 

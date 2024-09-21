@@ -630,35 +630,41 @@ export default class Random extends Vue {
 }
 
 .row > div {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   /* margin: 6px; */
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  font-weight: bold;
-  color: #ECEEF0;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
 }
 
 .yellow {
-  background: linear-gradient(180deg, #FEC03E 0%, #C08405 100%) !important;
+  border: 2px solid #DD9A17;
+  color: #DD9A17;
 }
 
 .blue {
-  background: linear-gradient(180deg, #4790FF 0%, #2D6ED1 100%) !important;
+  border: 2px solid #0085FF;
+  color: #0085FF;
 }
 
 .red {
-  background: linear-gradient(180deg, #E64D3D 0%, #C23526 100%) !important;
+  border: 2px solid #E64D3D;
+  color: #E64D3D;
 }
 
 .grey {
-  background: linear-gradient(180deg, #BEC3C7 0%, #7C8388 100%) !important;
+  border: 2px solid #9C9EA0;
+  color: #9C9EA0;
 }
 
 .green {
-  background: linear-gradient(180deg, #2ECD70 0%, #0E9D49 100%) !important;
+  border: 2px solid #33C759;
+  color: #33C759;
 }
 
 .floating {

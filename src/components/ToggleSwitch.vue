@@ -22,8 +22,8 @@ export default class ToggleSwitch extends Vue {
 
 <style scoped>
 .toggle-switch {
-  width: 50px;
-  height: 25px;
+  width: 52px;
+  height: 26px;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -46,15 +46,16 @@ export default class ToggleSwitch extends Vue {
 .toggle-thumb {
   width: 20px;
   height: 20px;
-  background-color: #4AFF81;
+  background-color: #737577;
   border-radius: 50%;
   position: absolute;
-  top: 2px;
-  left: 1px;
+  top: 3px;
+  left: 2px;
   transition: transform 0.3s ease;
 }
 
 .toggle-track.is-checked .toggle-thumb {
+  background-color: #FFFFFF;
   transform: translateX(24px);
 }
 </style>

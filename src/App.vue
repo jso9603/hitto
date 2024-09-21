@@ -72,6 +72,8 @@ export default class App extends Vue {
             this.isPopupVisible = true
           }, 500)
         }
+    } else {
+      this.$router.replace('/')
     }
   }
 }
