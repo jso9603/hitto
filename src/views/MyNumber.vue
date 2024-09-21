@@ -11,7 +11,7 @@
     <div class="week">
       {{currentRound}}회
       <div class="selected" @click="onChangedRound">
-        <img src="@/assets/test.svg" />
+        <img src="@/assets/ic-arrow-down.svg" />
       </div>
     </div>
 
@@ -199,13 +199,18 @@ export default class MyNumber extends Vue {
 }
 
 .selected {
-  width: 18px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #222222;
+  background-color: #333333;
   border-radius: 50%;
+}
+
+.selected > img {
+  width: 18px;
+  height: 18px;
 }
 
 .date {

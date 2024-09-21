@@ -82,7 +82,7 @@ export default class LottoList extends Vue {
 
   private get indicatorStyle() {
     return {
-      transform: this.activeTab === 'select' ? 'translateX(0)' : 'translateX(100%)',
+      transform: this.activeTab === 'automatic' ? 'translateX(0)' : 'translateX(100%)',
     }
   }
 
@@ -96,6 +96,8 @@ export default class LottoList extends Vue {
 
   private setActiveTab(tab: string) {
     this.activeTab = tab
+
+    this.loading = true
     setTimeout(() => {
       this.loading = false
     }, 1000)
@@ -271,13 +273,13 @@ export default class LottoList extends Vue {
 .tab-item {
   flex: 1;
   text-align: center;
-  padding: 14px 0;
+  padding: 12px 0;
   border-radius: 100px;
   font-size: 14px;
   color: #737577;
   cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
   line-height: 18px;
   z-index: 1;
 }
@@ -288,7 +290,7 @@ export default class LottoList extends Vue {
   bottom: 0;
   left: 0;
   width: 50%; /* 탭 인디케이터 너비는 두 개의 탭에 맞춰 50%로 설정 */
-  /* background-color: #ECEEF0; */
+  background-color: #ECEEF0;
   border-radius: 100px;
   transition: transform 0.3s ease; /* 슬라이드 트랜지션 */
   z-index: 0; /* 텍스트 뒤에 배경 인디케이터를 배치 */
@@ -296,7 +298,6 @@ export default class LottoList extends Vue {
 
 .tab-item.active {
   color: #202223;
-  background-color: #ECEEF0;
   font-size: 15px;
   font-weight: 600;
   line-height: 18px;

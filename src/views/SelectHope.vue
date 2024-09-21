@@ -451,13 +451,13 @@ export default class Result extends Vue {
 .tab-item {
   flex: 1;
   text-align: center;
-  padding: 14px 0;
+  padding: 12px 0;
   border-radius: 100px;
   font-size: 14px;
   color: #737577;
   cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
   line-height: 18px;
   z-index: 1;
 }
@@ -476,7 +476,6 @@ export default class Result extends Vue {
 
 .tab-item.active {
   color: #202223;
-  /* background-color: #ECEEF0; */
   font-size: 15px;
   font-weight: 600;
   line-height: 18px;

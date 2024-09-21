@@ -37,7 +37,7 @@ export default class LoginPopup extends Vue {
     const currentRound = Number(this.round)
     const rounds = []
 
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 9; i++) {
       rounds.push(currentRound - i)
     }
     return rounds
@@ -111,7 +111,7 @@ export default class LoginPopup extends Vue {
   font-weight: 400;
   line-height: 22px;
   text-align: left;
-  color: #5F6163;
+  color: #737577;
 }
 
 .round-buttons {
@@ -129,7 +129,7 @@ export default class LoginPopup extends Vue {
   justify-content: center;
   align-items: center;
   width: 80px;
-  height: 40px;
+  height: 44px;
   border-radius: 24px;
   border: 1px solid #e0e0e0;
   background-color: #ffffff;
@@ -141,7 +141,9 @@ export default class LoginPopup extends Vue {
 }
 
 .round-button.selected {
+  height: 46px;
   background-color: #202223; /* 선택된 버튼의 배경색 */
+  border: none;
   color: #ffffff; /* 선택된 버튼의 글자색 */
 }
 
