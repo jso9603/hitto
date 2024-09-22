@@ -2,8 +2,10 @@
   <div class="leave">
     <div v-if="isLoading">
       <div class="waitinging">
-        <img src="@/assets/ic-stefan-2d.svg" class="bounce-animation" />
-        <div class="waiting">잠시만 기다려주세요.</div>
+        <div class="bg-img bounce-animation">
+          <img src="@/assets/ic-stefan-2d.svg" />
+        </div>
+        <div class="waiting">잠시만 기달려주세요</div>
       </div>
     </div>
 
@@ -246,7 +248,7 @@ img {
 }
 
 .waitinging {
-  padding: 40px 20px;
+  padding: 48px 20px;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -256,6 +258,18 @@ img {
   transform: translate(-50%, -50%);
   left: 50%;
   top: 50%;
+}
+
+.bg-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #0085FF;
 }
 
 .waiting {

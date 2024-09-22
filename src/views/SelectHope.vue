@@ -9,8 +9,10 @@
 
       <div v-if="isLoading">
         <div class="waitinging">
-          <img src="@/assets/ic-stefan-2d.svg" class="bounce-animation" />
-          <div class="waiting">잠시만 기다려주세요.</div>
+          <div class="bg-img bounce-animation">
+            <img src="@/assets/ic-stefan-2d.svg" />
+          </div>
+          <div class="waiting">잠시만 기달려주세요</div>
         </div>
       </div>
 
@@ -281,7 +283,7 @@ export default class Result extends Vue {
             this.isLoading = false
 
             this.$router.push('/my/number?tab=automatic')
-          }, 2000)
+          }, 1000)
           
         } catch (e) {
           console.error('Error adding document: ', e)
@@ -326,6 +328,8 @@ export default class Result extends Vue {
     // 페이지 로드 시 히스토리 상태 추가 (페이지 이동 막기 위해 pushState 사용)
     window.history.pushState(null, '', window.location.href)
     window.addEventListener('popstate', this.handleBackButton)
+
+    this.isLoading = true
   }
 
   // redirect (login)
@@ -660,11 +664,28 @@ export default class Result extends Vue {
 }
 
 .waitinging {
-  padding: 40px 20px;
+  padding: 48px 20px;
   display: flex;
   align-items: center;
   flex-direction: column;
   gap: 12px;
+}
+
+.bg-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #0085FF;
+}
+
+.bg-img > img {
+  width: 32px;
+  height: 32px;
 }
 
 .waiting {
