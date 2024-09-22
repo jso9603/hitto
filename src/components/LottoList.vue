@@ -101,13 +101,12 @@ export default class LottoList extends Vue {
     this.activeTab = tab
 
     this.loading = true
-    setTimeout(() => {
-      this.loading = false
-    }, 1000)
+
     this.lottoData = []
 
     this.fetchLottoData(this.user.uid, tab).then(() => {
       this.$forceUpdate() // 강제로 뷰를 업데이트
+      this.loading = false
     })
   }
 
@@ -154,8 +153,9 @@ export default class LottoList extends Vue {
       this.lottoData = JSON.parse(cachedData)
 
       console.log(this.lottoData)
-      this.processLottoData(this.lottoData)
-      this.loading = false
+      this.processLottoData(this.lottoData).then(() => {
+        this.loading = false
+      })
 
       return
     }
@@ -181,10 +181,11 @@ export default class LottoList extends Vue {
       console.error('데이터를 가져오는 중 오류 발생:', error)
     } finally {
       console.log('lottoData: ', this.lottoData)
-      this.processLottoData(this.lottoData)
-      setTimeout(() => {
-        this.loading = false
-      }, 800)
+      this.processLottoData(this.lottoData).then(() => {
+        setTimeout(() => {
+          this.loading = false
+        }, 500)
+      })
     }
   }
 
