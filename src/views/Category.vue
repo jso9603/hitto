@@ -2321,7 +2321,7 @@ mainCategories: MainCategory[] = [
   transform: translate(-50%, 0);
   width: calc(100% - 40px);
   padding: 30px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 64.38%);
+  background: linear-gradient(180deg, rgba(23, 23, 23, 0) 0%, #171717 15.46%, #171717 82.53%);
 }
 
 .floating > button {

@@ -1,5 +1,5 @@
 <template>
-  <div class="list">
+  <div class="list" :class="['list', {blank: isRoundMatched}]">
     <div class="tab-container">
       <div class="tab">
         <div :class="['tab-item', { active: activeTab === 'automatic' }]" @click="setActiveTab('automatic')">자동 번호</div>
@@ -261,6 +261,10 @@ export default class LottoList extends Vue {
 </script>
 
 <style scoped>
+.blank {
+  margin-bottom: 94px;
+}
+
 .tab-container {
   margin: 24px auto 12px;
   padding: 4px;

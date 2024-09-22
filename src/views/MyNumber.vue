@@ -1,12 +1,12 @@
 <template>
   <div class="my__number">
     <RoundPopup
-        :visible="isPopupVisible"
-        :round="week"
-        :current="currentRound"
-        @close="isPopupVisible = false"
-        @selected="onSelected"
-      />
+      :visible="isPopupVisible"
+      :round="week"
+      :current="currentRound"
+      @close="isPopupVisible = false"
+      @selected="onSelected"
+    />
 
     <div class="week" @click="onChangedRound">
       {{currentRound}}회
@@ -26,6 +26,13 @@
       :key="currentRound"
       :isRoundMatched="isRoundMatched"
     />
+
+    <div class="floating" v-if="isRoundMatched">
+      <button class="primary" @click="onOneMoreNumber">
+        <img src="@/assets/ic-system-challenge.svg" />
+        추가 번호 생성하기
+      </button>
+    </div>
   </div>
 </template>
 
@@ -99,6 +106,10 @@ export default class MyNumber extends Vue {
     }
 
     return currentWeek
+  }
+
+  onOneMoreNumber() {
+    this.$router.push('/ai')
   }
 
   created() {
@@ -222,5 +233,41 @@ export default class MyNumber extends Vue {
   font-weight: 400;
   line-height: 23px;
   text-align: center;
+}
+
+.floating {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+  background: linear-gradient(180deg, rgba(23, 23, 23, 0) 0%, #171717 15.46%, #171717 82.53%);
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+}
+
+.floating > button {
+  width: 100%;
+  min-height: 54px;
+  background-color: #4AFF81;
+  padding: 8px 8px;
+  border-radius: 100px;
+  border-style: none;
+  color: #202223;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 19px;
+  cursor: pointer;
+}
+
+.floating > button.primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 </style>
