@@ -328,8 +328,6 @@ export default class Result extends Vue {
     // 페이지 로드 시 히스토리 상태 추가 (페이지 이동 막기 위해 pushState 사용)
     window.history.pushState(null, '', window.location.href)
     window.addEventListener('popstate', this.handleBackButton)
-
-    this.isLoading = true
   }
 
   // redirect (login)
