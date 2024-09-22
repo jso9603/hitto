@@ -17,6 +17,7 @@ import Leave from '@/views/Leave.vue'
 import Terms from '@/views/Terms.vue'
 import Test from '@/views/Test.vue'
 import NotFound from '@/views/NotFound.vue'
+import Manual from '@/views/Manual.vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -111,6 +112,11 @@ const routes = [
     path: '*',
     name: 'NotFound',
     component: NotFound,
+  },
+  {
+    path: '/manual',
+    name: '/manual',
+    component: Manual,
   }
 ];
 
