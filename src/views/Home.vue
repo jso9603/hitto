@@ -233,7 +233,7 @@ export default class Home extends Vue {
   justify-content: center;
   flex-direction: column;
   gap: 4px;
-  background-color: #333;
+  background-color: #22222280;
   border-radius: 20px;
   padding: 20px;
   color: #4AFF81;
@@ -243,7 +243,6 @@ export default class Home extends Vue {
   text-align: center;
   font-variant: common-ligatures tabular-nums;
   backdrop-filter: blur(10px);
-  opacity: 0.5;
   transition: backdrop-filter 0.3s ease;
 }
 

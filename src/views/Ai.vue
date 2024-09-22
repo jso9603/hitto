@@ -71,8 +71,11 @@ export default class Ai extends Vue {
     this.targetCount = await getCounting()
     this.startCounting();
 
+    // const contents: string =
+    //   '"저는 스테판입니다.\n단순한 행운이 아닌 체계적인\n전략으로 14번이나\n당첨된 전설적인 인물이죠.\n제 소개는 그만 각설하고..."\n\n"자~ 이제 시작해볼까요?"';
+
     const contents: string =
-      '"저는 스테판입니다.\n단순한 행운이 아닌 체계적인\n전략으로 14번이나\n당첨된 전설적인 인물이죠.\n제 소개는 그만 각설하고..."\n\n"자~ 이제 시작해볼까요?"';
+      '저는 스테판입니다.\n행운이 아닌 데이터 기반의 전략으로\n13번 당첨된 전설적인 인물입니다'
     let saveInterval: number | undefined;
 
     let index = 0;
@@ -94,12 +97,13 @@ export default class Ai extends Vue {
           index++;
         }
       } else {
-        if (index >= contents.lastIndexOf('"자~ 이제 시작해볼까요?"')) {
-          // 마지막 문장에 녹색 색상을 적용
-          this.typedText += `<span style="color: #4AFF81;">${contents[index++]}</span>`;
-        } else {
-          this.typedText += contents[index++];
-        }
+        this.typedText += contents[index++];
+        // if (index >= contents.lastIndexOf('"자~ 이제 시작해볼까요?"')) {
+        //   // 마지막 문장에 녹색 색상을 적용
+        //   this.typedText += `<span style="color: #4AFF81;">${contents[index++]}</span>`;
+        // } else {
+        //   this.typedText += contents[index++];
+        // }
       }
     }, 50);
   }
