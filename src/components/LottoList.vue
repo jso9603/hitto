@@ -259,7 +259,7 @@ export default class LottoList extends Vue {
 
 <style scoped>
 .tab-container {
-  margin: 32px auto 24px;
+  margin: 24px auto 12px;
   padding: 4px;
   background-color: #222222;
   border-radius: 100px;

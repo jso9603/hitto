@@ -180,7 +180,7 @@ export default class MyNumber extends Vue {
 
 <style scoped>
 .my__number {
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 32px;
   padding-left: 20px;
   padding-right: 20px;
@@ -191,9 +191,9 @@ export default class MyNumber extends Vue {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 30px;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 32px;
   text-align: center;
   color: #ECEEF0;
 }
@@ -214,10 +214,11 @@ export default class MyNumber extends Vue {
 }
 
 .date {
+  margin-top: 8px;
   color: #9C9EA0;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
-  line-height: 22px;
+  line-height: 23px;
   text-align: center;
 }
 </style>

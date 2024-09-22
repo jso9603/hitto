@@ -239,7 +239,7 @@ export default class Header extends Vue {
 
 .header.scrolled {
   /* 블러효과 (https://www.zappy.ai/kr 참고) */
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(6px);
   background-color: rgba(23, 23, 23, 0.5);
 }
 

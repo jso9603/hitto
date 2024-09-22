@@ -233,7 +233,7 @@ export default class Home extends Vue {
   justify-content: center;
   flex-direction: column;
   gap: 4px;
-  background: #222222F0;
+  background-color: #333;
   border-radius: 20px;
   padding: 20px;
   color: #4AFF81;
@@ -242,6 +242,9 @@ export default class Home extends Vue {
   line-height: 22px;
   text-align: center;
   font-variant: common-ligatures tabular-nums;
+  backdrop-filter: blur(10px);
+  opacity: 0.5;
+  transition: backdrop-filter 0.3s ease;
 }
 
 .home > .desc {
@@ -436,7 +439,10 @@ export default class Home extends Vue {
   margin-left: auto;
   margin-right: auto;
   max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
-  padding: 20px;
-  background: linear-gradient(360deg, #171717 50%, rgba(23, 23, 23, 0) 100%);
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(6px);
 }
 </style>
