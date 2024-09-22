@@ -114,7 +114,8 @@ export default class LottoList extends Vue {
   private calculateRank(lottoData: LottoData): string {
     // 사용자가 찍은 번호 (문자열을 숫자 배열로 변환)
     const userNumbers = lottoData.numbers[0].split(', ').map(Number)
-    if (lottoData.winningNumbers === undefined) {
+
+    if (!lottoData.winningNumbers || lottoData.winningNumbers.length === 0) {
       return '추첨 대기'
     }
 
@@ -208,6 +209,8 @@ export default class LottoList extends Vue {
         }
       }
     }
+
+    this.loading = false
   }
 
   mounted() {

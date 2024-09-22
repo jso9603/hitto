@@ -8,9 +8,9 @@
         @selected="onSelected"
       />
 
-    <div class="week">
+    <div class="week" @click="onChangedRound">
       {{currentRound}}회
-      <div class="selected" @click="onChangedRound">
+      <div class="selected">
         <img src="@/assets/ic-arrow-down.svg" />
       </div>
     </div>
@@ -196,6 +196,7 @@ export default class MyNumber extends Vue {
   line-height: 32px;
   text-align: center;
   color: #ECEEF0;
+  cursor: pointer;
 }
 
 .selected {
@@ -206,6 +207,7 @@ export default class MyNumber extends Vue {
   justify-content: center;
   background-color: #333333;
   border-radius: 50%;
+  cursor: pointer;
 }
 
 .selected > img {
