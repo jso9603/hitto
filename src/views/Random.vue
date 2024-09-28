@@ -1,5 +1,10 @@
 <template>
   <div class="container" :class="{ add: !showPage1 }">
+    <SelectHopePopup
+      :visible="isPopupVisible"
+      @close="isPopupVisible = false"
+    />
+
     <transition name="fade" mode="out-in">
       <div class="page1" v-if="showPage1" key="page1">
         <div v-if="showMessage">
@@ -58,8 +63,12 @@ import { Component, Vue } from 'vue-property-decorator'
 import { mapState } from 'vuex'
 
 import { Ball } from '../models/Ball'
+import SelectHopePopup from '@/components/SelectHopePopup.vue'
 
 @Component({
+  components: {
+    SelectHopePopup,
+  },
   computed: {
     ...mapState(['menuName']),
   },
@@ -83,6 +92,7 @@ export default class Random extends Vue {
   private showMessage2: boolean = false
 
   private showPage1: boolean = true
+  private isPopupVisible: boolean = false
 
   private isLoading = false
   charater = ''
@@ -442,7 +452,8 @@ export default class Random extends Vue {
     sessionStorage.setItem('lottoNumbers', JSON.stringify(ball))
 
     this.isLoading = false
-    this.$router.push('/select-hope')
+    // this.$router.push('/select-hope')
+    this.isPopupVisible = true
   }
 }
 </script>
