@@ -55,11 +55,15 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import Cookies from 'js-cookie'
+import { mapState } from 'vuex'
 
 import { Ball } from '../models/Ball'
 
-@Component
+@Component({
+  computed: {
+    ...mapState(['menuName']),
+  },
+})
 export default class Random extends Vue {
   private canvas: HTMLCanvasElement | null = null
   private balls: Ball[] = []
@@ -347,8 +351,8 @@ export default class Random extends Vue {
   }
 
   created() {
-    this.background = Cookies.get('menu')!.includes('꿈해몽') ? 'yellow-bg' : 'blue-bg'
-    this.charater = Cookies.get('menu')!.includes('꿈해몽') ? 'img-stella-3d.png' : 'img-stefan-3d.png'
+    this.background = this.$store.state.menuName!.includes('꿈해몽') ? 'yellow-bg' : 'blue-bg'
+    this.charater = this.$store.state.menuName!.includes('꿈해몽') ? 'img-stella-3d.png' : 'img-stefan-3d.png'
 
     this.messages = this.background === 'blue-bg' ? ['스테판이 ai 통계기반', '로또 번호를 생성하고 있어요'] : ['스텔라가 ai 통계기반', '로또 번호를 생성하고 있어요']
   }

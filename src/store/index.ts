@@ -10,6 +10,7 @@ export default new Vuex.Store({
       uid: null,
       email: null,
     },
+    menuName: '',
   },
   mutations: {
     setShowCopyImage(state, payload) {
@@ -22,6 +23,9 @@ export default new Vuex.Store({
     clearUser(state) {
       state.user.uid = null
       state.user.email = null
+    },
+    setMenuName(state, menuName) {
+      state.menuName = menuName
     },
   },
   actions: {
@@ -38,6 +42,15 @@ export default new Vuex.Store({
     logoutUser({ commit }) {
       // 로그아웃 시 user 정보를 초기화
       commit('clearUser')
+    },
+    updateMenuName({ commit }, menuName) {
+      // menuName 업데이트
+      commit('setMenuName', menuName)
+    },
+  },
+  getters: {
+    menuName(state) {
+      return state.menuName // menuName을 가져오는 getter 추가
     },
   },
 })

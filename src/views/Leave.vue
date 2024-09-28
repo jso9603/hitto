@@ -88,7 +88,6 @@ export default class Leave extends Vue {
 
         sessionStorage.clear()
 
-        Cookies.remove('menu')
         Cookies.remove('user')
       } catch (error) {
         console.error(error)

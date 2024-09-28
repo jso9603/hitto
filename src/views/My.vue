@@ -27,7 +27,7 @@
 
     <div class="menu">
       <div class="title">서비스</div>
-        <div v-for="item in services" :key="item.title" class="service-item" @click="$router.push(item.link)">
+        <div v-for="item in services" :key="item.title" class="service-item" @click="onService(item)">
           <span class="service-title">{{ item.title }}</span>
           <img src="@/assets/ic-system-arrow-right.svg" />
       </div>
@@ -118,8 +118,13 @@ export default class My extends Vue {
     }
   }
 
+  onService(item: { title: string, link: string }) {
+    this.$store.dispatch('updateMenuName', item.title)
+    this.$router.push(item.link)
+  }
+
   onNumber(title: string) {
-    Cookies.set('menu', title)
+    this.$store.dispatch('updateMenuName', title)
     this.$router.push('/my/number')
   }
 

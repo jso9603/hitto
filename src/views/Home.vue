@@ -64,7 +64,6 @@ import { Component, Vue } from 'vue-property-decorator'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import weekday from 'dayjs/plugin/weekday'
-import Cookies from 'js-cookie'
 
 dayjs.extend(duration)
 dayjs.extend(weekday)
@@ -74,7 +73,7 @@ export default class Home extends Vue {
   countdown: string = ''
 
   onClick(type: string, menu: string) {
-    Cookies.set('menu', menu)
+    this.$store.dispatch('updateMenuName', menu)
 
     this.$router.push(`/${type}`)
   }

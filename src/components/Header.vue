@@ -96,10 +96,15 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import Cookies from 'js-cookie'
+import { mapState } from 'vuex'
+
 import { getLoggedUserInfo } from '@/utils/user'
 
-@Component
+@Component({
+  computed: {
+    ...mapState(['menuName']),
+  },
+})
 export default class Header extends Vue {
   isScrolled: boolean = false
 
@@ -183,10 +188,6 @@ export default class Header extends Vue {
 
   get login() {
     return this.$route.path === '/login'
-  }
-
-  get menuName() {
-    return Cookies.get('menu')
   }
 
   goBack() {

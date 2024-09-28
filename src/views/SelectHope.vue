@@ -332,8 +332,8 @@ export default class Result extends Vue {
 
   // redirect (login)
   created() {
-    this.background = Cookies.get('menu')!.includes('꿈해몽') ? 'yellow-bg' : 'blue-bg'
-    this.charater = Cookies.get('menu')!.includes('꿈해몽') ? 'img-stella-3d.png' : 'img-stefan-3d.png'
+    this.background = this.$store.state.menuName!.includes('꿈해몽') ? 'yellow-bg' : 'blue-bg'
+    this.charater = this.$store.state.menuName!.includes('꿈해몽') ? 'img-stella-3d.png' : 'img-stefan-3d.png'
 
     if (sessionStorage.getItem('hope') && sessionStorage.getItem('lottoNumbers')) {
       if (sessionStorage.getItem('hope-select') === 'true') {
