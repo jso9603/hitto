@@ -283,7 +283,7 @@ export default class Header extends Vue {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  color: #fff;
+  color: #ECEEF0;
   font-size: 18px;
   font-weight: 600;
 }

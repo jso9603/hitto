@@ -1,24 +1,64 @@
 <template>
   <div class="fortune">
-    <h1>오늘의 운세</h1>
-    <button @click="getFortune">운세 보기</button>
-    <p v-if="loading">운세를 불러오는 중...</p>
-    <div v-else>
-      {{fortuneResponse}}
+    <div class="today">{{today}}</div>
+    <div class="name">이름</div>
+
+    <div class="img">
+      <img src='@/assets/img-fortune.png' at="fortune 이미지" />
+    </div>
+
+    <div v-for="fortune in fortunes" :key="fortune.category" class="fortune-box">
+      <div class="category">{{fortune.category}}</div>
+      <div class="summary">{{fortune.summary}}</div>
+      <div class="text">{{fortune.text}}</div>
+    </div>
+
+    <div class="share">
+      <div class="title">친구, 지인과 함께<br/>로또 1등에 도전해보세요</div>
+      <div class="share-channel">
+        <div class="round kakao" @click="shareKakao">
+          <img src="@/assets/ic-system-kakao.svg" alt="kakao" />
+        </div>
+        <div class="round sms" @click="shareSms">
+          <img src="@/assets/ic-system-sms.svg" alt="sms" />
+        </div>
+        <div class="round url" @click="shareUrl">
+          URL
+        </div>
+        <div class="round more" @click="shareNative">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+
 import axios from 'axios'
+import dayjs from 'dayjs'
+
+interface Fortune {
+  category: string,
+  summary: string,
+  text: string,
+}
 
 @Component
 export default class ChatGPT extends Vue {
+  fortunes: Fortune[] = []
   fortuneResponse = ''
   loading = false
 
+  get today () {
+    return dayjs().format('YYYY년 MM월 DD일')
+  }
+
   async getFortune() {
+    console.log(process.env.VUE_APP_GPT_API_KEY)
     this.loading = true;
     try {
       const response = await axios.post(
@@ -46,20 +86,121 @@ export default class ChatGPT extends Vue {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.GPT_API_KEY}`,
+            Authorization: `Bearer ${process.env.VUE_APP_GPT_API_KEY}`,
             'Content-Type': 'application/json'
           }
         }
       );
 
       // 운세 데이터를 파싱하여 각 항목에 저장
-      this.fortuneResponse = response.data.choices[0].message.content
+      const result = JSON.parse(response.data.choices[0].message.content);
+
+    if (result.fortunes && Array.isArray(result.fortunes)) {
+      this.fortunes = result.fortunes; // fortunes 배열을 할당
+    } else {
+      console.error('운세 데이터가 올바르지 않습니다.');
+    }
     } catch (error) {
       console.error('운세 데이터를 불러오는 중 오류가 발생했습니다:', error);
-      this.fortuneResponse = '오류입니다...'
     } finally {
       this.loading = false;
     }
+  }
+
+  shareKakao() {
+    window.Kakao.Share.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: '모두의 희망로또',
+        description: '친구, 지인과 함께 로또 1등에 도전해보세요.',
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/hitto-1b119.appspot.com/o/img-mohito.png?alt=media&token=83f16f0c-842a-47e8-a293-94de4e4c56fd',
+        link: {
+          mobileWebUrl: 'https://mohito.co.kr',
+          webUrl: 'https://mohito.co.kr',
+        },
+      },
+      buttons: [
+        {
+          title: '웹으로 보기',
+          link: {
+            mobileWebUrl: 'https://mohito.co.kr',
+            webUrl: 'https://mohito.co.kr',
+          },
+        },
+      ],
+    })
+  }
+
+  shareSms() {
+    const message = '친구와 함께 로또1등 당첨 도전해보세요. 모두의 희망로또!: https://mohito.co.kr'
+    const phoneNumber = ''
+    window.location.href = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`
+  }
+
+  shareUrl() {
+    const currentUrl = 'https://mohito.co.kr'
+
+    // Check if navigator.clipboard.writeText is available
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(currentUrl).then(() => {
+        this.$store.dispatch('showCopyImage')
+      }).catch(err => {
+        console.error('링크 복사에 실패했습니다:', err)
+      })
+    } else {
+      // Fallback for iOS Safari
+      const textArea = document.createElement('textarea')
+      textArea.value = currentUrl
+      // Ensure the textarea is not visible and doesn't cause layout shifts
+      textArea.style.position = 'fixed' // Fixed position to avoid layout changes
+      textArea.style.top = '0'
+      textArea.style.left = '0'
+      textArea.style.width = '1px'
+      textArea.style.height = '1px'
+      textArea.style.padding = '0'
+      textArea.style.border = 'none'
+      textArea.style.outline = 'none'
+      textArea.style.boxShadow = 'none'
+      textArea.style.background = 'transparent'
+      textArea.style.opacity = '0' // Make it invisible
+      textArea.setAttribute('readonly', '')
+      document.body.appendChild(textArea)
+      textArea.focus()
+      textArea.select()
+      try {
+        const successful = document.execCommand('copy')
+        if (successful) {
+          this.$store.dispatch('showCopyImage')
+        } else {
+          console.error('링크 복사에 실패했습니다.')
+        }
+      } catch (err) {
+        console.error('링크 복사에 실패했습니다:', err)
+      }
+      document.body.removeChild(textArea)
+    }
+  }
+
+  shareNative() {
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      navigator.share({
+        title: '모두의 희망로또',
+        text: '친구, 지인과 함께 로또 1등에 도전해보세요.',
+        url: 'https://mohito.co.kr',
+      })
+      .then(() => {
+        console.log('공유 성공')
+      })
+      .catch((error: any) => {
+        console.error('공유 실패:', error)
+      })
+    } else {
+      alert('이 브라우저에서는 지원되지 않습니다.')
+    }
+  }
+
+  mounted() {
+    this.getFortune()
   }
 
   // 최종 API response
@@ -95,43 +236,145 @@ export default class ChatGPT extends Vue {
 
 <style scoped>
 .fortune {
-  color: #FFF;
+  margin-top: 20px;
 }
 
-h1 {
-  text-align: center;
+.today {
+  color: #9C9EA0;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+.name {
+  margin-top: 4px;
+  color: #FFFFFF;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+.img {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.img > img {
+  margin-right: 10px;
+  width: 120px;
+  height: 120px;
+}
+
+.fortune-box {
+  background-color: #212736;
+  border-radius: 16px;
+  padding: 24px;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.category {
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #61D59D;
+}
+
+.summary {
+  margin-bottom: 12px;
+  color: #ECEEF0;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 25px;
+}
+
+.text {
+  color: #9C9EA0;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 23px;
+  text-align: left;
+}
+
+.share {
+  margin-top: 32px;
+  margin-bottom: 40px;
+}
+
+.title {
   margin-bottom: 20px;
+  color: #ECEEF0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 26px;
+  text-align: center;
 }
 
-button {
-  display: block;
-  margin: 20px auto;
-  padding: 10px 20px;
-  background-color: #0085ff;
-  color: white;
-  border: none;
-  border-radius: 4px;
+.share-channel {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.round {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #0073e6;
+.kakao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFE600;
 }
 
-input[type="date"] {
-  display: block;
-  margin: 0 auto 20px;
-  padding: 10px;
-  font-size: 16px;
+.kakao > img,
+.sms > img {
+  width: 24px;
+  height: 24px;
 }
 
-h2 {
-  margin-top: 20px;
-  text-align: center;
+.sms {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4AFF81;
 }
 
-p {
-  text-align: center;
-  font-size: 18px;
+.url {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2E80FA;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.more {
+  background-color: #737577;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.more > div {
+  width: 5px;
+  height: 5px;
+  background-color: #D9D9D9;
+  border-radius: 50%;
 }
 </style>
