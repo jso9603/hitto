@@ -220,7 +220,7 @@ export default class Header extends Vue {
   align-items: center;
   justify-content: space-between;
   height: 54px;
-  background-color: #171717;
+  /* background-color: #171717; */
   position: fixed;
   top: 0;
   left: 0;
@@ -231,6 +231,9 @@ export default class Header extends Vue {
   transition: backdrop-filter 0.3s ease;
   margin-left: auto;
   margin-right: auto;
+
+  background-color: rgba(255, 255, 255, 0);
+  /* opacity: 0; */
 }
 
 .header.popup-active {
@@ -241,7 +244,7 @@ export default class Header extends Vue {
 .header.scrolled {
   /* 블러효과 (https://www.zappy.ai/kr 참고) */
   backdrop-filter: blur(6px);
-  background-color: rgba(23, 23, 23, 0.5);
+  /* background-color: rgba(23, 23, 23, 0.5); */
 }
 
 /* .home > div,

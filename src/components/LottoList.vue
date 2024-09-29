@@ -329,6 +329,10 @@ export default class LottoList extends Vue {
   color: #9C9EA0;
 }
 
+.lotto-result:last-child {
+  margin-bottom: 114px;
+}
+
 .box {
   background-color: #222222;
   padding: 16px;

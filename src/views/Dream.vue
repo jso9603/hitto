@@ -124,7 +124,7 @@ export default class Dream extends Vue {
   /* iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
   특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음 */
   /* margin-top: 20px까지 제외시킨다. */
-  height: calc(var(--vh, 1vh) * 100 - 78px);
+  height: calc(var(--vh, 1vh) * 100 - 54px);
   position: relative;
 }
 
@@ -194,7 +194,7 @@ export default class Dream extends Vue {
   margin-right: auto;
   max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
-  background: linear-gradient(180deg, rgba(23, 23, 23, 0) 0%, #171717 15.46%, #171717 82.53%);
+  background: linear-gradient(180deg, rgba(19, 23, 32, 0) 0%, #131720 15.46%, #131720 82.53%);
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 

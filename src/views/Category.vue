@@ -2103,8 +2103,7 @@ mainCategories: MainCategory[] = [
 }
 
 .container {
-  padding: 0 20px;
-  /* width: calc(100% - 40px); */
+  padding: 0 20px 20px;
   box-sizing: border-box;
 }
 
@@ -2122,7 +2121,7 @@ mainCategories: MainCategory[] = [
   margin-top: 32px;
   margin-bottom: 20px;
   padding: 4px;
-  background-color: #222222;
+  background-color: #212736;
   border-radius: 100px;
   height: 42px;
 }
@@ -2140,7 +2139,7 @@ mainCategories: MainCategory[] = [
   padding: 12px 0;
   border-radius: 100px;
   font-size: 14px;
-  color: #737577;
+  color: #ffffff80;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
@@ -2235,7 +2234,7 @@ mainCategories: MainCategory[] = [
   flex-grow: 1; /* flex-grow로 남은 공간을 채움 */
   width: calc(33.333% - 16px); /* 각 요소의 최대 너비 설정 */
   padding: 16px;
-  background-color: #222;
+  background-color: #212736;
   border-radius: 16px;
   color: #fff;
   font-size: 16px;
@@ -2288,7 +2287,7 @@ mainCategories: MainCategory[] = [
   align-items: center;
   margin-bottom: 12px;
   padding: 20px;
-  background-color: #222;
+  background-color: #212736;
   border-radius: 16px;
   color: #fff;
   font-size: 16px;

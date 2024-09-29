@@ -142,19 +142,19 @@ export default class My extends Vue {
   }
 
   created() {
-    const userData = Cookies.get('user');
+    const userData = Cookies.get('user')
 
     if (userData) {
       try {
-        this.user = JSON.parse(userData);
-        this.nickname = this.generateNickname(this.user.uid);
+        this.user = JSON.parse(userData)
+        this.nickname = this.generateNickname(this.user.uid)
       } catch (error) {
-        console.error('Failed to parse user data:', error);
+        console.error('Failed to parse user data:', error)
         this.user = null;
       }
     } else {
       this.user = null;
-      this.nickname = 'Guest';
+      this.nickname = 'Guest'
     }
   }
 }
@@ -180,7 +180,7 @@ export default class My extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #4262FF;
+  background-color: #0085FF;
   border-radius: 50%;
   margin-bottom: 12px;
 }

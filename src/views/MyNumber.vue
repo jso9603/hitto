@@ -112,7 +112,21 @@ export default class MyNumber extends Vue {
     this.$router.push('/ai')
   }
 
+  adjustHtmlHeight = () => {
+    const bodyHeight = document.body.scrollHeight
+    const windowHeight = window.innerHeight
+
+    if (windowHeight > bodyHeight) {
+      document.documentElement.style.height = '100%' // html에 height: 100% 추가
+    } else {
+      document.documentElement.style.height = '' // 조건에 맞지 않으면 height 속성 제거
+    }
+  }
+
   created() {
+    window.addEventListener('resize', this.adjustHtmlHeight)
+    window.addEventListener('load', this.adjustHtmlHeight)
+
     dayjs.extend(duration)
 
     this.week = (this.getLottoWeek(dayjs())).toString()
@@ -246,7 +260,7 @@ export default class MyNumber extends Vue {
   display: flex;
   gap: 10px;
   padding: 20px;
-  background: linear-gradient(180deg, rgba(23, 23, 23, 0) 0%, #171717 15.46%, #171717 82.53%);
+  background: linear-gradient(180deg, rgba(19, 23, 32, 0) 0%, #131720 15.46%, #131720 82.53%);
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 

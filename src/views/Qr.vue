@@ -76,7 +76,6 @@ export default class Qr extends Vue {
   /* margin-top: 20px까지 제외시킨다. */
   height: calc(var(--vh, 1vh) * 100 - 54px);
   position: relative;
-  background-color: #333;
   color: white;
   padding: 20px;
   box-sizing: border-box;

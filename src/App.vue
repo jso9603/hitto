@@ -80,12 +80,17 @@ export default class App extends Vue {
 </script>
 
 <style>
+html, body {
+  box-sizing: border-box;
+  min-height: 100%;
+  background: linear-gradient(180deg, #242A3B 0%, #131720 50%);
+  background-attachment: fixed;
+}
 body {
   margin: 0;
   padding: 0;
   max-width: 576px;
   margin: 0 auto;
-  background-color: #171717;
   font-family: 'Pretendard', sans-serif;
 }
 
@@ -139,5 +144,7 @@ body {
 
 .content {
   padding-top: 54px;
+  /* background: linear-gradient(180deg, #242A3B 0%, #131720 50%); */
+  min-height: 100%;
 }
 </style>

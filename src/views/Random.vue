@@ -479,23 +479,11 @@ export default class Random extends Vue {
 }
 
 .add {
-  height: calc(var(--vh, 1vh) * 100 - 158px);
+  /* height: calc(var(--vh, 1vh) * 100 - 158px); */
   transition: height 2s ease;
 }
 
-/* .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 100vh;
-  margin: 0;
-  background-color: #171717;
-} */
-
 .page1 {
-  /* margin-top: 30px; */
-  background-color: #171717;
   text-align: center;
 
   display: flex;
@@ -549,6 +537,7 @@ export default class Random extends Vue {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  margin-top: -72px;
 }
 
 .random-animation {
@@ -709,7 +698,7 @@ export default class Random extends Vue {
   display: flex;
   gap: 10px;
   padding: 20px;
-  background: linear-gradient(180deg, rgba(23, 23, 23, 0) 0%, #171717 15.46%, #171717 82.53%);
+  background: linear-gradient(180deg, rgba(19, 23, 32, 0) 0%, #131720 15.46%, #131720 82.53%);
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
   
 }
