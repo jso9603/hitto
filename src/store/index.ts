@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
@@ -11,6 +12,7 @@ export default new Vuex.Store({
       email: null,
     },
     menuName: '',
+    showRoundPopup: false,
   },
   mutations: {
     setShowCopyImage(state, payload) {
@@ -27,6 +29,9 @@ export default new Vuex.Store({
     setMenuName(state, menuName) {
       state.menuName = menuName
     },
+    setRoundPopup(state, payload) {
+      state.showRoundPopup = payload
+    }
   },
   actions: {
     showCopyImage({ commit }) {
@@ -47,10 +52,21 @@ export default new Vuex.Store({
       // menuName 업데이트
       commit('setMenuName', menuName)
     },
+    updateRoundPopup({ commit }, roundPopup) {
+      commit('setRoundPopup', roundPopup)
+    },
   },
   getters: {
     menuName(state) {
       return state.menuName // menuName을 가져오는 getter 추가
     },
+    roundPopup(state) {
+      return state.showRoundPopup
+    }
   },
+  plugins: [
+    createPersistedState({
+      storage: window.localStorage // 상태를 localStorage에 저장
+    })
+  ]
 })

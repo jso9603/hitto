@@ -14,7 +14,9 @@
         <img src="@/assets/ic-system-challenge.svg" />
         시작하기
       </button>
-      <div class="disclamer">본 서비스에서 제공하는 캐릭터 정보와 생성번호는 참고 용도이며,<br/>그로 인한 결과는 법적 책임은 사용자에게 있습니다.</div>
+      <div class="disclamer">
+        모희또 서비스에서 제공하는 생성번호는 참고 용도이며,<br/>그로 인한 결과는 법적 책임은 사용자에게 있습니다.
+      </div>
     </div>
   </div>
 </template>
@@ -205,8 +207,8 @@ export default class Dream extends Vue {
   gap: 8px;
   margin-bottom: 15px;
   color: #ECEEF0;
-  font-weight: 500;
-  font-size: 16px;
+  font-weight: 400;
+  font-size: 15px;
   line-height: 22px;
   font-variant: common-ligatures tabular-nums;
 }
@@ -234,7 +236,7 @@ export default class Dream extends Vue {
 .floating > button {
   width: 100%;
   min-height: 52px;
-  background-color: #4AFF81;
+  background-color: #ECEEF0;
   padding: 8px 8px;
   border-radius: 24px;
   border-style: none;

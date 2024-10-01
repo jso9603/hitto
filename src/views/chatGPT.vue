@@ -51,7 +51,7 @@ interface Fortune {
 export default class ChatGPT extends Vue {
   fortunes: Fortune[] = []
   fortuneResponse = ''
-  loading = false
+  loading = true
 
   get today () {
     return dayjs().format('YYYY년 MM월 DD일')
@@ -59,7 +59,7 @@ export default class ChatGPT extends Vue {
 
   async getFortune() {
     console.log(process.env.VUE_APP_GPT_API_KEY)
-    this.loading = true;
+    this.loading = true
     try {
       const response = await axios.post(
         'https://api.openai.com/v1/chat/completions',
@@ -93,17 +93,17 @@ export default class ChatGPT extends Vue {
       );
 
       // 운세 데이터를 파싱하여 각 항목에 저장
-      const result = JSON.parse(response.data.choices[0].message.content);
+      const result = JSON.parse(response.data.choices[0].message.content)
 
     if (result.fortunes && Array.isArray(result.fortunes)) {
-      this.fortunes = result.fortunes; // fortunes 배열을 할당
+      this.fortunes = result.fortunes
     } else {
-      console.error('운세 데이터가 올바르지 않습니다.');
+      console.error('운세 데이터가 올바르지 않습니다.')
     }
     } catch (error) {
-      console.error('운세 데이터를 불러오는 중 오류가 발생했습니다:', error);
+      console.error('운세 데이터를 불러오는 중 오류가 발생했습니다:', error)
     } finally {
-      this.loading = false;
+      this.loading = false
     }
   }
 
@@ -200,7 +200,11 @@ export default class ChatGPT extends Vue {
   }
 
   mounted() {
-    this.getFortune()
+    // this.getFortune()
+    const fortunesData = this.$route.params.fortunes
+    if (fortunesData) {
+      this.fortunes = JSON.parse(fortunesData) // 전달받은 데이터를 파싱하여 사용
+    }
   }
 
   // 최종 API response
@@ -237,12 +241,13 @@ export default class ChatGPT extends Vue {
 <style scoped>
 .fortune {
   margin-top: 20px;
+  padding: 0 20px;
 }
 
 .today {
   color: #9C9EA0;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 22px;
 }
 
@@ -267,6 +272,7 @@ export default class ChatGPT extends Vue {
   width: 120px;
   height: 120px;
 }
+
 
 .fortune-box {
   background-color: #212736;
@@ -349,7 +355,7 @@ export default class ChatGPT extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #4AFF81;
+  background-color: #61D59D;
 }
 
 .url {
@@ -376,5 +382,28 @@ export default class ChatGPT extends Vue {
   height: 5px;
   background-color: #D9D9D9;
   border-radius: 50%;
+}
+
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.loading > .box {
+  min-height: 150px;
+  background-color: #212736;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 12px;
+
+  opacity: 0;
+  transform: translateY(100%);
+  animation: slideUp 0.5s forwards;
 }
 </style>

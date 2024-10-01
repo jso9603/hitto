@@ -209,8 +209,8 @@ export default class Ai extends Vue {
   gap: 8px;
   margin-bottom: 15px;
   color: #ECEEF0;
-  font-weight: 500;
-  font-size: 16px;
+  font-weight: 400;
+  font-size: 15px;
   line-height: 22px;
   font-variant: common-ligatures tabular-nums;
 }
@@ -238,7 +238,7 @@ export default class Ai extends Vue {
 .floating > button {
   width: 100%;
   min-height: 52px;
-  background-color: #4AFF81;
+  background-color: #ECEEF0;
   padding: 8px 8px;
   border-radius: 24px;
   border-style: none;

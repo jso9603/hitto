@@ -49,7 +49,6 @@
         <div class="floating">
           <button class="none" @click="oneMore">재선택</button>
           <button :disabled="isLoading" class="primary" @click="onSelectedBall">
-            <img src="@/assets/ic-system-challenge.svg" />
             선택하기
           </button>
         </div>
@@ -360,6 +359,12 @@ export default class Random extends Vue {
     }, 3000)
   }
 
+  private handleBackButton(): void {
+    if (this.$route.path !== '/') {
+      this.$router.replace('/')
+    }
+  }
+
   created() {
     this.background = this.$store.state.menuName!.includes('꿈해몽') ? 'yellow-bg' : 'blue-bg'
     this.charater = this.$store.state.menuName!.includes('꿈해몽') ? 'img-stella-3d.png' : 'img-stefan-3d.png'
@@ -372,6 +377,10 @@ export default class Random extends Vue {
     window.addEventListener('orientationchange', this.setViewportHeight)
 
     this.setViewportHeight()
+
+    // 페이지 로드 시 히스토리 상태 추가 (페이지 이동 막기 위해 pushState 사용)
+    window.history.pushState(null, '', window.location.href)
+    window.addEventListener('popstate', this.handleBackButton)
 
     this.initCanvas()
     this.animateBalls()
@@ -706,7 +715,7 @@ export default class Random extends Vue {
 .floating > button {
   width: 100%;
   min-height: 54px;
-  background-color: #4AFF81;
+  background-color: #ECEEF0;
   padding: 8px 8px;
   border-radius: 100px;
   border-style: none;
@@ -725,8 +734,9 @@ export default class Random extends Vue {
 }
 
 .floating > button.none {
-  background-color: #fff;
-  color: #202223;
+  background-color: transparent;
+  border: 1px solid #414244;
+  color: #ECEEF0;
   font-size: 16px;
   font-weight: 700;
   line-height: 19px;

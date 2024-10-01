@@ -2,7 +2,9 @@
   <div class="container">
     <div class="contents">
       <h3>모두의 희망로또</h3>
-      <div class="description">모희또의 ai 통계기반 알고리즘을 통해<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
+      <div class="description">
+        행운은 도전하는 자의 것,<br/>지금 경제적 자유에 도전하세요!
+      </div>
 
       <div class="benefit" v-for="(benefit, index) in benefits" :key="index">
         <img :src="require(`@/assets/${benefit.icon}`)" />
@@ -19,7 +21,7 @@
 
       <div class="floating">
         <div class="participation">
-          {{ formattedCount }}명이 당첨 소감에 참여했어요
+          {{ formattedCount }}명이 로또에 당첨됐어요!
         </div>
 
         <button @click="kakaoLoginStart" class="kakao">
@@ -200,7 +202,7 @@ h3 {
   font-weight: 700;
   line-height: 30px;
   text-align: center;
-  color: #fff;
+  color: #ECEEF0;
 }
 
 .description {
@@ -220,7 +222,7 @@ h3 {
   gap: 12px;
   padding: 20px;
   border-radius: 16px;
-  background-color: #222222;
+  background-color: #1D2330;
 }
 
 .benefit > img {
@@ -301,7 +303,7 @@ h3 {
   justify-content: center;
   flex-direction: column;
   color: #fff;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 15px;
 }
 

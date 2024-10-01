@@ -1,32 +1,40 @@
 <template>
   <div class="home">
     <img class="main" src="@/assets/img-mohito.png" />
-    <div class="desc">ai 통계기반 알고리즘을 통해<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
+    <div class="desc">행운은 도전하는 자의 것,<br/>지금 경제적 자유에 도전하세요!</div>
 
     <div class="boxes">
-      <div class="box" @click="onClick('ai', 'AI 생성')">
-        <img src="@/assets/ic-ai.svg" alt="ai" />
-        <div class="text">GTP가 분석해주는<br/><span>AI 생성</span></div>
-      </div>
-      <div class="box" @click="onClick('dream', '꿈해몽 생성')">
-        <img src="@/assets/img-stella-2d.png" alt="dream" />
-        <div class="text">조상신이 점지해주는<br/><span>꿈해몽 생성</span></div>
+      <div
+        v-for="menu in menus"
+        :key="menu.title"
+        class="box"
+        @click="onStart(menu.title)"
+      >
+        <div class="title">{{ menu.title }}</div>
+        <div class="text">{{ menu.text }}</div>
+        <div
+          v-if="menu.badge"
+          class="badge"
+          :style="{ color: menu.badgeBg, backgroundColor: `${menu.badgeBg}14` }"
+        >
+          {{ menu.badge }}
+        </div>
+        <img :src="require(`@/assets/${menu.icon}`)" at="menu 이미지" />
       </div>
     </div>
-
     <div class="algorithm">
       <div class="light">
         <img src="@/assets/ic-system-star.png" />
       </div>
       <div class="title">스테판이 생성해주는<br/>정교한 알고리즘</div>
-      <div class="desc">ai 통계기반 알고리즘을 통해<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
+      <div class="desc">AI 통계기반 알고리즘을 통해<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
       <img src="@/assets/ic-system-intro-aicard.png" />
     </div>
 
     <div class="dream">
       <img class="cloud" src="@/assets/ic-system-cloud.png" />
       <div class="title">꿈자리를 통한<br/>이상적인 번호 조합</div>
-      <div class="desc">로또 1등 당첨자들이 가장 많이 꾼꿈을<br/>조합하여 이상적인 번호 생성을 도와드려요.</div>
+      <div class="desc">로또 1등 당첨자들이 가장 많이 꾼꿈을 조합하여<br/>이상적인 번호 생성을 도와드려요.</div>
       <img class="list" src="@/assets/ic-system-list.png" />
     </div>
 
@@ -50,12 +58,12 @@
       </div>
     </div>
 
-    <div class="floating">
+    <!-- <div class="floating">
       <div class="count__down">
         <div class="timer">당첨까지 남은 시간</div>
         {{ countdown }}
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -72,10 +80,52 @@ dayjs.extend(weekday)
 export default class Home extends Vue {
   countdown: string = ''
 
-  onClick(type: string, menu: string) {
-    this.$store.dispatch('updateMenuName', menu)
+  menus = [
+    {
+      title: 'AI 생성',
+      text: '통계기반 알고리즘',
+      icon: 'img-stefan-3d.png',
+      badge: '인기',
+      badgeBg: '#FF604F',
+    },
+    {
+      title: '수동 생성',
+      text: '나만의 번호 관리',
+      icon: 'img-custom-3d.png',
+    },
+    {
+      title: '꿈해몽 생성',
+      text: '조상님 알고리즘',
+      icon: 'img-stella-3d.png',
+    },
+    {
+      title: '오늘의 운세',
+      text: '매일매일 희망루틴',
+      icon: 'img-fortune-3d.png',
+      badge: '추천',
+      badgeBg: '#61D59D',
+    }   
+  ]
 
-    this.$router.push(`/${type}`)
+  onStart(menuTitle: string) {
+    this.$store.dispatch('updateMenuName', menuTitle)
+
+    switch(menuTitle) {
+      case 'AI 생성':
+        this.$router.push('/ai')
+        break
+      case '수동 생성':
+        this.$router.push('/manual')
+        break
+      case '꿈해몽 생성':
+        this.$router.push('/dream')
+        break
+      case '오늘의 운세':
+        this.$router.push('/today')
+        break
+      default:
+        break
+    }
   }
 
   mounted() {
@@ -208,13 +258,13 @@ export default class Home extends Vue {
 
 <style scoped>
 .home {
-  padding: 32px 20px;
+  padding: 20px;
   text-align: center;
 }
 
 .main {
-  width: 260px;
-  height: auto;
+  width: 230px;
+  height: 140px;
 }
 
 .timer {
@@ -231,10 +281,11 @@ export default class Home extends Vue {
   justify-content: center;
   flex-direction: column;
   gap: 4px;
-  background-color: #22222280;
-  border-radius: 20px;
-  padding: 20px;
-  color: #4AFF81;
+  background-color: #1D2330CC;
+  border-radius: 16px;
+  border: 1px solid #2e364b;
+  padding: 16px;
+  color: #61D59D;
   font-size: 18px;
   font-weight: 700;
   line-height: 22px;
@@ -245,11 +296,11 @@ export default class Home extends Vue {
 }
 
 .home > .desc {
-  margin-bottom: 40px;
-  color: #BABCBE;
-  font-size: 15px;
+  margin-bottom: 50px;
+  color: #9C9EA0;
+  font-size: 16px;
   font-weight: 400;
-  line-height: 23px;
+  line-height: 24px;
 }
 
 .boxes {
@@ -257,28 +308,53 @@ export default class Home extends Vue {
   display: grid;
   grid-template: repeat(1, 1fr) / repeat(2, 1fr);
   gap: 12px;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
 }
 
 .box {
-  padding: 30px 20px;
-  background-color: #222222;
+  position: relative;
+  min-height: 128px;
+  padding: 16px;
+  background-color: #1D2330;
   border-radius: 16px;
   cursor: pointer;
+  text-align: left;
 }
 
-.box  > img {
-  width: 38px;
-  height: 38px;
-  margin-bottom: 12px;
+.box > .title {
+  margin-bottom: 6px;
+  color: #ECEEF0;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 20px;
 }
 
-.text {
+.box > .text {
   color: #9C9EA0;
   font-size: 14px;
   font-weight: 400;
-  line-height: 22px;
+  line-height: 16px;
 }
+
+.box > .badge {
+  margin-top: 8px;
+  margin-bottom: 16px;
+  display: table;
+  padding: 4px 7px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 14px;
+}
+
+.box  > img {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+}
+
 .text > span {
   color: #fff;
   font-size: 16px;
@@ -308,15 +384,15 @@ export default class Home extends Vue {
   font-size: 26px;
   font-weight: 900;
   line-height: 36px;
-  color: #fff;
+  color: #ECEEF0;
 }
 
 .algorithm > .desc {
   margin-bottom: 40px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
-  line-height: 23px;
-  color: #BABCBE;
+  line-height: 24px;
+  color: #9C9EA0;
 }
 
 .algorithm > img {
@@ -335,7 +411,7 @@ export default class Home extends Vue {
 
 .dream > .title {
   margin-top: 12px;
-  color: #fff;
+  color: #ECEEF0;
   font-size: 26px;
   font-weight: 900;
   line-height: 36px;
@@ -343,10 +419,10 @@ export default class Home extends Vue {
 
 .dream > .desc {
   margin-top: 12px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
-  line-height: 23px;
-  color: #BABCBE;
+  line-height: 24px;
+  color: #9C9EA0;
 }
 
 .dream > .list {
@@ -356,8 +432,8 @@ export default class Home extends Vue {
 }
 
 .share {
-  margin-top: 70px;
-  margin-bottom: 166px;
+  margin-top: 40px;
+  margin-bottom: 90px;
 }
 
 .title {
@@ -399,7 +475,7 @@ export default class Home extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #4AFF81;
+  background-color: #61D59D;
 }
 
 .url {
@@ -435,11 +511,11 @@ export default class Home extends Vue {
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  max-width: calc(576px - 32px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
   backdrop-filter: blur(6px);
 }
 </style>

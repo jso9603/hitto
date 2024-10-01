@@ -1,18 +1,15 @@
 <template>
   <div class="my__number">
     <RoundPopup
-      :visible="isPopupVisible"
+      :visible="showRoundPopup"
       :round="week"
       :current="currentRound"
-      @close="isPopupVisible = false"
+      @close="$store.dispatch('updateRoundPopup', false)"
       @selected="onSelected"
     />
 
-    <div class="week" @click="onChangedRound">
+    <div class="week">
       {{currentRound}}회
-      <div class="selected">
-        <img src="@/assets/ic-arrow-down.svg" />
-      </div>
     </div>
 
     <div class="date">
@@ -46,17 +43,21 @@ import RoundPopup from '@/components/RoundPopup.vue'
 import LottoList from '@/components/LottoList.vue'
 import { User } from '../models/User'
 
+import { mapState } from 'vuex'
+
 @Component({
   components: {
     RoundPopup,
     LottoList,
+  },
+  computed: {
+    ...mapState(['showRoundPopup']),
   },
 })
 export default class MyNumber extends Vue {
   week =''
   currentRound = ''
   saturdayDate = ''
-  isPopupVisible = false
 
   user: User = {email: '', uid: ''}
 
@@ -65,15 +66,11 @@ export default class MyNumber extends Vue {
     return storedRound === this.currentRound
   }
 
-  onChangedRound() {
-    this.isPopupVisible = true
-  }
-
   onSelected(selectedRound: number) {
     this.currentRound = selectedRound.toString()
     this.saturdayDate = this.getSaturdayDate(+this.currentRound - 1)
 
-    this.isPopupVisible = false
+    this.$store.dispatch('updateRoundPopup', false)
   }
 
   getSaturdayDate(week: number) {
@@ -224,22 +221,6 @@ export default class MyNumber extends Vue {
   cursor: pointer;
 }
 
-.selected {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #333333;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.selected > img {
-  width: 18px;
-  height: 18px;
-}
-
 .date {
   margin-top: 8px;
   color: #9C9EA0;
@@ -267,7 +248,7 @@ export default class MyNumber extends Vue {
 .floating > button {
   width: 100%;
   min-height: 54px;
-  background-color: #4AFF81;
+  background-color: #ECEEF0;
   padding: 8px 8px;
   border-radius: 100px;
   border-style: none;

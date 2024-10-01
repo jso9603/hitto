@@ -23,11 +23,11 @@
     >
       <div class="form-header">
         <h3>P-{{ form.label.charCodeAt() - 64 }}</h3>
-        <button @click="resetForm(index)" class="reset" :disabled="form.selectedNumbers.length === 0">
+        <button @click="resetForm(index)" class="reset" :disabled="form.selectedNumbers.length === 0" :style="{marginRight: index === 0 ? '0px' : '8px' }">
           <!-- <img src="@/assets/ic-refresh.svg" /> -->
           초기화
         </button>
-        <button @click="removeForm(index)" class="remove" :disabled="index === 0">삭제</button>
+        <button v-if="index !== 0" @click="removeForm(index)" class="remove">삭제</button>
       </div>
       <!-- 여기에 번호 입력하는 영역 -->
       <div class="numbers">
@@ -123,6 +123,11 @@ export default class Manual extends Vue {
 
   selectNumber(formIndex: number, number: number) {
     const selectedNumbers = this.forms[formIndex].selectedNumbers
+
+    if (selectedNumbers.length > 5) {
+      alert('최대 6개까지만 선택가능합니다.')
+      return
+    }
 
     if (!selectedNumbers.includes(number)) {
       selectedNumbers.push(number)
@@ -282,13 +287,17 @@ export default class Manual extends Vue {
 </script>
 
 <style scoped>
+.form-container {
+  padding: 0 20px;
+}
+
 .week {
   margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 600;
   line-height: 32px;
   text-align: center;
@@ -297,12 +306,12 @@ export default class Manual extends Vue {
 }
 
 .date {
-  margin-top: 8px;
+  margin-top: 4px;
   margin-bottom: 24px;
   color: #9C9EA0;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
-  line-height: 23px;
+  line-height: 24px;
   text-align: center;
 }
 
@@ -438,11 +447,11 @@ h3::before {
 .floating > button {
   width: 100%;
   min-height: 54px;
-  background-color: #4AFF81;
+  background-color: #ECEEF0;
   padding: 8px 8px;
   border-radius: 100px;
   border-style: none;
-  color: #202223;
+  color: #181D23;
   font-size: 16px;
   font-weight: 700;
   line-height: 19px;

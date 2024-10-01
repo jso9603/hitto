@@ -20,6 +20,7 @@ import NotFound from '@/views/NotFound.vue'
 import Manual from '@/views/Manual.vue'
 import ChatGPT from '@/views/chatGPT.vue'
 import TodayFortune from '@/views/TodayFortune.vue'
+import FortuneLoading from '@/views/FortuneLoading.vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -130,6 +131,11 @@ const routes = [
     name: '/today',
     component: TodayFortune,
   },
+  {
+    path: '/loading',
+    name: '/loading',
+    component: FortuneLoading,
+  }
 ];
 
 const router = new Router({

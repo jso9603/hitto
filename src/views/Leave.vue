@@ -200,8 +200,8 @@ img {
 
 .floating > .participation {
   margin-bottom: 15px;
+  font-weight: 400;
   font-size: 15px;
-  font-weight: 500;
   line-height: 22px;
   text-align: center;
   color: #fff;

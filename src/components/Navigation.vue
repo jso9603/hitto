@@ -4,10 +4,6 @@
       <img :src="homeIcon" alt="Home" class="nav-icon">
       <p :class="{ active: isHomeActive }">홈</p>
     </div>
-    <div class="nav-item" @click="onTab('challenge')">
-      <img :src="benefitsIcon" alt="Benefits" class="nav-icon">
-      <p :class="{ active: isBenefitsActive }">챌린지</p>
-    </div>
     <div class="nav-item" @click="onTab('more')">
       <img :src="moreIcon" alt="More" class="nav-icon">
       <p :class="{ active: isMoreActive }">더 보기</p>
@@ -26,12 +22,6 @@ export default class Navigation extends Vue {
       : require('@/assets/img-home-disable.svg')
   }
 
-  get benefitsIcon() {
-    return this.$route.path === '/guess'
-      ? require('@/assets/img-game-enable.svg')
-      : require('@/assets/img-game-disable.svg')
-  }
-
   get moreIcon() {
     return this.$route.path === '/my'
       ? require('@/assets/img-all-enable.svg')
@@ -42,10 +32,6 @@ export default class Navigation extends Vue {
     return this.$route.path === '/' || this.$route.path === '/home'
   }
 
-  get isBenefitsActive() {
-    return this.$route.path === '/guess'
-  }
-
   get isMoreActive() {
     return this.$route.path === '/my'
   }
@@ -54,10 +40,6 @@ export default class Navigation extends Vue {
     switch(tab) {
       case 'home':
         this.$router.push('/')
-        break
-      case 'challenge':
-        this.$store.dispatch('updateMenuName', '로또 맞추기')
-        this.$router.push('/guess')
         break
       case 'more':
         this.$router.push('/my')
@@ -83,10 +65,10 @@ export default class Navigation extends Vue {
   max-width: 576px; /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   width: 100%;
   height: 64px;
-  background-color: #171717F5;
+  background-color: #1d2330;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-  border: 1px solid #414244;
+  border: 1px solid #272e40;
   border-left: none;
   border-right: none;
   border-bottom: none;

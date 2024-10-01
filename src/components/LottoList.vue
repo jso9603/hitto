@@ -269,7 +269,7 @@ export default class LottoList extends Vue {
 .tab-container {
   margin: 24px auto 12px;
   padding: 4px;
-  background-color: #222222;
+  background-color: #212736;
   border-radius: 100px;
   height: 42px;
 }
@@ -287,7 +287,7 @@ export default class LottoList extends Vue {
   padding: 12px 0;
   border-radius: 100px;
   font-size: 14px;
-  color: #737577;
+  color: #FFFFFF66;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
@@ -301,14 +301,14 @@ export default class LottoList extends Vue {
   bottom: 0;
   left: 0;
   width: 50%; /* 탭 인디케이터 너비는 두 개의 탭에 맞춰 50%로 설정 */
-  background-color: #ECEEF0;
+  background-color: #FFFFFF;
   border-radius: 100px;
   transition: transform 0.3s ease; /* 슬라이드 트랜지션 */
   z-index: 0; /* 텍스트 뒤에 배경 인디케이터를 배치 */
 }
 
 .tab-item.active {
-  color: #202223;
+  color: #242A3B;
   font-size: 16px;
   font-weight: 700;
   line-height: 18px;
@@ -334,7 +334,7 @@ export default class LottoList extends Vue {
 }
 
 .box {
-  background-color: #222222;
+  background-color: #1D2330;
   padding: 16px;
   border-radius: 16px;
 }
@@ -360,7 +360,7 @@ export default class LottoList extends Vue {
 }
 
 ::v-deep .draw > span {
-  color: #4AFF81;
+  color: #61D59D;
 }
 
 .date {
@@ -494,11 +494,11 @@ export default class LottoList extends Vue {
   padding: 10px 14px 10px 14px;
   border-radius: 100px;
   border: 1px solid #222222;
-  background-color: #333333;
+  background-color: #1A1F2B;
   color: #ECEEF0;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
-  line-height: 16px;
+  line-height: 22px;
 }
 
 @keyframes bounce {

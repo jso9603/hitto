@@ -6,7 +6,9 @@
       <button class="share" @click="onShare">공유</button>
     </template>
 
-    <template v-else-if="$route.path === '/ai' || $route.path === '/dream' || $route.path === '/category' || $route.path === '/random'">
+    <template
+      v-else-if="$route.path === '/ai' || $route.path === '/dream' || $route.path === '/category' || $route.path === '/random' || $route.path === '/manual' || $route.path === '/today' || $route.path === '/chatGPT' || $route.path === '/loading'"
+    >
       <button @click="goBack" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
@@ -40,11 +42,11 @@
     </template>
 
     <template v-else-if="$route.path === '/my/number' && ($route.query.tab === 'automatic' || $route.query.tab === 'manual')">
-      <div class="empty"></div>
-      <div class="menu">나의 로또번호</div>
-      <button @click="goClose" class="close">
-        <img src="@/assets/ic-system-close-img.svg" />
+      <button @click="goClose" class="back">
+        <img src="@/assets/ic-system-back-img.svg" />
       </button>
+      <div class="menu">나의 로또번호</div>
+      <button class="share" @click="onSelectedRound">회차</button>
     </template>
 
     <template v-else-if="$route.path === '/my/number'">
@@ -52,7 +54,7 @@
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
       <div class="menu">나의 로또번호</div>
-      <div class="empty"></div>
+      <button class="share" @click="onSelectedRound">회차</button>
     </template>
 
     <template v-else-if="$route.path === '/my/setting'">
@@ -211,6 +213,11 @@ export default class Header extends Vue {
   onSetting() {
     this.$router.push('/my/setting');
   }
+
+  onSelectedRound() {
+    console.log('eeee')
+    this.$store.dispatch('updateRoundPopup', true)
+  }
 }
 </script>
 
@@ -243,7 +250,7 @@ export default class Header extends Vue {
 
 .header.scrolled {
   /* 블러효과 (https://www.zappy.ai/kr 참고) */
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(10px);
   /* background-color: rgba(23, 23, 23, 0.5); */
 }
 
@@ -301,14 +308,14 @@ img.qr {
 
 .share,
 .use {
-  padding: 7px 13px;
+  padding: 5px 13px;
   border-radius: 100px;
   border: none;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 500;
   line-height: 24px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background-color: #2E364B;
+  color: #ECEEF0;
   cursor: pointer;
 }
 
