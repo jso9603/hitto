@@ -1,65 +1,70 @@
 <template>
   <transition name="popup-fade">
+    
     <div v-if="visible" class="popup-overlay">
-      <div class="popup-content">
-        <button @click="goBackRandom" class="close">
-          <img src="@/assets/ic-system-close-img.svg" />
+      <div @click="goBackRandom" class="close">
+        <img src="@/assets/ic-system-close-img.svg" />
+      </div>
+      <div class="popup-overlay-content">
+        <div class="popup-content">
+          <div class="bar" />
+
+          <div v-for="(message, index) in texts" :key="index" class="text" :style="{ animationDelay: `${index * 0.2}s` }">
+            {{ message }}
+          </div>
+
+          <div class="tab-container">
+            <div class="tab">
+              <div :class="['tab-item', { active: activeTab === 'select' }]" @click="setActiveTab('select')">소망 선택</div>
+              <div :class="['tab-item', { active: activeTab === 'input' }]" @click="setActiveTab('input')">직접입력</div>
+              <div class="tab-indicator" :style="indicatorStyle"></div>
+            </div>
+          </div>
+          <div class="tab-content">
+            <div v-if="activeTab === 'select'">
+              <div
+                v-for="(option, index) in selectOptions"
+                :key="index"
+                :class="['option-item', { active: selectedIndex === index }]"
+                @click="selected(index)"
+              >
+                <span class="icon">{{ option.icon }}</span>
+                <span class="tab-text">{{ option.text }}</span>
+              </div>
+            </div>
+            <div v-if="activeTab === 'input'" class="textarea-box">
+              <textarea
+                ref="myTextarea"
+                class="custom-textarea"
+                v-model="impression"
+                @input="handleInput"
+              />
+              <div class="placeholder" @click="onPlaceholder" v-if="!impression">{{ placeholderText }}</div>
+              <div class="textarea-footer">
+                <span class="current">{{ impression.length }}<span class="max"> / 300</span></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div v-if="activeTab !== 'select'" :class="['floating', { select: activeTab === 'select' }]">
+            <button
+              class="primary"
+              :disabled="isLoading || impression.length < 1"
+              @click="onLogin"
+            > 
+              입력 완료
+            </button>
+          </div> -->
+        </div>
+      </div>
+      <div v-if="activeTab !== 'select'" :class="['floating', { select: activeTab === 'select' }]">
+        <button
+          class="primary"
+          :disabled="isLoading || impression.length < 1"
+          @click="onLogin"
+        > 
+          입력 완료
         </button>
-        <div :class="['img-bg', background]">
-          <img :src="require(`@/assets/${charater}`)" at="character 이미지" />
-        </div>
-
-        <div v-for="(message, index) in texts" :key="index" class="text" :style="{ animationDelay: `${index * 0.2}s` }">
-          {{ message }}
-        </div>
-
-        <div class="tab-container">
-          <div class="tab">
-            <div :class="['tab-item', { active: activeTab === 'select' }]" @click="setActiveTab('select')">소망 선택</div>
-            <div :class="['tab-item', { active: activeTab === 'input' }]" @click="setActiveTab('input')">직접입력</div>
-            <div class="tab-indicator" :style="indicatorStyle"></div>
-          </div>
-        </div>
-        <div class="tab-content">
-          <div v-if="activeTab === 'select'">
-            <div
-              v-for="(option, index) in selectOptions"
-              :key="index"
-              :class="['option-item', { active: selectedIndex === index }]"
-              @click="selected(index)"
-            >
-              <span class="icon">{{ option.icon }}</span>
-              <span class="tab-text">{{ option.text }}</span>
-            </div>
-          </div>
-          <div v-if="activeTab === 'input'" class="textarea-box">
-            <textarea
-              ref="myTextarea"
-              class="custom-textarea"
-              v-model="impression"
-              @input="handleInput"
-            />
-            <div class="placeholder" @click="onPlaceholder" v-if="!impression">{{ placeholderText }}</div>
-            <div class="textarea-footer">
-              <span class="current">{{ impression.length }}<span class="max"> / 300</span></span>
-            </div>
-          </div>
-        </div>
-
-        <div :class="['floating', { select: activeTab === 'select' }]">
-          <button
-            class="primary"
-            :disabled="isLoading || activeTab === 'select' ? selectedIndex === null : impression.length < 1"
-            @click="onLogin"
-          >
-            <template v-if="activeTab === 'select'">
-              <img :src="selectedIndex !== null ? require('@/assets/ic-system-challenge.svg') : require('@/assets/ic-system-challenge-off.svg')" />
-            </template>
-            
-            {{activeTab === 'select' ? '선택하기' : '입력 완료'}}
-          </button>
-          <button v-if="activeTab === 'select'" class="none" :disabled="isLoading" @click="onItsOk">넘어가기</button>
-        </div>
       </div>
     </div>
   </transition>
@@ -106,7 +111,6 @@ export default class SelectHopePopup extends Vue {
   isPopupVisible = false
 
   charater = ''
-  background = ''
 
   private selectOptions: SelectOption[] = [
     { icon: '✨', text: '포르쉐 파나메라 사게해주세요' },
@@ -137,6 +141,7 @@ export default class SelectHopePopup extends Vue {
 
   private selected(index: number) {
     this.selectedIndex = index
+    this.onLogin()
   }
 
   private handleInput(event: Event) {
@@ -331,7 +336,6 @@ export default class SelectHopePopup extends Vue {
 
   // redirect (login)
   created() {
-    this.background = this.$store.state.menuName!.includes('꿈해몽') ? 'yellow-bg' : 'blue-bg'
     this.charater = this.$store.state.menuName!.includes('꿈해몽') ? 'img-stella-3d.png' : 'img-stefan-3d.png'
 
     if (sessionStorage.getItem('hope') && sessionStorage.getItem('lottoNumbers')) {
@@ -365,22 +369,52 @@ export default class SelectHopePopup extends Vue {
   left: 0;
   width: 100%;
   height: calc(100% - 74px);
-  background: #242A3B;
   z-index: 10;
+  overflow-y: auto;
+}
+
+.popup-overlay-content {
+  background: #242A3B;
   border-top-left-radius: 32px;
   border-top-right-radius: 32px;
   overflow-y: auto;
+  min-height: 100%;
+}
+
+.close {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  background-color: transparent;
+  border: none;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  background-color: #2E364B;
+  border-radius: 50%;
 }
 
 .popup-content {
   position: relative;
   padding: 20px;
-  border-radius: 8px;
+  max-width: calc(576px - 40px);
+  margin: 0 auto;
+  /* border-radius: 8px; */
   /* transform: translateY(100%); */
   transform: translateY(0%);
   opacity: 1;
   transition: transform 0.5s ease-out, opacity 0.5s ease-out;
   z-index: 999;
+}
+
+.bar {
+  margin: -4px auto 24px;
+  width: 50px;
+  height: 5px;
+  gap: 0px;
+  border-radius: 100px;
+  background-color: #2E364B;
 }
 
 .popup-fade-enter-active,
@@ -398,19 +432,6 @@ export default class SelectHopePopup extends Vue {
   opacity: 1;
   transform: translateY(20px);
   visibility: visible;
-}
-
-.close {
-  display: contents;
-  background-color: transparent;
-  border: none;
-  width: 24px;
-  height: auto;
-  cursor: pointer;
-}
-
-.close > img {
-  float: right;
 }
 
 @keyframes slideUp3 {
@@ -468,42 +489,10 @@ export default class SelectHopePopup extends Vue {
   animation-delay: 0.3s;
 }
 
-.img-bg {
-  margin-top: 24px;
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 50%;
-  margin-bottom: 16px;
-  opacity: 0;
-  transform: translateY(50%);
-  animation: slideUp2 1s forwards;
-}
-
-.img-bg.yellow-bg {
-  background-color: #FCD53F;
-}
-
-.img-bg.blue-bg {
-  background-color: #0085FF;
-}
-
-.img-bg > img {
-  width: 42px;
-  height: 42px;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .tab-container {
   margin-top: 32px;
   padding: 4px;
-  background-color: #1C2029;
+  background-color: #212736;
   border-radius: 100px;
   height: 42px;
 
@@ -525,7 +514,7 @@ export default class SelectHopePopup extends Vue {
   padding: 12px 0;
   border-radius: 100px;
   font-size: 14px;
-  color: #737577;
+  color: #9C9EA0;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
@@ -648,7 +637,7 @@ export default class SelectHopePopup extends Vue {
   margin-right: auto;
   max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
-  background: linear-gradient(180deg, rgba(19, 23, 32, 0) 0%, #131720 15.46%, #131720 82.53%);
+  background: #242A3B;
 }
 
 .floating.select {

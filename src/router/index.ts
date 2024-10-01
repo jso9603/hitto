@@ -19,6 +19,7 @@ import Test from '@/views/Test.vue'
 import NotFound from '@/views/NotFound.vue'
 import Manual from '@/views/Manual.vue'
 import ChatGPT from '@/views/chatGPT.vue'
+import TodayFortune from '@/views/TodayFortune.vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -123,6 +124,11 @@ const routes = [
     path: '/chatGPT',
     name: '/chatGPT',
     component: ChatGPT,
+  },
+  {
+    path: '/today',
+    name: '/today',
+    component: TodayFortune,
   },
 ];
 

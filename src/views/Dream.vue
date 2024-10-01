@@ -132,19 +132,19 @@ export default class Dream extends Vue {
   position: absolute;
   top: calc(50% - 178px);
   
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #FCD53F;
   border-radius: 50%;
-  margin-bottom: 16åpx;
+  margin-bottom: 16px;
 }
 
 .dream > .img-bg > img {
-  width: 42px;
-  height: 42px;
+  width: 50px;
+  height: 50px;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
@@ -160,7 +160,7 @@ export default class Dream extends Vue {
   text-align: center;
 
   position: absolute;
-  top: calc(50% - 100px); /* 텍스트의 높이 294px의 절반인 147px을 보정 */
+  top: calc(50% - 90px); /* 텍스트의 높이 294px의 절반인 147px을 보정 */
   white-space: pre-wrap;
 }
 

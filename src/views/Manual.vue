@@ -8,15 +8,26 @@
       @save="saveData"
     />
 
+    <div class="week">
+      {{currentRound}}회
+    </div>
+
+    <div class="date">
+      {{getFormattedDate(saturdayDate)}} 추첨
+    </div>
+
     <div
       v-for="(form, index) in forms"
       :key="index"
       class="form-box"
     >
       <div class="form-header">
-        <h3>Play {{ form.label }}= {{ form.selectedNumbers.length === 0 }}</h3>
-        <button @click="resetForm(index)" :disabled="form.selectedNumbers.length === 0">초기화</button>
-        <button @click="removeForm(index)" :disabled="index === 0">삭제</button>
+        <h3>P-{{ form.label.charCodeAt() - 64 }}</h3>
+        <button @click="resetForm(index)" class="reset" :disabled="form.selectedNumbers.length === 0">
+          <!-- <img src="@/assets/ic-refresh.svg" /> -->
+          초기화
+        </button>
+        <button @click="removeForm(index)" class="remove" :disabled="index === 0">삭제</button>
       </div>
       <!-- 여기에 번호 입력하는 영역 -->
       <div class="numbers">
@@ -25,7 +36,10 @@
           :key="numberIndex"
           class="number-circle"
           @click="selectNumber(index, number)"
-          :class="{ selected: form.selectedNumbers.includes(number) }"
+          :class="[
+            form.selectedNumbers.includes(number) ? 'selected' : '', 
+            getNumberClass(number)
+          ]"
         >
           {{ number }}
         </div>
@@ -34,7 +48,7 @@
 
     <!-- 추가하기 버튼은 5개 이하일 때만 활성화 -->
     <!-- TODO: 나중에 5개 이상 버튼 추가하기 누르면 광고 -->
-    <button @click="addForm" v-if="forms.length < 5">추가하기</button>
+    <button class="add" @click="addForm" v-if="forms.length < 5">추가하기</button>
 
     <div class="floating">
       <button class="primary" @click="onSave">
@@ -68,12 +82,24 @@ interface Form {
   },
 })
 export default class Manual extends Vue {
+  week =''
+  currentRound = ''
+  saturdayDate = ''
   isPopupVisible = false
   forms: Form[] = [
     { label: 'A', numbers: this.generateNumbers(), selectedNumbers: [] },
   ]
 
   user: User = {uid: '', email: ''}
+
+  get isRoundMatched() {
+    const storedRound = sessionStorage.getItem('round')
+    return storedRound === this.currentRound
+  }
+
+  getFormattedDate(dateString: string) {
+    return dayjs(dateString).format('YYYY년 M월 D일')
+  }
 
   // 1부터 45까지의 숫자를 생성하는 메서드
   generateNumbers(): number[] {
@@ -127,6 +153,12 @@ export default class Manual extends Vue {
       // user 정보가 있으면 넘겨주기
       this.isPopupVisible = true
     }
+  }
+
+  getSaturdayDate(week: number) {
+    const t1 = dayjs('2002-12-07')
+    const saturday = t1.add(week, 'week') // 해당 회차의 토요일 날짜 계산
+    return saturday.format('YYYY-MM-DD')
   }
 
   getLottoWeek(t2: Dayjs) {
@@ -220,7 +252,26 @@ export default class Manual extends Vue {
     }
   }
 
+  getNumberClass(number: number) {
+    if (number >= 1 && number <= 10) {
+      return 'yellow';
+    } else if (number >= 11 && number <= 20) {
+      return 'blue';
+    } else if (number >= 21 && number <= 30) {
+      return 'red';
+    } else if (number >= 31 && number <= 40) {
+      return 'gray';
+    } else if (number >= 41 && number <= 45) {
+      return 'green';
+    }
+    return '';
+  }
+
   mounted() {
+    this.week = (this.getLottoWeek(dayjs())).toString()
+    this.currentRound = this.week
+    this.saturdayDate = this.getSaturdayDate(+this.currentRound - 1)
+
     const user = getLoggedUserInfo()
 
     if (user) {
@@ -231,15 +282,35 @@ export default class Manual extends Vue {
 </script>
 
 <style scoped>
-.form-container {
-  margin-top: 16px;
+.week {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 32px;
+  text-align: center;
+  color: #ECEEF0;
+  cursor: pointer;
+}
+
+.date {
+  margin-top: 8px;
+  margin-bottom: 24px;
+  color: #9C9EA0;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 23px;
+  text-align: center;
 }
 
 .form-box {
-  background-color: #222;
-  padding: 16px;
+  background-color: #212736;
+  padding: 24px 20px;
   margin-bottom: 12px;
-  border-radius: 8px;
+  border-radius: 16px;
 }
 
 .form-header {
@@ -249,28 +320,106 @@ export default class Manual extends Vue {
   color: #FFF;
 }
 
-.numbers {
+.reset {
+  margin-left: auto;
+  margin-right: 8px;
+}
+
+.reset,
+.remove {
+  background-color: #2A3246;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -0.5px;
+  color: #BABCBE;
+  border: none;
+  padding: 8px;
+}
+
+h3 {
+  margin: 0;
   display: flex;
+  align-items: center;
+}
+
+h3::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 6px;
+  background-color: #4AFF81;
+  border-radius: 50%;
+}
+
+.numbers {
+  /* display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: wrap; */
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  padding: 16px 0;
+  border-radius: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
 }
 
 .number-circle {
   width: 32px;
   height: 32px;
+  margin: auto;
   border-radius: 50%;
-  border: 1px solid #414244;
-  color: #fff;
+  color: #BABCBE;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  margin-bottom: 8px;
+  box-sizing: border-box;
+  text-align: center;
 }
 
-.number-circle.selected {
-  background-color: #0085FF;
-  border-color: #0085FF;
+.selected.yellow {
+  border: 1px solid #FFBD00;
+  color: #FFBD00;
+}
+
+.selected.blue {
+  border: 1px solid #0085FF;
+  color: #0085FF;
+}
+
+.selected.red {
+  border: 1px solid #E64D3D;
+  color: #E64D3D;
+}
+
+.selected.gray {
+  border: 1px solid #9C9EA0;
+  color: #9C9EA0;
+}
+
+.selected.green {
+  border: 1px solid #33C759;
+  color: #33C759
+}
+
+.add {
+  width: 100%;
+  min-height: 54px;
+  background-color: #212736;
+  padding: 8px 8px;
+  border-radius: 16px;
+  border-style: none;
+  color: #ECEEF0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 19px;
+  cursor: pointer;
+  margin-bottom: 114px;
 }
 
 .floating {
@@ -282,7 +431,7 @@ export default class Manual extends Vue {
   margin-right: auto;
   max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
-  background: linear-gradient(180deg, rgba(23, 23, 23, 0) 0%, #171717 15.46%, #171717 82.53%);
+  background: linear-gradient(180deg, rgba(19, 23, 32, 0) 0%, #131720 15.46%, #131720 82.53%);
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 
