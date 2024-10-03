@@ -8,13 +8,8 @@
       @save="saveData"
     />
 
-    <div class="week">
-      {{currentRound}}회
-    </div>
-
-    <div class="date">
-      {{getFormattedDate(saturdayDate)}} 추첨
-    </div>
+    <div class="week">{{currentRound}}회</div>
+    <div class="date">{{getFormattedDate(saturdayDate)}} 추첨</div>
 
     <div
       v-for="(form, index) in forms"
@@ -23,8 +18,12 @@
     >
       <div class="form-header">
         <h3>P-{{ form.label.charCodeAt() - 64 }}</h3>
-        <button @click="resetForm(index)" class="reset" :disabled="form.selectedNumbers.length === 0" :style="{marginRight: index === 0 ? '0px' : '8px' }">
-          <!-- <img src="@/assets/ic-refresh.svg" /> -->
+        <button
+          @click="resetForm(index)"
+          class="reset"
+          :disabled="form.selectedNumbers.length === 0"
+          :style="{marginRight: index === 0 ? '0px' : '8px' }"
+        >
           초기화
         </button>
         <button v-if="index !== 0" @click="removeForm(index)" class="remove">삭제</button>
@@ -46,9 +45,10 @@
       </div>
     </div>
 
-    <!-- 추가하기 버튼은 5개 이하일 때만 활성화 -->
     <!-- TODO: 나중에 5개 이상 버튼 추가하기 누르면 광고 -->
-    <button class="add" @click="addForm" v-if="forms.length < 5">추가하기</button>
+    <button class="add" @click="addForm" v-if="forms.length < 5">
+      <img src="@/assets/ic-system-plus.svg" />
+    </button>
 
     <div class="floating">
       <button class="primary" @click="onSave">
@@ -145,10 +145,10 @@ export default class Manual extends Vue {
       const selectedCount = form.selectedNumbers.length
 
       if (selectedCount < 6) {
-        alert(`Play ${form.label}에서 ${6 - selectedCount}개의 숫자를 더 선택해야 합니다.`)
+        alert(`P-${form.label.charCodeAt(0) - 64}에서 ${6 - selectedCount}개의 숫자를 더 선택해야 합니다.`)
         allValid = false
       } else if (selectedCount > 6) {
-        alert(`Play ${form.label}에서 ${selectedCount - 6}개의 숫자를 덜 선택해야 합니다.`)
+        alert(`P-${form.label.charCodeAt(0) - 64}에서 ${selectedCount - 6}개의 숫자를 덜 선택해야 합니다.`)
         allValid = false
       }
     })
@@ -289,6 +289,9 @@ export default class Manual extends Vue {
 <style scoped>
 .form-container {
   padding: 0 20px;
+
+  scroll-snap-type: y mandatory;
+  overflow-y: auto;
 }
 
 .week {
@@ -320,6 +323,8 @@ export default class Manual extends Vue {
   padding: 24px 20px;
   margin-bottom: 12px;
   border-radius: 16px;
+  scroll-snap-align: start;
+  height: 400px;
 }
 
 .form-header {

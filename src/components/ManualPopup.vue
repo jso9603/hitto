@@ -7,24 +7,12 @@
         <p>카카오로 시작하면 번호를 저장하고 관리할 수 있어요!</p>
       </div>
       <div class="lotto-numbers">
-        <!-- <div class="lotto-numbers">
-          <div class="label">생성 번호</div>
-          <div class="numbers">
-            <div
-              v-for="(num, index) in numbers"
-              :key="index"
-              :class="['number-circle', getNumberClass(num)]"
-            >
-              {{ num }}
-            </div>
-          </div>
-        </div> -->
         <div
           v-for="(form, index) in forms"
           :key="index"
           class="form-row"
         >
-          <div class="label">{{ form.label }}</div>
+          <div class="label">P-{{ form.label.charCodeAt() - 64 }}</div>
           <div class="numbers">
             <div
               v-for="(number, numberIndex) in sortedSelectedNumbers(form.selectedNumbers)"
@@ -216,6 +204,8 @@ export default class ManualPopup extends Vue {
 }
 
 .lotto-numbers .label {
+  display: flex;
+  align-items: center;
   font-size: 16px;
   font-weight: 400;
   line-height: 20px;
@@ -304,8 +294,8 @@ export default class ManualPopup extends Vue {
 }
 
 .save-btn {
-  background-color: #4AFF81;
-  color: #181D23;
+  background-color: #61D59D;
+  color: #202223;
   border: none;
   width: 100%;
   padding: 15px;
