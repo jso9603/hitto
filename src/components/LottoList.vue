@@ -274,7 +274,13 @@ export default class LottoList extends Vue {
   }
 
   onOneMoreNumber() {
-    this.$router.push('/ai')
+    if (this.activeTab === 'automatic') {
+      this.$store.dispatch('updateMenuName', 'AI 생성')
+      this.$router.push('/ai')
+    } else {
+      this.$store.dispatch('updateMenuName', '수동 생성')
+      this.$router.push('/manual')
+    }
   }
 }
 </script>
@@ -365,6 +371,7 @@ export default class LottoList extends Vue {
   flex-direction: column;
   /* 안의 콘텐츠 height 빼기 */
   height: calc(100% - 32px);
+  cursor: pointer;
 }
 
 .create-number-text {
