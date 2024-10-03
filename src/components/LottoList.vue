@@ -9,11 +9,8 @@
     </div>
   
     <div v-if="loading">
-      <div class="waitinging">
-        <div class="bg-img bounce-animation">
-          <img src="@/assets/ic-stefan-2d.svg"/>
-        </div>
-        <div class="waiting">잠시만 기달려주세요</div>
+      <div class="loading-spinner">
+        <img src="@/assets/ic-progress.svg" />
       </div>
     </div>
     <div v-else>
@@ -46,15 +43,32 @@
             <button class="open-card">열기</button>
           </div>
         </div>
+
+        <div class="lotto-result" v-if="isRoundMatched">
+          <div class="box create-number-box" @click="onOneMoreNumber">
+            <img src="@/assets/ic-system-plus.svg" />
+            <div class="create-number-text">번호 생성</div>
+          </div>
+        </div>
+
       </div>
       <div v-else>
-        <div class="no-data">
-          <div class="bg-img">
-            <img src="@/assets/ic-stefan-2d.svg" />
+        <template v-if="isRoundMatched">
+          <div class="lotto-result" v-if="isRoundMatched">
+          <div class="box create-number-box" @click="onOneMoreNumber">
+            <img src="@/assets/ic-system-plus.svg" />
+            <div class="create-number-text">번호 생성</div>
           </div>
-          <div class="no-data-title">생성이력이 없어요</div>
-          <div class="no-data-text">행운은 도전하는 자에게 찾아옵니다<br/>경제적 자유로 가는 첫 걸음, 모히또</div>
         </div>
+        </template>
+        <template v-else>
+          <div class="no-data">
+            <img src="@/assets/img-stefan.svg" />
+            <div class="no-data-title">생성이력이 없어요</div>
+            <div class="no-data-text">행운은 도전하는 자에게 찾아옵니다<br/>경제적 자유로 가는 첫 걸음, 모히또</div>
+          </div>
+        </template>
+        
       </div>
     </div>
   </div>
@@ -237,18 +251,18 @@ export default class LottoList extends Vue {
   }
 
   getResultClass(lottoData: LottoData) {
-  const userNumbers = lottoData.numbers.flatMap((num: any) => num.split(',').map((n: any) => Number(n.trim())))
+    const userNumbers = lottoData.numbers.flatMap((num: any) => num.split(',').map((n: any) => Number(n.trim())))
 
-  if (lottoData.winningNumbers === undefined) {
-    return ''
+    if (lottoData.winningNumbers === undefined) {
+      return ''
+    }
+
+    const winningNumbers = lottoData.winningNumbers.slice(0, 6)
+    const matchCount = userNumbers.filter((num: any) => winningNumbers.includes(num)).length
+
+    let rank = matchCount >= 3 ? 'bordered' : ''
+    return rank
   }
-
-  const winningNumbers = lottoData.winningNumbers.slice(0, 6)
-  const matchCount = userNumbers.filter((num: any) => winningNumbers.includes(num)).length
-
-  let rank = matchCount >= 3 ? 'bordered' : ''
-  return rank
-}
 
   getNumberClass(num: number) {
     if (num >= 1 && num <= 10) return 'yellow'
@@ -257,6 +271,10 @@ export default class LottoList extends Vue {
     if (num >= 31 && num <= 40) return 'gray'
     if (num >= 41 && num <= 45) return 'green'
     return ''
+  }
+
+  onOneMoreNumber() {
+    this.$router.push('/ai')
   }
 }
 </script>
@@ -329,10 +347,6 @@ export default class LottoList extends Vue {
   color: #9C9EA0;
 }
 
-.lotto-result:last-child {
-  margin-bottom: 114px;
-}
-
 .box {
   background-color: #1D2330;
   padding: 16px;
@@ -341,6 +355,24 @@ export default class LottoList extends Vue {
 
 .box.bordered {
   border: 1px solid #5F6163;
+}
+
+.box.create-number-box {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  /* 안의 콘텐츠 height 빼기 */
+  height: calc(100% - 32px);
+}
+
+.create-number-text {
+  margin-top: 8px;
+  color: #ECEEF0;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 18px;
 }
 
 .before-the-draw {
@@ -409,38 +441,27 @@ export default class LottoList extends Vue {
 
 .no-data {
   text-align: center;
-  margin: 72px 0;
+  margin: 60px 0;
 }
 
-.bg-img {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
+
+.no-data > img {
   width: 48px;
   height: 48px;
-  border-radius: 50%;
-  background-color: #0085FF;
-}
-
-.bg-img > img {
-  width: 32px;
-  height: 32px;
 }
 
 .no-data > .no-data-title {
   margin-top: 16px;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 24px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
   text-align: center;
   color: #FFF;
 }
 
 .no-data > .no-data-text {
   margin-top: 12px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 23px;
   text-align: center;
@@ -511,6 +532,29 @@ export default class LottoList extends Vue {
   60% {
     transform: translateY(-7.5px);
   }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner {
+  margin-top: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+}
+
+.loading-spinner > img {
+  width: 20px; /* 필요에 따라 크기 조정 */
+  height: 20px;
+  animation: rotate 1s linear infinite; /* 회전 애니메이션 */
 }
 
 .waitinging {

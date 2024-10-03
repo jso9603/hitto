@@ -110,11 +110,11 @@ body {
   max-width: calc(576px - 80px);
   margin-left: auto;
   margin-right: auto;
-  padding: 18px 20px;
+  padding: 16px 20px;
   display: flex;
   align-items: center;
   gap: 10px;
-  background-color: #222222E5;
+  background-color: #2e364b;
   font-size: 16px;
   font-weight: 500;
   line-height: 20px;

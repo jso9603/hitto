@@ -23,13 +23,6 @@
       :key="currentRound"
       :isRoundMatched="isRoundMatched"
     />
-
-    <div class="floating" v-if="isRoundMatched">
-      <button class="primary" @click="onOneMoreNumber">
-        <img src="@/assets/ic-system-challenge.svg" />
-        추가 번호 생성하기
-      </button>
-    </div>
   </div>
 </template>
 
@@ -103,10 +96,6 @@ export default class MyNumber extends Vue {
     }
 
     return currentWeek
-  }
-
-  onOneMoreNumber() {
-    this.$router.push('/ai')
   }
 
   adjustHtmlHeight = () => {
@@ -218,7 +207,6 @@ export default class MyNumber extends Vue {
   line-height: 32px;
   text-align: center;
   color: #ECEEF0;
-  cursor: pointer;
 }
 
 .date {
