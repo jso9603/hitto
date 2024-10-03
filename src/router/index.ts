@@ -17,6 +17,7 @@ import Leave from '@/views/Leave.vue'
 import Terms from '@/views/Terms.vue'
 import NotFound from '@/views/NotFound.vue'
 import Manual from '@/views/Manual.vue'
+import FortuneInfo from '@/views/FortuneInfo.vue'
 import ChatGPT from '@/views/chatGPT.vue'
 import TodayFortune from '@/views/TodayFortune.vue'
 import FortuneLoading from '@/views/FortuneLoading.vue'
@@ -67,42 +68,42 @@ const routes = [
   },
   {
     path: '/my',
-    name: 'my',
+    name: 'My',
     component: My,
   },
   {
     path: '/qr',
-    name: 'qr',
+    name: 'Qr',
     component: Qr,
   },
   {
     path: '/my/number',
-    name: 'number',
+    name: 'Number',
     component: MyNumber,
   },
   {
     path: '/guess',
-    name: 'guess',
+    name: 'Guess',
     component: Guess,
   },
   {
     path: '/challenge',
-    name: 'challenge',
+    name: 'Challenge',
     component: Challenge,
   },
   {
     path: '/my/setting',
-    name: 'setting',
+    name: 'Setting',
     component: Setting,
   },
   {
     path: '/leave',
-    name: 'leave',
+    name: 'Leave',
     component: Leave,
   },
   {
     path: '/terms',
-    name: 'terms',
+    name: 'Terms',
     component: Terms,
   },
   {
@@ -112,22 +113,27 @@ const routes = [
   },
   {
     path: '/manual',
-    name: '/manual',
+    name: 'Manual',
     component: Manual,
   },
   {
+    path: '/fortuneInfo',
+    name: 'FortuneInfo',
+    component: FortuneInfo
+  },
+  {
     path: '/chatGPT',
-    name: '/chatGPT',
+    name: 'ChatGPT',
     component: ChatGPT,
   },
   {
     path: '/today',
-    name: '/today',
+    name: 'Today',
     component: TodayFortune,
   },
   {
     path: '/loading',
-    name: '/loading',
+    name: 'Loading',
     component: FortuneLoading,
   }
 ];

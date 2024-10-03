@@ -54,7 +54,7 @@ export default class FortuneLoading extends Vue {
 
     if (result.fortunes && Array.isArray(result.fortunes)) {
       this.$router.push({ 
-        name: '/chatGPT', // 이동할 라우트 이름
+        name: 'ChatGPT', // 이동할 라우트 이름
         params: { fortunes: JSON.stringify(result.fortunes) }
       })
     } else {

@@ -50,11 +50,15 @@
       <img src="@/assets/ic-system-plus.svg" />
     </button>
 
-    <div class="floating">
+     <button class="primary" @click="onSave">
+        저장하기
+      </button>
+
+    <!-- <div class="floating">
       <button class="primary" @click="onSave">
         저장하기
       </button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -109,6 +113,13 @@ export default class Manual extends Vue {
   addForm() {
     const nextLabel = String.fromCharCode(65 + this.forms.length)
     this.forms.push({ label: nextLabel, numbers: this.generateNumbers(), selectedNumbers: [] })
+
+    this.$nextTick(() => {
+    const addedForm = this.$el.querySelectorAll('.form-box')[this.forms.length - 1] // 새로 추가된 form
+    if (addedForm) {
+      addedForm.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  })
   }
 
   removeForm(index: number) {
@@ -290,6 +301,7 @@ export default class Manual extends Vue {
 .form-container {
   padding: 0 20px;
 
+  /* 세로 스냅 적용 */
   scroll-snap-type: y mandatory;
   overflow-y: auto;
 }
@@ -323,8 +335,8 @@ export default class Manual extends Vue {
   padding: 24px 20px;
   margin-bottom: 12px;
   border-radius: 16px;
+
   scroll-snap-align: start;
-  height: 400px;
 }
 
 .form-header {
@@ -433,7 +445,8 @@ h3::before {
   font-weight: 500;
   line-height: 19px;
   cursor: pointer;
-  margin-bottom: 114px;
+  /* margin-bottom: 114px; */
+  margin-bottom: 20px;
 }
 
 .floating {
@@ -449,7 +462,8 @@ h3::before {
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 
-.floating > button {
+button.primary {
+  margin-bottom: 20px;
   width: 100%;
   min-height: 54px;
   background-color: #ECEEF0;

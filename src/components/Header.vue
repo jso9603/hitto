@@ -7,7 +7,7 @@
     </template>
 
     <template
-      v-else-if="$route.path === '/ai' || $route.path === '/dream' || $route.path === '/category' || $route.path === '/random' || $route.path === '/manual' || $route.path === '/today' || $route.path === '/chatGPT' || $route.path === '/loading'"
+      v-else-if="$route.path === '/ai' || $route.path === '/dream' || $route.path === '/category' || $route.path === '/random' || $route.path === '/manual' || $route.path === '/fortuneInfo' || $route.path === '/today' || $route.path === '/chatGPT' || $route.path === '/loading'"
     >
       <button @click="goBack" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
