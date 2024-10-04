@@ -118,16 +118,17 @@ export default class Random extends Vue {
     if (this.canvas) {
       const ctx = this.canvas.getContext('2d')
 
-      // // 고해상도 스크린을 위해 배율 설정
-      // const dpr = window.devicePixelRatio || 1
-      // // 실제 픽셀 크기와 스타일 크기 분리
-      // this.canvas.width = 160 * dpr  // 실제 픽셀 크기
-      // this.canvas.height = 160 * dpr // 실제 픽셀 크기
+      // 고해상도 스크린을 위해 배율 설정
+      const dpr = window.devicePixelRatio || 1
+      // 실제 픽셀 크기와 스타일 크기 분리
+      const canvasSize = 160; // 화면상에서의 크기
+      this.canvas.width = canvasSize * dpr; // 실제 픽셀 크기
+      this.canvas.height = canvasSize * dpr; // 실제 픽셀 크기
+
+      this.canvas.style.width = `${canvasSize}px`; // 화면 상의 크기
+      this.canvas.style.height = `${canvasSize}px`; // 화면 상의 크기
       
-      // this.canvas.style.width = '160px'  // 화면 상의 크기
-      // this.canvas.style.height = '160px' // 화면 상의 크기
-      
-      // ctx?.scale(dpr, dpr) // 배율 조정
+      ctx?.scale(dpr, dpr) // 배율 조정
 
       if (ctx) {
         // 공 생성 및 초기화
@@ -295,30 +296,34 @@ export default class Random extends Vue {
 
   // 파란 원형 로딩바 그리기
   drawLoadingBar(ctx: CanvasRenderingContext2D) {
-    const centerX = this.canvas!.width / 2
+    const dpr = window.devicePixelRatio || 1 // 배율 적용
+
+    const centerX = this.canvas!.width  / 2 // 배율 적용하여 좌표 조정
     const centerY = this.canvas!.height / 2
-    const radius = 70 // 로딩바의 반지름
+    const radius = 70 * dpr; // 배율에 맞게 반지름 조정
+    const lineWidth = 13 * dpr; // 선 두께를 dpr에 맞게 조정
     const startAngle = -Math.PI / 2 // 12시 방향에서 시작
     const endAngle = startAngle + (Math.PI * 2 * (this.progress / 100)) // 진행 상태에 따라 각도를 조정
 
     // 배경 원형 그리기 (회색 원)
     ctx.beginPath()
-    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2)
-    ctx.strokeStyle = '#202223'
-    ctx.lineWidth = 13
+    ctx.arc(centerX / dpr, centerY / dpr, radius / dpr, 0, Math.PI * 2)
+    ctx.strokeStyle = '#242A3B'
+    ctx.lineWidth = lineWidth / dpr
     ctx.stroke()
     ctx.closePath()
 
     // 그라데이션 추가
-    const gradient = ctx.createLinearGradient(0, 0, 0, this.canvas!.height)
-    gradient.addColorStop(0.0, 'rgba(74, 255, 129, 0)') // 시작점 (투명)
-    gradient.addColorStop(1.0, '#4AFF81') // 끝점 (초록색)
+    const gradient = ctx.createLinearGradient(0, 0, 0, this.canvas!.height / dpr)
+    gradient.addColorStop(0.0, '#61D59D'); // 진한 초록색이 처음부터 끝까지 유지
+    gradient.addColorStop(0.8, '#61D59D'); // 진한 초록색 유지
+    gradient.addColorStop(1.0, '#61D59D'); // 마지막에 색상이 옅어짐
 
     // 진행 상태에 따른 원형 그라데이션 그리기
     ctx.beginPath()
-    ctx.arc(centerX, centerY, radius, startAngle, endAngle)
+    ctx.arc(centerX / dpr, centerY / dpr, radius / dpr, startAngle, endAngle)
     ctx.strokeStyle = gradient // 그라데이션 적용
-    ctx.lineWidth = 13
+    ctx.lineWidth = lineWidth / dpr
     ctx.lineCap = 'round' // 원형 끝을 둥글게
     ctx.stroke()
     ctx.closePath()
@@ -326,16 +331,14 @@ export default class Random extends Vue {
 
   // 프로그레시브 바 진행 함수
   incrementProgress() {
-  const interval = setInterval(() => {
-    if (this.progress >= 100) {
-      this.progress = 0 // progress가 100%에 도달하면 다시 0으로 초기화
-    } else {
-      this.progress += 1 // progress 증가
-    }
-  }, 30) // 30ms마다 1씩 증가
-
-  console.log(interval)
-}
+    setInterval(() => {
+      if (this.progress >= 100) {
+        this.progress = 0 // progress가 100%에 도달하면 다시 0으로 초기화
+      } else {
+        this.progress += 1 // progress 증가
+      }
+    }, 30) // 30ms마다 1씩 증가
+  }
 
   // 컴포넌트가 파괴되기 전 애니메이션을 멈추기
   beforeDestroy() {
@@ -555,7 +558,7 @@ export default class Random extends Vue {
   align-items: center;
   height: 100vh; */
   margin: 0;
-  background-color: #171717;
+  /* background-color: #171717; */
   border-radius: 50%;
 }
 

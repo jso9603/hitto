@@ -10,7 +10,7 @@
       <div class="participation">        
         {{ formattedCount }}명이 오늘의 운세를 받았어요.
       </div>
-      <button class="primary" @click="$router.push('/loading')">
+      <button class="primary" @click="$router.push('/fortuneInfo')">
         <img src="@/assets/ic-system-challenge.svg" />
         운세보기
       </button>
