@@ -71,7 +71,7 @@ export default class Dream extends Vue {
     this.setViewportHeight()
 
     const dream = await getCounting()
-    this.targetCount = +dream - 235
+    this.targetCount = +dream - 939
     this.startCounting()
 
     const contents: string =

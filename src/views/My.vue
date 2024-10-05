@@ -2,7 +2,7 @@
   <div class="my">
     <div class="summary">
       <div class="img-bg">
-        <img src="@/assets/ic-stefan-2d.svg" class="person" />
+        <img src="@/assets/img-stefan-3d.png" class="person" />
       </div>
       <div class="nickname">{{nickname}}</div>
       <div class="email">
@@ -13,17 +13,6 @@
         <div v-if="user === null" class="kakao-login" @click="onLogin">카카오 계정으로 로그인해주세요.</div>
       </div>
     </div>
-
-    <iframe
-      class="ad"
-      src="https://ads-partners.coupang.com/widgets.html?id=800971&template=carousel&trackingCode=AF9553073&subId=&width=335&height=60&tsource="
-      width="335"
-      height="60"
-      frameborder="0"
-      scrolling="no"
-      referrerpolicy="unsafe-url"
-      browsingtopics
-    ></iframe>
 
     <div class="menu">
       <div class="title">서비스</div>
@@ -62,12 +51,20 @@ export default class My extends Vue {
 
   services = [
     {
-      title: 'Ai 로또생성',
+      title: 'Ai 생성',
       link: '/ai',
+    },
+    {
+      title: '수동 생성',
+      link: '/manual',
     },
     {
       title: '꿈해몽 생성',
       link: '/dream',
+    },
+    {
+      title: '오늘의 운세',
+      link: '/today',
     },
   ];
 
@@ -229,13 +226,6 @@ export default class My extends Vue {
 .summary > .email > .kakao > img {
   width: 13.5px;
   height: 13.5px;
-}
-
-.ad {
-  margin-bottom: 24px;
-  background-color: #F3F3F3;
-  width: 100%;
-  height: 62px;
 }
 
 .menu {

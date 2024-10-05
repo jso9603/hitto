@@ -41,7 +41,7 @@
 
     <template v-else-if="$route.path === '/my'">
       <div class="empty"></div>
-      <div class="menu">나의 모히또</div>
+      <div class="menu">더보기</div>
       <img src="@/assets/ic-setting.svg" v-if="isLoggedIn" @click="onSetting" />
     </template>
 

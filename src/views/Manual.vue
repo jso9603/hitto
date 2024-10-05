@@ -311,9 +311,9 @@ export default class Manual extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 4px;
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 32px;
   text-align: center;
   color: #ECEEF0;
@@ -446,9 +446,9 @@ h3::before {
   line-height: 19px;
   cursor: pointer;
   /* margin-bottom: 114px; */
-  margin-bottom: 20px;
+  margin-bottom: 52px;
 }
-
+ 
 .floating {
   position: fixed;
   bottom: 0;

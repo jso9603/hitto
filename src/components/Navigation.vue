@@ -6,7 +6,7 @@
     </div>
     <div class="nav-item" @click="onTab('more')">
       <img :src="moreIcon" alt="More" class="nav-icon">
-      <p :class="{ active: isMoreActive }">더 보기</p>
+      <p :class="{ active: isMoreActive }">더보기</p>
     </div>
   </div>
 </template>
@@ -80,11 +80,11 @@ export default class Navigation extends Vue {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 500;
   line-height: 12px;
   text-align: center;
-  color: #BABCBE;
+  color: #737577;
   cursor: pointer;
 }
 
@@ -99,7 +99,7 @@ p {
 }
 
 .active {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 500;
   line-height: 12px;
   text-align: center;

@@ -100,7 +100,7 @@ export default class Random extends Vue {
   private circleCenter = { x: 80, y: 80 } // canvas의 중앙
   private circleRadius = 80 // 원의 반지름 (로딩 바)
 
-  private messages: string[] = []
+  private messages: string[] = ['AI 통계기반', '로또 번호를 생성하고 있어요']
   private messages2 = ['로또 번호를 생성했어요!', '맘에 드시나요?']
   private selectedMessage: string | null = null
   private showMessage: boolean = false
@@ -415,8 +415,6 @@ export default class Random extends Vue {
   created() {
     this.background = this.$store.state.menuName!.includes('꿈해몽') ? 'yellow-bg' : 'blue-bg'
     this.charater = this.$store.state.menuName!.includes('꿈해몽') ? 'img-stella-3d.png' : 'img-stefan-3d.png'
-
-    this.messages = this.background === 'blue-bg' ? ['스테판이 ai 통계기반', '로또 번호를 생성하고 있어요'] : ['스텔라가 ai 통계기반', '로또 번호를 생성하고 있어요']
   }
 
   mounted() {
@@ -839,15 +837,15 @@ export default class Random extends Vue {
 }
 
 .row > div {
-  width: 56px;
-  height: 56px;
+  width: 50px;
+  height: 50px;
   /* margin: 6px; */
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
   font-weight: 500;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 24px;
 }
 

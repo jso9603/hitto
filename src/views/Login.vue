@@ -40,7 +40,6 @@ import Cookies from 'js-cookie'
 import { db } from '../../src/config/firebaseConfig'
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore'
 
-import { getCounting } from '@/utils/counting'
 import { User } from '../models/User'
 
 @Component
@@ -163,7 +162,7 @@ export default class Login extends Vue {
 
     this.setViewportHeight()
 
-    this.targetCount = await getCounting()
+    this.targetCount = 985
     this.startCounting()
   }
 

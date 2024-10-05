@@ -37,7 +37,7 @@ export default class FortuneLoading extends Vue {
   private circleCenter = { x: 80, y: 80 } // canvas의 중앙
   private circleRadius = 80 // 원의 반지름 (로딩 바)
 
-  private messages = ['스테판이 ai 통계기반', '로또 번호를 생성하고 있어요']
+  private messages = ['AI 통계기반', '운세 정보를 생성하고 있어요']
   private floatings = ['객관적인 운세 결과를 위해 30초 정도가 소요됩니다', '이름과 성별을 분석 중입니다', '생년월일과 태어난 시를 분석 중입니다 ']
 
   // 현재 보여줄 텍스트의 인덱스
@@ -289,7 +289,7 @@ export default class FortuneLoading extends Vue {
   startTextFlip() {
     setInterval(() => {
       this.currentIndex = (this.currentIndex + 1) % this.floatings.length;
-    }, 3000); // 3초마다 텍스트 전환
+    }, 4000); // 3초마다 텍스트 전환
   }
 
   async getFortune() {
@@ -359,7 +359,6 @@ export default class FortuneLoading extends Vue {
     this.getFortune()
 
     const fortuneUserName = this.$route.params.fortuneName
-    console.log('fortune', fortuneUserName)
     if (fortuneUserName) {
       this.fortuneUserName = fortuneUserName
       Cookies.set('fortuneName', this.fortuneUserName, {expires: 1})
@@ -428,9 +427,9 @@ canvas {
 }
 
 .floating-text {
-  font-size: 18px;
-  font-weight: 600;
-  color: #BABCBE;
+  font-size: 14px;
+  font-weight: 400;
+  color: #737577;
   text-align: center;
   padding: 10px 20px;
   border-radius: 8px;
@@ -440,22 +439,19 @@ canvas {
 .text-item {
   width: 100%;
   text-align: center;
-  animation: slide-up 3s infinite; /* 3초마다 텍스트가 전환되며 무한 반복 */
+  animation: slide-up 4s infinite;
   opacity: 0;
   animation-fill-mode: forwards; /* 애니메이션 종료 후 상태 유지 */
 }
 
 @keyframes slide-up {
   0% {
-    transform: translateY(-100%);
     opacity: 0;
   }
   50% {
-    transform: translateY(0);
     opacity: 1;
   }
-  80% {
-    transform: translateY(100%);
+  100% {
     opacity: 0;
   }
 }

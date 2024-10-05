@@ -201,20 +201,20 @@ export default class MyNumber extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  font-size: 26px;
-  font-weight: 600;
+  gap: 4px;
+  font-size: 24px;
+  font-weight: 700;
   line-height: 32px;
   text-align: center;
   color: #ECEEF0;
 }
 
 .date {
-  margin-top: 8px;
+  margin-top: 4px;
   color: #9C9EA0;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
-  line-height: 23px;
+  line-height: 24px;
   text-align: center;
 }
 
