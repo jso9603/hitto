@@ -119,48 +119,48 @@ export default class Header extends Vue {
   }
 
   onShare() {
-  const currentUrl = window.location.href
+    const currentUrl = window.location.href
 
-  // Check if navigator.clipboard.writeText is available
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(currentUrl).then(() => {
-      this.$store.dispatch('showCopyImage')
-    }).catch(err => {
-      console.error('링크 복사에 실패했습니다:', err)
-    })
-  } else {
-    // Fallback for iOS Safari
-    const textArea = document.createElement('textarea')
-    textArea.value = currentUrl
-    // Ensure the textarea is not visible and doesn't cause layout shifts
-    textArea.style.position = 'fixed' // Fixed position to avoid layout changes
-    textArea.style.top = '0'
-    textArea.style.left = '0'
-    textArea.style.width = '1px'
-    textArea.style.height = '1px'
-    textArea.style.padding = '0'
-    textArea.style.border = 'none'
-    textArea.style.outline = 'none'
-    textArea.style.boxShadow = 'none'
-    textArea.style.background = 'transparent'
-    textArea.style.opacity = '0' // Make it invisible
-    textArea.setAttribute('readonly', '')
-    document.body.appendChild(textArea)
-    textArea.focus()
-    textArea.select()
-    try {
-      const successful = document.execCommand('copy')
-      if (successful) {
+    // Check if navigator.clipboard.writeText is available
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(currentUrl).then(() => {
         this.$store.dispatch('showCopyImage')
-      } else {
-        console.error('링크 복사에 실패했습니다.')
+      }).catch(err => {
+        console.error('링크 복사에 실패했습니다:', err)
+      })
+    } else {
+      // Fallback for iOS Safari
+      const textArea = document.createElement('textarea')
+      textArea.value = currentUrl
+      // Ensure the textarea is not visible and doesn't cause layout shifts
+      textArea.style.position = 'fixed' // Fixed position to avoid layout changes
+      textArea.style.top = '0'
+      textArea.style.left = '0'
+      textArea.style.width = '1px'
+      textArea.style.height = '1px'
+      textArea.style.padding = '0'
+      textArea.style.border = 'none'
+      textArea.style.outline = 'none'
+      textArea.style.boxShadow = 'none'
+      textArea.style.background = 'transparent'
+      textArea.style.opacity = '0' // Make it invisible
+      textArea.setAttribute('readonly', '')
+      document.body.appendChild(textArea)
+      textArea.focus()
+      textArea.select()
+      try {
+        const successful = document.execCommand('copy')
+        if (successful) {
+          this.$store.dispatch('showCopyImage')
+        } else {
+          console.error('링크 복사에 실패했습니다.')
+        }
+      } catch (err) {
+        console.error('링크 복사에 실패했습니다:', err)
       }
-    } catch (err) {
-      console.error('링크 복사에 실패했습니다:', err)
+      document.body.removeChild(textArea)
     }
-    document.body.removeChild(textArea)
   }
-}
 
   get isLoggedIn() {
     const user = getLoggedUserInfo()
@@ -197,7 +197,15 @@ export default class Header extends Vue {
   }
 
   goBack() {
-    this.$router.back()
+    console.log('ddd')
+    // !this.isLoggedIn && 
+    console.log(this.$route.path === '/random')
+    console.log(sessionStorage.getItem('lottoNumbers'))
+    if (this.$route.path === '/random') {
+      this.$emit('goBack')
+    } else {
+      this.$router.back()
+    }
   }
 
   goClose() {

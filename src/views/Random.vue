@@ -5,6 +5,13 @@
       @close="isPopupVisible = false"
     />
 
+    <LoginPopup
+      v-if="showLoginPopup"
+      :numbers="LoginPopupNumbers"
+      :visible="isLoginPopupVisible"
+      @close="isLoginPopupVisible = false"
+    />
+
     <transition name="fade" mode="out-in">
       <div class="page1" v-if="showPage1" key="page1">
         <div v-if="showMessage">
@@ -61,15 +68,24 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { mapState } from 'vuex'
 
+import { getLoggedUserInfo } from '@/utils/user'
 import { Ball } from '../models/Ball'
 import SelectHopePopup from '@/components/SelectHopePopup.vue'
+import LoginPopup from '@/components/LoginPopup.vue'
+
+import dayjs, { Dayjs } from 'dayjs'
+import Cookies from 'js-cookie'
+import { db } from '../../src/config/firebaseConfig'
+import { collection, addDoc } from 'firebase/firestore'
 
 @Component({
   components: {
     SelectHopePopup,
+    LoginPopup,
   },
   computed: {
     ...mapState(['menuName']),
+    ...mapState(['showLoginPopup']),
   },
 })
 export default class Random extends Vue {
@@ -100,6 +116,13 @@ export default class Random extends Vue {
   // 확률 높은 숫자들
   highProbNumbers: number[] = [1, 3, 6, 7, 12, 14, 17, 24, 26, 27, 33, 34, 42, 43, 45]
   private lottoNumbers: number[][] = []
+
+  isLoginPopupVisible = false
+  private LoginPopupNumbers: number[] = []
+
+  get showLoginPopup() {
+    return this.$store.state.showLoginPopup;
+  }
 
   get dynamicHeight() {
     return `calc(var(--vh, 1vh) * 100 - ${this.showPage1 ? '54px' : '192px'})`
@@ -181,35 +204,34 @@ export default class Random extends Vue {
   // 공 그리기 함수
   drawBall(ctx: CanvasRenderingContext2D, ball: Ball) {
     const gradient = ctx.createLinearGradient(
-    ball.x, ball.y - ball.radius, // 그라데이션 시작점 (위쪽)
-    ball.x, ball.y + ball.radius  // 그라데이션 끝점 (아래쪽)
-  )
+      ball.x, ball.y - ball.radius, // 그라데이션 시작점 (위쪽)
+      ball.x, ball.y + ball.radius  // 그라데이션 끝점 (아래쪽)
+    )
 
-  if (ball.color === '#4790FF') {
-    gradient.addColorStop(0, '#74B9FF')  // 밝은 파랑
-    gradient.addColorStop(1, '#2980B9')  // 어두운 파랑
-  } else if (ball.color === '#FEC03E') {
-    gradient.addColorStop(0, '#FFD700')  // 밝은 노랑
-    gradient.addColorStop(1, '#FFA500')  // 어두운 오렌지
-  } else if (ball.color === '#E64D3D') {
-    gradient.addColorStop(0, '#FF6F61')  // 밝은 빨강
-    gradient.addColorStop(1, '#C0392B')  // 어두운 빨강
-  } else if (ball.color === '#2ECD70') {
-    gradient.addColorStop(0, '#66FF99')  // 밝은 초록
-    gradient.addColorStop(1, '#27AE60')  // 어두운 초록
-  } else if (ball.color === '#BEC3C7') {
-    gradient.addColorStop(0, '#E0E0E0')  // 밝은 회색
-    gradient.addColorStop(1, '#7C8388')  // 어두운 회색
+    if (ball.color === '#4790FF') {
+      gradient.addColorStop(0, '#74B9FF')  // 밝은 파랑
+      gradient.addColorStop(1, '#2980B9')  // 어두운 파랑
+    } else if (ball.color === '#FEC03E') {
+      gradient.addColorStop(0, '#FFD700')  // 밝은 노랑
+      gradient.addColorStop(1, '#FFA500')  // 어두운 오렌지
+    } else if (ball.color === '#E64D3D') {
+      gradient.addColorStop(0, '#FF6F61')  // 밝은 빨강
+      gradient.addColorStop(1, '#C0392B')  // 어두운 빨강
+    } else if (ball.color === '#2ECD70') {
+      gradient.addColorStop(0, '#66FF99')  // 밝은 초록
+      gradient.addColorStop(1, '#27AE60')  // 어두운 초록
+    } else if (ball.color === '#BEC3C7') {
+      gradient.addColorStop(0, '#E0E0E0')  // 밝은 회색
+      gradient.addColorStop(1, '#7C8388')  // 어두운 회색
+    }
+
+    // 공 그리기
+    ctx.beginPath()
+    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2) // 공의 형태
+    ctx.fillStyle = gradient // 그라데이션을 색상으로 설정
+    ctx.fill()
+    ctx.closePath()
   }
-
-  // 공 그리기
-  ctx.beginPath()
-  ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2) // 공의 형태
-  ctx.fillStyle = gradient // 그라데이션을 색상으로 설정
-  ctx.fill()
-  ctx.closePath()
-  }
-
 
   // 공의 위치를 업데이트하는 함수
   updateBallPosition(ball: Ball) {
@@ -364,8 +386,30 @@ export default class Random extends Vue {
 
   private handleBackButton(): void {
     if (this.$route.path !== '/') {
-      this.$router.replace('/')
+      // this.$router.replace('/')
+      const user = getLoggedUserInfo()
+
+      if (!user && this.$route.path === '/random' && sessionStorage.getItem('lottoNumbers')) {
+        this.showPopup()
+
+        // 히스토리를 조작하여 페이지 이동을 막음
+        history.pushState(null, '', window.location.href)
+      }
     }
+  }
+
+  showPopup() {
+    const storedNumbers = sessionStorage.getItem('lottoNumbers')
+    
+    if (storedNumbers) {
+      // 문자열에서 양쪽의 따옴표를 제거하고, 쉼표로 분리하여 배열로 변환 후 숫자로 변환
+      this.LoginPopupNumbers = storedNumbers
+        .replace(/^"|"$/g, '')  // 양 끝의 따옴표 제거
+        .split(',')             // 쉼표로 문자열 분리
+        .map(num => Number(num.trim())) // 각 요소를 숫자로 변환
+    }
+
+    this.isLoginPopupVisible = true
   }
 
   created() {
@@ -446,6 +490,9 @@ export default class Random extends Vue {
     for (let i = 0; i < rounds; i++) {
       this.lottoNumbers.push(this.generateLotteryNumbers())
     }
+
+    const ball = this.lottoNumbers[0].join(', ')
+    sessionStorage.setItem('lottoNumbers', JSON.stringify(ball))
   }
 
   private getNumberClass(number: number) {
@@ -459,13 +506,143 @@ export default class Random extends Vue {
   private onSelectedBall() {
     this.isLoading = true
 
-    // (session 저장: store는 refresh하면 정보 없어짐)
-    const ball = this.lottoNumbers[0].join(', ')
-    sessionStorage.setItem('lottoNumbers', JSON.stringify(ball))
+    // // (session 저장: store는 refresh하면 정보 없어짐)
+    // const ball = this.lottoNumbers[0].join(', ')
+    // sessionStorage.setItem('lottoNumbers', JSON.stringify(ball))
 
-    this.isLoading = false
-    // this.$router.push('/select-hope')
-    this.isPopupVisible = true
+    // this.isLoading = false
+    // // this.$router.push('/select-hope')
+    // this.isPopupVisible = true
+    this.onLogin()
+  }
+
+  private async onLogin() {
+    const user = getLoggedUserInfo()
+
+    try {
+      sessionStorage.setItem('hope', '')
+      sessionStorage.setItem('hope-select', 'false')
+
+      if (user) {
+        await this.saveLottoNumbers()
+      } else {
+        this.$router.replace('/login?redirect=select-hope')
+      }
+    } catch (error) {
+      console.error('Failed to parse user data:', error)
+      alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요')
+      return
+    }
+  }
+
+  getLottoWeek(t2: Dayjs) {
+    // console.log('회차:', this.getLottoWeek('2024-09-08 15:00'))  // 일
+    // console.log('회차:', this.getLottoWeek('2024-09-09 15:00'))  // 월
+    // console.log('회차:', this.getLottoWeek('2024-09-10 15:00')) // 화
+    // console.log('회차:', this.getLottoWeek('2024-09-11 15:00'))  // 수
+    // console.log('회차:', this.getLottoWeek('2024-09-12 13:00')) // 목
+    // console.log('회차:', this.getLottoWeek('2024-09-13 13:00')) // 금요일
+    // console.log('회차:', this.getLottoWeek('2024-09-14 17:00')) // 토요일 오후 5시, 1137회
+    // console.log('회차:', this.getLottoWeek('2024-09-14 18:30')) // 토요일 오후 6시 30분, 1138회
+    // console.log('회차:', this.getLottoWeek('2024-09-15 00:00')) // 일요일 자정, 1138회
+
+    const t1 = dayjs('2002-12-07') // 로또 1회차 기준 날짜
+    // const currentDate = dayjs(t2) // 입력된 날짜
+    const currentDate = t2
+    let diffWeeks = currentDate.diff(t1, 'week') // 기준 날짜와의 주차 차이
+    let currentWeek = diffWeeks + 1 // 회차는 1회차부터 시작하므로 1을 더해줌
+
+    // 이번 주 토요일 오후 6시를 계산
+    let saturdaySixPM = currentDate.startOf('week').add(6, 'day').hour(18).minute(0).second(0)
+
+    console.log('현재 날짜:', currentDate.format('YYYY-MM-DD HH:mm'))
+    console.log('이번 주 토요일 오후 6시:', saturdaySixPM.format('YYYY-MM-DD HH:mm'))
+
+    // 만약 현재 시간이 그 주의 토요일 오후 6시 이후라면 다음 회차로 설정
+    if (currentDate.day() === 0 || currentDate.isAfter(saturdaySixPM)) {
+      currentWeek += 1
+      console.log('현재 시간이 토요일 오후 6시 이후입니다.')
+    } else if (currentDate.day() >= 1 && currentDate.day() <= 5) {
+      // 월요일(1) ~ 금요일(5) 사이에는 다음 회차로 미리 더해줌 (1주가 안지나서 그런지 계속 -1되서 보여짐)
+      currentWeek += 1
+    } else {
+      console.log('현재 시간이 토요일 오후 6시 이전입니다.')
+    }
+
+    return currentWeek
+  }
+
+  private async saveLottoNumbers() {
+    this.isLoading = true
+
+    const userData = Cookies.get('user') as string
+    let user = null
+
+    if (userData) {
+      try {
+        user = JSON.parse(userData)
+
+        const round = this.getLottoWeek(dayjs())
+
+        const numbers = [(sessionStorage.getItem('lottoNumbers'))!.replace(/^"|"$/g, '')]
+
+        try {
+          // automatic or dream 컬렉션에 새로운 문서 추가
+          await addDoc(collection(db, 'automatic'), {
+            date: dayjs().format('YYYYMMDD HH:mm:ss'),
+            numbers,
+            uid: user.uid,
+            round,
+            winningText: '',
+          })
+
+          const datas = sessionStorage.getItem(`myNumbers-${round}`)
+          const insertData = {
+            date: dayjs().format('YYYYMMDD HH:mm:ss'),
+            numbers,
+            uid: user.uid,
+            round,
+            winningText: '',
+          }
+
+          if (!datas) {
+            // sessionStorage에 아무 데이터도 없으면, 배열에 insertData를 넣어서 저장
+            sessionStorage.setItem(`myNumbers-${round}`, JSON.stringify(insertData))
+          } else {
+            const alreadyDatas = JSON.parse(datas)
+
+            const updatedData = Array.isArray(alreadyDatas) ? alreadyDatas : [alreadyDatas]
+            updatedData.push(insertData)
+
+            updatedData.sort((a, b) => {
+              return dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1
+            })
+
+            sessionStorage.setItem(`myNumbers-${round}`, JSON.stringify(updatedData))
+          }
+
+          sessionStorage.removeItem('hope')
+          sessionStorage.removeItem('lottoNumbers')
+          sessionStorage.removeItem('type')
+
+          setTimeout(() => {
+            this.isLoading = false
+
+            this.$router.push('/my/number?tab=automatic')
+          }, 1000)
+          
+        } catch (e) {
+          console.error('Error adding document: ', e)
+          alert('저장하는 과정에서 오류가 발생했습니다. 다시 시도해주세요.')
+        }
+      } catch (error) {
+        console.error('Failed to parse user data:', error)
+        user = null
+      }
+    } else {
+      user = null
+      this.showPopup()
+    }
   }
 }
 </script>
