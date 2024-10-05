@@ -26,7 +26,9 @@
     <template v-else-if="$route.path === '/qr'">
       <div class="empty"></div>
       <img src="@/assets/ic-system-logo.svg" class="logo" @click="$router.replace('/')" />
-      <div class="empty"></div>
+      <button @click="goClose" class="close">
+        <img src="@/assets/ic-system-close-img.svg" />
+      </button>
     </template>
 
     <template v-else-if="$route.path === '/login'">

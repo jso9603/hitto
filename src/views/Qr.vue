@@ -4,7 +4,6 @@
     <div class="qr__zone">
       <qrcode-stream @decode="onDecode" @init="onInit"></qrcode-stream>
     </div>
-    <img src="@/assets/ic-system-qr-close.svg" @click="onQrClose" />
   </div>
 </template>
 
@@ -70,7 +69,7 @@ export default class Qr extends Vue {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   /* iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
   특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음 */
   /* margin-top: 20px까지 제외시킨다. */
@@ -82,7 +81,6 @@ export default class Qr extends Vue {
 }
 
 .text {
-  margin-top: auto;
   margin-bottom: 20px;
   font-size: 22px;
   font-weight: 600;
@@ -93,7 +91,7 @@ export default class Qr extends Vue {
 .qr__zone {
   width: 300px;
   height: 280px;
-  background-color: white;
+  background-color: #1D2330;
   border: 2px solid;
   border-radius: 24px;
   /* border-image-source: linear-gradient(131.67deg, #4AFF81 3.05%, #9348F1 97.51%);
@@ -130,9 +128,5 @@ export default class Qr extends Vue {
   border-image-repeat: round; /* Border를 둥글게 만듭니다 */
   -webkit-mask-image: linear-gradient(white, white);
   border: 2px solid;
-}
-
-img {
-  margin-top: auto;
 }
 </style>
