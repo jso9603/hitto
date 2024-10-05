@@ -195,6 +195,9 @@ export default class MyNumber extends Vue {
   margin-bottom: 32px;
   padding-left: 20px;
   padding-right: 20px;
+
+  min-height: calc(100vh - 54px);
+  background: linear-gradient(180deg, #242A3B 0%);
 }
 
 .week {
