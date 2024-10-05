@@ -7,7 +7,7 @@
     </template>
 
     <template
-      v-else-if="$route.path === '/ai' || $route.path === '/dream' || $route.path === '/category' || $route.path === '/random' || $route.path === '/manual' || $route.path === '/fortuneInfo' || $route.path === '/today' || $route.path === '/chatGPT' || $route.path === '/loading'"
+      v-else-if="$route.path === '/ai' || $route.path === '/dream' || $route.path === '/category' || $route.path === '/random' || $route.path === '/manual' || $route.path === '/fortuneInfo' || $route.path === '/today' || $route.path === '/chatGPT' || $route.path === '/loading' || $router.path === '/fortune-loading'"
     >
       <button @click="goBack" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
@@ -24,7 +24,9 @@
     </template>
 
     <template v-else-if="$route.path === '/qr'">
+      <div class="empty"></div>
       <img src="@/assets/ic-system-logo.svg" class="logo" @click="$router.replace('/')" />
+      <div class="empty"></div>
     </template>
 
     <template v-else-if="$route.path === '/login'">

@@ -200,7 +200,7 @@ export default class FortuneInfo extends Vue {
       };
 
       console.log('userInfo: ', userInfo)
-      this.$router.push('/loading-test')
+      this.$router.push('/fortune-loading')
     }
   }
 }

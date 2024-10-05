@@ -96,7 +96,7 @@ export default class SelectHopePopup extends Vue {
 
   goBackRandom() {
     this.$emit('close')
-    this.$router.back()
+    // this.$router.back()
   }
 
   private activeTab: string = 'select'

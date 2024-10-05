@@ -21,7 +21,6 @@ import FortuneInfo from '@/views/FortuneInfo.vue'
 import ChatGPT from '@/views/chatGPT.vue'
 import TodayFortune from '@/views/TodayFortune.vue'
 import FortuneLoading from '@/views/FortuneLoading.vue'
-import LoadingTest from '@/views/LoadingTest.vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -138,9 +137,9 @@ const routes = [
     component: FortuneLoading,
   },
   {
-    path: '/loading-test',
-    name: 'LoadingTest',
-    component: LoadingTest,
+    path: '/fortune-loading',
+    name: 'FortuneLoading',
+    component: FortuneLoading,
   }
 ];
 
