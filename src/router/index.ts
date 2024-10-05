@@ -3,6 +3,7 @@ import Home from '@/views/Home.vue'
 import Ai from '@/views/Ai.vue'
 import Backup from '@/views/Backup.vue'
 import Random from '@/views/Random.vue'
+import AfterLogin from '@/views/AfterLogin.vue'
 import SelectHope from '@/views/SelectHope.vue'
 import Dream from '@/views/Dream.vue'
 import Category from '@/views/Category.vue'
@@ -45,6 +46,11 @@ const routes = [
     path: '/random',
     name: 'Random',
     component: Random,
+  },
+  {
+    path: '/after-login',
+    name: 'AfterLogin',
+    component: AfterLogin,
   },
   {
     path: '/select-hope',

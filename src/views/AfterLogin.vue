@@ -1,10 +1,5 @@
 <template>
   <div class="container" :class="{ add: !showPage1 }">
-    <SelectHopePopup
-      :visible="isPopupVisible"
-      @close="isPopupVisible = false"
-    />
-
     <LoginPopup
       v-if="showLoginPopup"
       :numbers="LoginPopupNumbers"
@@ -12,55 +7,42 @@
       @close="isLoginPopupVisible = false"
     />
 
-    <transition name="fade" mode="out-in">
-      <div class="page1" v-if="showPage1" key="page1">
-        <div v-if="showMessage">
-          <div v-for="(message, index) in messages" :key="index" class="message" :style="{ animationDelay: `${index * 0.2}s` }">
-            {{ message }}
-          </div>
-        </div>
-        <div class="random-animation">
-          <canvas ref="loadingCanvas" width="160" height="160"></canvas>
+    <div class="page2">
+      <div :class="['img-bg', background]" :style="{ animationDelay: `0s` }">
+        <img :src="require(`@/assets/${charater}`)" at="character 이미지" />
+      </div>
+
+      <div v-if="showMessage2">
+        <div v-for="(message, index) in messages2" :key="index" class="message2" :style="{ animationDelay: `${index * 0.2}s` }">
+          {{ message }}
         </div>
       </div>
 
-      <div class="page2" v-else key="page2">
-        <div :class="['img-bg', background]" :style="{ animationDelay: `0s` }">
-          <img :src="require(`@/assets/${charater}`)" at="character 이미지" />
-        </div>
-
-        <div v-if="showMessage2">
-          <div v-for="(message, index) in messages2" :key="index" class="message2" :style="{ animationDelay: `${index * 0.2}s` }">
-            {{ message }}
-          </div>
-        </div>
-
-        <div class="result__box">
-          <div v-for="(round, index) in lottoNumbers" :key="index" class="round">
-            <div class="row">
-              <div v-for="number in round.slice(0, 3)" :key="number" :class="getNumberClass(number)">
-                {{ number }}
-              </div>
-            </div>
-            <div class="row">
-              <div v-for="number in round.slice(3, 5)" :key="number" :class="getNumberClass(number)">
-                {{ number }}
-              </div>
-              <div :class="[getNumberClass(round[6])]">
-                {{ round[5] }}
-              </div>
+      <div class="result__box">
+        <div v-for="(round, index) in lottoNumbers" :key="index" class="round">
+          <div class="row">
+            <div v-for="number in round.slice(0, 3)" :key="number" :class="getNumberClass(number)">
+              {{ number }}
             </div>
           </div>
-        </div>
-
-        <div class="floating">
-          <button class="none" @click="oneMore">재선택</button>
-          <button :disabled="isLoading" class="primary" @click="onSelectedBall">
-            선택하기
-          </button>
+          <div class="row">
+            <div v-for="number in round.slice(3, 5)" :key="number" :class="getNumberClass(number)">
+              {{ number }}
+            </div>
+            <div :class="[getNumberClass(round[6])]">
+              {{ round[5] }}
+            </div>
+          </div>
         </div>
       </div>
-    </transition>
+
+      <div class="floating">
+        <button class="none" @click="oneMore">재선택</button>
+        <button :disabled="isLoading" class="primary" @click="onSelectedBall">
+          선택하기
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -69,8 +51,6 @@ import { Component, Vue } from 'vue-property-decorator'
 import { mapState } from 'vuex'
 
 import { getLoggedUserInfo } from '@/utils/user'
-import { Ball } from '../models/Ball'
-import SelectHopePopup from '@/components/SelectHopePopup.vue'
 import LoginPopup from '@/components/LoginPopup.vue'
 
 import dayjs, { Dayjs } from 'dayjs'
@@ -80,7 +60,6 @@ import { collection, addDoc } from 'firebase/firestore'
 
 @Component({
   components: {
-    SelectHopePopup,
     LoginPopup,
   },
   computed: {
@@ -88,14 +67,7 @@ import { collection, addDoc } from 'firebase/firestore'
     ...mapState(['showLoginPopup']),
   },
 })
-export default class Random extends Vue {
-  private canvas: HTMLCanvasElement | null = null
-  private balls: Ball[] = []
-  private ballCount = 10 // 공의 개수
-  private animationId: number = 0
-  private progress: number = 0 // 로딩바 진행 상태
-  private colors: string[] = ['#FEC03E', '#4790FF', '#E64D3D', '#2ECD70', '#BEC3C7']
-
+export default class AfterLogin extends Vue {
   // 원의 중심점과 반지름
   private circleCenter = { x: 80, y: 80 } // canvas의 중앙
   private circleRadius = 80 // 원의 반지름 (로딩 바)
@@ -103,8 +75,7 @@ export default class Random extends Vue {
   private messages: string[] = ['AI 통계기반', '로또 번호를 생성하고 있어요']
   private messages2 = ['로또 번호를 생성했어요!', '맘에 드시나요?']
   private selectedMessage: string | null = null
-  private showMessage: boolean = false
-  private showMessage2: boolean = false
+  private showMessage2: boolean = true
 
   private showPage1: boolean = true
   private isPopupVisible: boolean = false
@@ -129,242 +100,7 @@ export default class Random extends Vue {
   }
 
   oneMore() {
-    location.reload() // 페이지 새로고침
-  }
-
-  // Canvas 초기화 및 공 생성
-  // HTML5 <canvas> 엘리먼트의 width와 height는 디스플레이 해상도와 실제 픽셀 값 간의 불일치로 인해 그래픽이 흐릿하게 보일 수 있음.
-  // 특히 고해상도 디스플레이에서는 더 뚜렷하게 나타날 수 있음.
-  // 이를 해결하기 위해, 캔버스의 CSS 크기와 실제 픽셀 크기를 분리하여 고해상도 디스플레이에서도 선명한 렌더링을 유지하도록
-  initCanvas() {
-    this.canvas = this.$refs.loadingCanvas as HTMLCanvasElement
-    if (this.canvas) {
-      const ctx = this.canvas.getContext('2d')
-
-      // 고해상도 스크린을 위해 배율 설정
-      const dpr = window.devicePixelRatio || 1
-      // 실제 픽셀 크기와 스타일 크기 분리
-      const canvasSize = 160; // 화면상에서의 크기
-      this.canvas.width = canvasSize * dpr; // 실제 픽셀 크기
-      this.canvas.height = canvasSize * dpr; // 실제 픽셀 크기
-
-      this.canvas.style.width = `${canvasSize}px`; // 화면 상의 크기
-      this.canvas.style.height = `${canvasSize}px`; // 화면 상의 크기
-      
-      ctx?.scale(dpr, dpr) // 배율 조정
-
-      if (ctx) {
-        // 공 생성 및 초기화
-        for (let i = 0; i < this.ballCount; i++) {
-          const color = this.colors[i % this.colors.length]
-          this.balls.push({
-            x: this.circleCenter.x + (Math.random() - 0.5) * this.circleRadius, // 원 안에서 임의의 위치
-            y: this.circleCenter.y + (Math.random() - 0.5) * this.circleRadius,
-            radius: 8, // 공 크기
-            dx: (Math.random() - 0.5) * 6, // 속도 조정
-            dy: (Math.random() - 0.5) * 6,
-            color: color,
-          })
-        }
-      }
-    }
-  }
-
-  // 애니메이션 시작
-  animateBalls() {
-    const ctx = this.canvas?.getContext('2d')
-    if (ctx && this.canvas) {
-      const width = this.canvas.width
-      const height = this.canvas.height
-
-      const draw = () => {
-        // 캔버스 지우기
-        ctx.clearRect(0, 0, width, height)
-
-        // 로딩바 그리기 (파란 원형 선)
-        this.drawLoadingBar(ctx)
-
-        // 공 그리기 및 위치 업데이트
-        this.balls.forEach((ball) => {
-          this.drawBall(ctx, ball)
-          this.updateBallPosition(ball)
-        })
-
-        // 공끼리의 충돌 처리
-        this.handleBallCollisions()
-
-        // 다음 프레임 요청
-        this.animationId = requestAnimationFrame(draw)
-      }
-
-      draw()
-    }
-  }
-
-  // 공 그리기 함수
-  drawBall(ctx: CanvasRenderingContext2D, ball: Ball) {
-    const gradient = ctx.createLinearGradient(
-      ball.x, ball.y - ball.radius, // 그라데이션 시작점 (위쪽)
-      ball.x, ball.y + ball.radius  // 그라데이션 끝점 (아래쪽)
-    )
-
-    if (ball.color === '#4790FF') {
-      gradient.addColorStop(0, '#74B9FF')  // 밝은 파랑
-      gradient.addColorStop(1, '#2980B9')  // 어두운 파랑
-    } else if (ball.color === '#FEC03E') {
-      gradient.addColorStop(0, '#FFD700')  // 밝은 노랑
-      gradient.addColorStop(1, '#FFA500')  // 어두운 오렌지
-    } else if (ball.color === '#E64D3D') {
-      gradient.addColorStop(0, '#FF6F61')  // 밝은 빨강
-      gradient.addColorStop(1, '#C0392B')  // 어두운 빨강
-    } else if (ball.color === '#2ECD70') {
-      gradient.addColorStop(0, '#66FF99')  // 밝은 초록
-      gradient.addColorStop(1, '#27AE60')  // 어두운 초록
-    } else if (ball.color === '#BEC3C7') {
-      gradient.addColorStop(0, '#E0E0E0')  // 밝은 회색
-      gradient.addColorStop(1, '#7C8388')  // 어두운 회색
-    }
-
-    // 공 그리기
-    ctx.beginPath()
-    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2) // 공의 형태
-    ctx.fillStyle = gradient // 그라데이션을 색상으로 설정
-    ctx.fill()
-    ctx.closePath()
-  }
-
-  // 공의 위치를 업데이트하는 함수
-  updateBallPosition(ball: Ball) {
-    const ctx = this.canvas?.getContext('2d') // context 가져오기
-
-    if (!ctx) return
-
-    ball.x += ball.dx
-    ball.y += ball.dy
-
-    const distX = ball.x - this.circleCenter.x
-    const distY = ball.y - this.circleCenter.y
-    const distance = Math.sqrt(distX * distX + distY * distY)
-
-    // 로딩바 안쪽 경계(반지름 - 로딩바 두께 - 공의 반지름)에 부딪힐 경우 반사
-    const boundaryRadius = 57
-
-    // 공이 원의 경계에 부딪혔을 때
-    if (distance > boundaryRadius) {
-      const angle = Math.atan2(distY, distX)
-      ball.dx = -ball.dx
-      ball.dy = -ball.dy
-
-      // 공을 경계 안쪽으로 이동시킴
-      ball.x = this.circleCenter.x + boundaryRadius * Math.cos(angle)
-      ball.y = this.circleCenter.y + boundaryRadius * Math.sin(angle)
-    }
-  }
-
-  // 공끼리 충돌 처리 함수
-  handleBallCollisions() {
-    for (let i = 0; i < this.balls.length; i++) {
-      for (let j = i + 1; j < this.balls.length; j++) {
-        const dx = this.balls[j].x - this.balls[i].x
-        const dy = this.balls[j].y - this.balls[i].y
-        const distance = Math.sqrt(dx * dx + dy * dy)
-
-        // 두 공이 충돌했을 경우 반사 처리
-        if (distance < this.balls[i].radius + this.balls[j].radius) {
-          const angle = Math.atan2(dy, dx)
-          const sin = Math.sin(angle)
-          const cos = Math.cos(angle)
-
-          // 공의 위치 회전
-          const pos0 = { x: 0, y: 0 }
-          const pos1 = { x: dx * cos + dy * sin, y: dy * cos - dx * sin }
-
-          // 공의 속도 회전
-          const vel0 = { x: this.balls[i].dx * cos + this.balls[i].dy * sin, y: this.balls[i].dy * cos - this.balls[i].dx * sin }
-          const vel1 = { x: this.balls[j].dx * cos + this.balls[j].dy * sin, y: this.balls[j].dy * cos - this.balls[j].dx * sin }
-
-          // 충돌 후 속도
-          const vxTotal = vel0.x - vel1.x
-          vel0.x = ((this.balls[i].radius - this.balls[j].radius) * vel0.x + 2 * this.balls[j].radius * vel1.x) / (this.balls[i].radius + this.balls[j].radius)
-          vel1.x = vxTotal + vel0.x
-
-          // 공 위치 조정
-          const absV = Math.abs(vel0.x) + Math.abs(vel1.x)
-          const overlap = (this.balls[i].radius + this.balls[j].radius) - Math.abs(pos0.x - pos1.x)
-          pos0.x += vel0.x / absV * overlap
-          pos1.x += vel1.x / absV * overlap
-
-          // 위치를 다시 회전
-          const pos0F = { x: pos0.x * cos - pos0.y * sin, y: pos0.y * cos + pos0.x * sin }
-          const pos1F = { x: pos1.x * cos - pos1.y * sin, y: pos1.y * cos + pos1.x * sin }
-
-          this.balls[j].x = this.balls[i].x + pos1F.x
-          this.balls[j].y = this.balls[i].y + pos1F.y
-          this.balls[i].x += pos0F.x
-          this.balls[i].y += pos0F.y
-
-          // 속도를 다시 회전
-          const vel0F = { x: vel0.x * cos - vel0.y * sin, y: vel0.y * cos + vel0.x * sin }
-          const vel1F = { x: vel1.x * cos - vel1.y * sin, y: vel1.y * cos + vel1.x * sin }
-
-          this.balls[i].dx = vel0F.x
-          this.balls[i].dy = vel0F.y
-          this.balls[j].dx = vel1F.x
-          this.balls[j].dy = vel1F.y
-        }
-      }
-    }
-  }
-
-  // 파란 원형 로딩바 그리기
-  drawLoadingBar(ctx: CanvasRenderingContext2D) {
-    const dpr = window.devicePixelRatio || 1 // 배율 적용
-
-    const centerX = this.canvas!.width  / 2 // 배율 적용하여 좌표 조정
-    const centerY = this.canvas!.height / 2
-    const radius = 70 * dpr; // 배율에 맞게 반지름 조정
-    const lineWidth = 13 * dpr; // 선 두께를 dpr에 맞게 조정
-    const startAngle = -Math.PI / 2 // 12시 방향에서 시작
-    const endAngle = startAngle + (Math.PI * 2 * (this.progress / 100)) // 진행 상태에 따라 각도를 조정
-
-    // 배경 원형 그리기 (회색 원)
-    ctx.beginPath()
-    ctx.arc(centerX / dpr, centerY / dpr, radius / dpr, 0, Math.PI * 2)
-    ctx.strokeStyle = '#242A3B'
-    ctx.lineWidth = lineWidth / dpr
-    ctx.stroke()
-    ctx.closePath()
-
-    // 그라데이션 추가
-    const gradient = ctx.createLinearGradient(0, 0, 0, this.canvas!.height / dpr)
-    gradient.addColorStop(0.0, '#61D59D'); // 진한 초록색이 처음부터 끝까지 유지
-    gradient.addColorStop(0.8, '#61D59D'); // 진한 초록색 유지
-    gradient.addColorStop(1.0, '#61D59D'); // 마지막에 색상이 옅어짐
-
-    // 진행 상태에 따른 원형 그라데이션 그리기
-    ctx.beginPath()
-    ctx.arc(centerX / dpr, centerY / dpr, radius / dpr, startAngle, endAngle)
-    ctx.strokeStyle = gradient // 그라데이션 적용
-    ctx.lineWidth = lineWidth / dpr
-    ctx.lineCap = 'round' // 원형 끝을 둥글게
-    ctx.stroke()
-    ctx.closePath()
-  }
-
-  // 프로그레시브 바 진행 함수
-  incrementProgress() {
-    setInterval(() => {
-      if (this.progress >= 100) {
-        this.progress = 0 // progress가 100%에 도달하면 다시 0으로 초기화
-      } else {
-        this.progress += 1 // progress 증가
-      }
-    }, 30) // 30ms마다 1씩 증가
-  }
-
-  // 컴포넌트가 파괴되기 전 애니메이션을 멈추기
-  beforeDestroy() {
-    cancelAnimationFrame(this.animationId)
+    this.$router.replace('/random')
   }
 
   // iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
@@ -372,16 +108,6 @@ export default class Random extends Vue {
   setViewportHeight = () => {
     const vh = window.innerHeight * 0.01
     document.documentElement.style.setProperty('--vh', `${vh}px`)
-  }
-
-  private selectRandomMessageWithDelay() {
-    this.showMessage = true
-
-    setTimeout(() => {
-      this.showPage1 = false
-      this.showMessage2 = true
-      this.generateHighNumbers(1)
-    }, 3000)
   }
 
   private handleBackButton(): void {
@@ -423,38 +149,24 @@ export default class Random extends Vue {
 
     this.setViewportHeight()
 
+    const storedLottoNumbers = sessionStorage.getItem('lottoNumbers')
+    console.log(storedLottoNumbers)
+    
+    if (storedLottoNumbers) {
+      // 문자열을 숫자 배열로 변환
+      const numberArray = storedLottoNumbers
+        .replace(/^"|"$/g, '')  // 양 끝의 따옴표 제거
+        .split(',')             // 쉼표로 문자열 분리
+        .map(num => Number(num.trim())) // 각 요소를 숫자로 변환
+
+      // 1차원 배열을 2차원 배열로 변환하여 lottoNumbers에 추가
+      this.lottoNumbers.push(numberArray);
+    }
+
     // 페이지 로드 시 히스토리 상태 추가 (페이지 이동 막기 위해 pushState 사용)
     window.history.pushState(null, '', window.location.href)
     window.addEventListener('popstate', this.handleBackButton)
-
-    this.initCanvas()
-    this.animateBalls()
-    this.incrementProgress() // 로딩바를 진행시키는 함수 호출
-
-    this.selectRandomMessageWithDelay()
   }
-
-  // 처음 공
-  // private drawBall(ctx: CanvasRenderingContext2D, ball: Ball) {
-  //   ctx.beginPath()
-  //   ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
-  //   ctx.fillStyle = ball.color // 볼의 색깔을 지정
-  //   ctx.fill()
-  //   ctx.closePath()
-  // }
-
-  // 그라데이션
-  // private drawBall(ctx: CanvasRenderingContext2D, ball: Ball) {
-  //   const gradient = ctx.createRadialGradient(ball.x - ball.radius / 2, ball.y - ball.radius / 2, ball.radius / 4, ball.x, ball.y, ball.radius)
-  //   gradient.addColorStop(0, 'white')
-  //   gradient.addColorStop(1, ball.color)
-
-  //   ctx.beginPath()
-  //   ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
-  //   ctx.fillStyle = gradient // 볼의 색깔을 그라데이션으로 지정
-  //   ctx.fill()
-  //   ctx.closePath()
-  // }
   
   getRandomNumbers(array: number[], count: number): number[] {
     const result = []
@@ -503,34 +215,7 @@ export default class Random extends Vue {
 
   private onSelectedBall() {
     this.isLoading = true
-
-    // // (session 저장: store는 refresh하면 정보 없어짐)
-    // const ball = this.lottoNumbers[0].join(', ')
-    // sessionStorage.setItem('lottoNumbers', JSON.stringify(ball))
-
-    // this.isLoading = false
-    // // this.$router.push('/select-hope')
-    // this.isPopupVisible = true
-    this.onLogin()
-  }
-
-  private async onLogin() {
-    const user = getLoggedUserInfo()
-
-    try {
-      sessionStorage.setItem('hope', '')
-      sessionStorage.setItem('hope-select', 'false')
-
-      if (user) {
-        await this.saveLottoNumbers()
-      } else {
-        this.$router.replace('/login?redirect=after-login')
-      }
-    } catch (error) {
-      console.error('Failed to parse user data:', error)
-      alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요')
-      return
-    }
+    this.saveLottoNumbers()
   }
 
   getLottoWeek(t2: Dayjs) {
@@ -646,13 +331,6 @@ export default class Random extends Vue {
 </script>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.8s ease;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
-
 .container {
   margin: 0;
   padding: 0 20px;
