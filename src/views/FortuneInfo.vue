@@ -104,7 +104,7 @@
     </div>
 
     <div class="floating">
-      <button @click="onConfirm">완료</button>
+      <button @click="onConfirm">운세보기</button>
     </div>
   </div>
 </template>
@@ -131,9 +131,9 @@ export default class FortuneInfo extends Vue {
 
   validateBirthday() {
     if (!this.birthday || !this.isValidBirthday(this.birthday)) {
-      this.birthdayError = '유효한 값을 입력해주세요!';
+      this.birthdayError = '유효한 값을 입력해주세요!'
     } else {
-      this.birthdayError = ''; // 유효한 경우 오류 초기화
+      this.birthdayError = '' // 유효한 경우 오류 초기화
     }
   }
 
@@ -157,36 +157,36 @@ export default class FortuneInfo extends Vue {
   }
 
   onConfirm() {
-    let valid = true;
+    let valid = true
 
     if (!this.name) {
-      this.nameError = '이름을 입력해주세요.';
-      valid = false;
+      this.nameError = '이름을 입력해주세요.'
+      valid = false
     }
 
     if (!this.gender) {
-      this.genderError = '성별을 선택해주세요.';
-      valid = false;
+      this.genderError = '성별을 선택해주세요.'
+      valid = false
     }
 
     if (!this.birthday || !this.isValidBirthday(this.birthday)) {
-      this.birthdayError = '생년월일을 8자리로 정확히 입력해주세요.';
-      valid = false;
+      this.birthdayError = '생년월일을 8자리로 정확히 입력해주세요.'
+      valid = false
     }
 
     if (!this.calendarType) {
-      this.calendarTypeError = '양력 또는 음력을 선택해주세요.';
-      valid = false;
+      this.calendarTypeError = '양력 또는 음력을 선택해주세요.'
+      valid = false
     }
 
     if (!this.birthTime) {
-      this.birthTimeError = '출생 시간을 선택해주세요.';
-      valid = false;
+      this.birthTimeError = '출생 시간을 선택해주세요.'
+      valid = false
     }
 
     if (!this.zodiac) {
-      this.zodiacError = '띠를 선택해주세요.';
-      valid = false;
+      this.zodiacError = '띠를 선택해주세요.'
+      valid = false
     }
 
     if (valid) {
@@ -197,10 +197,13 @@ export default class FortuneInfo extends Vue {
         calendarType: this.calendarType,
         birthTime: this.birthTime,
         zodiac: this.zodiac,
-      };
+      }
 
       console.log('userInfo: ', userInfo)
-      this.$router.push('/fortune-loading')
+      this.$router.push({ 
+        name: 'FortuneLoading',
+        params: { fortuneName: this.name}
+      })
     }
   }
 }

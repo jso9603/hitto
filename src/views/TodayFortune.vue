@@ -10,9 +10,9 @@
       <div class="participation">        
         {{ formattedCount }}명이 오늘의 운세를 받았어요.
       </div>
-      <button class="primary" @click="$router.push('/fortuneInfo')">
+      <button class="primary" @click="onNext">
         <img src="@/assets/ic-system-challenge.svg" />
-        운세보기
+        시작하기
       </button>
       <div class="disclamer">
         모희또 서비스에서 제공하는 생성번호는 참고 용도이며,<br/>그로 인한 책임은 사용자에게 있습니다.
@@ -23,6 +23,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import Cookies from 'js-cookie'
 
 import { getCounting } from '@/utils/counting'
 
@@ -64,6 +65,38 @@ export default class TodayFortune extends Vue {
     }, stepTime)
   }
 
+  getTodayFortune() {
+    const storedData = localStorage.getItem('todayFortune')
+    
+    if (storedData) {
+      const data = JSON.parse(storedData)
+      
+      // 현재 시간과 만료 시간을 비교
+      const now = new Date()
+      if (now.getTime() > data.expiry) {
+        // 만료 시간이 지났으면 localStorage에서 삭제
+        localStorage.removeItem('todayFortune')
+        return null // 만료된 데이터는 null 반환
+      }
+      
+      return data.fortunes // 만료되지 않았다면 fortune 데이터 반환
+    }
+    
+    return null // 저장된 데이터가 없으면 null 반환
+  }
+
+  onNext() {
+    const todayFortune = this.getTodayFortune()
+
+    const name = Cookies.get('fortuneName')
+
+    if (todayFortune && name) {
+      this.$router.push('/chatGPT')
+    } else {
+      this.$router.push('/fortuneInfo')
+    }
+  }
+
   async mounted() {
     window.addEventListener('resize', this.setViewportHeight)
     window.addEventListener('orientationchange', this.setViewportHeight)
@@ -103,7 +136,7 @@ export default class TodayFortune extends Vue {
           this.typedText += contents[index++]
         }
       }
-    }, 50);
+    }, 50)
   }
 
   beforeDestroy(): void {

@@ -1,7 +1,7 @@
 <template>
   <div class="fortune">
     <div class="today">{{today}}</div>
-    <div class="name">이름</div>
+    <div class="name">{{fortuneUserName}}님</div>
 
     <div class="img">
       <img src='@/assets/img-fortune.png' at="fortune 이미지" />
@@ -37,8 +37,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import Cookies from 'js-cookie'
 
-import axios from 'axios'
 import dayjs from 'dayjs'
 
 interface Fortune {
@@ -53,58 +53,10 @@ export default class ChatGPT extends Vue {
   fortuneResponse = ''
   loading = true
 
+  fortuneUserName = ''
+
   get today () {
     return dayjs().format('YYYY년 MM월 DD일')
-  }
-
-  async getFortune() {
-    console.log(process.env.VUE_APP_GPT_API_KEY)
-    this.loading = true
-    try {
-      const response = await axios.post(
-        'https://api.openai.com/v1/chat/completions',
-        {
-          model: 'gpt-3.5-turbo',
-          messages: [
-            {
-              role: 'system',
-              content: `
-                당신은 운세 전문가입니다. 사용자에게 오늘의 재물운, 연애운, 사업운, 건강운, 시험운을 각각 한국어로 1줄 요약과 5줄 이상의 상세 설명으로 알려주세요.
-              응답은 반드시 JSON 형식으로 주세요. 형식은 아래와 같이 해주세요:
-              {
-                "fortunes": [
-                  { "category": "재물운", "summary": "1줄 요약", "text": "5줄 이상의 상세 설명" },
-                  { "category": "연애운", "summary": "1줄 요약", "text": "5줄 이상의 상세 설명" },
-                  { "category": "사업운", "summary": "1줄 요약", "text": "5줄 이상의 상세 설명" },
-                  { "category": "건강운", "summary": "1줄 요약", "text": "5줄 이상의 상세 설명" },
-                  { "category": "시험운", "summary": "1줄 요약", "text": "5줄 이상의 상세 설명" }
-                ]
-              }
-              `
-            }
-          ],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.VUE_APP_GPT_API_KEY}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
-
-      // 운세 데이터를 파싱하여 각 항목에 저장
-      const result = JSON.parse(response.data.choices[0].message.content)
-
-    if (result.fortunes && Array.isArray(result.fortunes)) {
-      this.fortunes = result.fortunes
-    } else {
-      console.error('운세 데이터가 올바르지 않습니다.')
-    }
-    } catch (error) {
-      console.error('운세 데이터를 불러오는 중 오류가 발생했습니다:', error)
-    } finally {
-      this.loading = false
-    }
   }
 
   shareKakao() {
@@ -199,11 +151,62 @@ export default class ChatGPT extends Vue {
     }
   }
 
+  // 자정까지 남은 시간을 계산하여 fortune 데이터를 localStorage에 저장하는 함수
+  setTodayFortune(fortunes: any) {    
+    // 오늘 자정 시간을 계산
+    const tomorrow = new Date()
+    tomorrow.setHours(24, 0, 0, 0)  // 자정 시간 설정 (내일 00:00:00)
+    
+    const data = {
+      fortunes: fortunes,          // 저장할 fortune 데이터
+      expiry: tomorrow.getTime()   // 자정의 시간을 만료 시간으로 저장
+    }
+    
+    // localStorage에 저장 (todayFortune)
+    localStorage.setItem('todayFortune', JSON.stringify(data))
+  }
+
+  // todayFortune 데이터를 가져오는 함수 (만료 시간 확인)
+  getTodayFortune() {
+    const storedData = localStorage.getItem('todayFortune')
+    
+    if (storedData) {
+      const data = JSON.parse(storedData)
+      
+      // 현재 시간과 만료 시간을 비교
+      const now = new Date()
+      if (now.getTime() > data.expiry) {
+        // 만료 시간이 지났으면 localStorage에서 삭제
+        localStorage.removeItem('todayFortune')
+        return null // 만료된 데이터는 null 반환
+      }
+      
+      return data.fortunes // 만료되지 않았다면 fortune 데이터 반환
+    }
+    
+    return null // 저장된 데이터가 없으면 null 반환
+  }
+
   mounted() {
-    // this.getFortune()
     const fortunesData = this.$route.params.fortunes
+    const fortuneUserName = this.$route.params.fortuneUserName
+    this.fortuneUserName = fortuneUserName
+
     if (fortunesData) {
       this.fortunes = JSON.parse(fortunesData) // 전달받은 데이터를 파싱하여 사용
+      this.setTodayFortune(fortunesData)
+
+      console.log(fortunesData)
+    } else {
+      const todayFortune = this.getTodayFortune()
+      if (todayFortune) {
+        console.log('오늘의 운세:', todayFortune)
+        this.fortunes = JSON.parse(todayFortune)
+      } else {
+        console.log('운세 데이터가 만료되었습니다.')
+      }
+
+      this.fortuneUserName = Cookies.get('fortuneName') as string
     }
   }
 

@@ -20,6 +20,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 import { Ball } from '../models/Ball'
 
@@ -40,11 +41,13 @@ export default class FortuneLoading extends Vue {
   private floatings = ['객관적인 운세 결과를 위해 30초 정도가 소요됩니다', '이름과 성별을 분석 중입니다', '생년월일과 태어난 시를 분석 중입니다 ']
 
   // 현재 보여줄 텍스트의 인덱스
-  private currentIndex: number = 0;
+  private currentIndex: number = 0
+
+  private fortuneUserName: string = ''
 
   // 애니메이션으로 보여줄 텍스트 (현재의 텍스트)
   get currentText() {
-    return this.floatings[this.currentIndex];
+    return this.floatings[this.currentIndex]
   }
 
   initCanvas() {
@@ -143,7 +146,6 @@ export default class FortuneLoading extends Vue {
     ctx.fill()
     ctx.closePath()
   }
-
 
   // 공의 위치를 업데이트하는 함수
   updateBallPosition(ball: Ball) {
@@ -274,15 +276,15 @@ export default class FortuneLoading extends Vue {
     }, 30) // 30ms마다 1씩 증가
   }
 
-setViewportHeight = () => {
+  setViewportHeight = () => {
     const vh = window.innerHeight * 0.01
     document.documentElement.style.setProperty('--vh', `${vh}px`)
   }
 
-// 컴포넌트가 파괴되기 전 애니메이션을 멈추기
-beforeDestroy() {
-  cancelAnimationFrame(this.animationId)
-}
+  // 컴포넌트가 파괴되기 전 애니메이션을 멈추기
+  beforeDestroy() {
+    cancelAnimationFrame(this.animationId)
+  }
 
   startTextFlip() {
     setInterval(() => {
@@ -329,10 +331,10 @@ beforeDestroy() {
       const result = JSON.parse(response.data.choices[0].message.content)
 
     if (result.fortunes && Array.isArray(result.fortunes)) {
-      // TODO: 이름 정보 넘겨야 함!!
+
       this.$router.push({ 
-        name: 'ChatGPT', // 이동할 라우트 이름
-        params: { fortunes: JSON.stringify(result.fortunes)}
+        name: 'ChatGPT',
+        params: { fortunes: JSON.stringify(result.fortunes), fortuneUserName: this.fortuneUserName }
       })
     } else {
       console.error('운세 데이터가 올바르지 않습니다.')
@@ -355,6 +357,13 @@ beforeDestroy() {
     this.startTextFlip()
 
     this.getFortune()
+
+    const fortuneUserName = this.$route.params.fortuneName
+    console.log('fortune', fortuneUserName)
+    if (fortuneUserName) {
+      this.fortuneUserName = fortuneUserName
+      Cookies.set('fortuneName', this.fortuneUserName, {expires: 1})
+    }
   }
 }
 </script>
