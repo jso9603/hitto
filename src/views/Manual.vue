@@ -446,7 +446,7 @@ h3::before {
   line-height: 19px;
   cursor: pointer;
   /* margin-bottom: 114px; */
-  margin-bottom: 52px;
+  margin-bottom: 20px;
 }
  
 .floating {

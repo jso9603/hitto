@@ -110,8 +110,8 @@ export default class MyNumber extends Vue {
   }
 
   created() {
-    window.addEventListener('resize', this.adjustHtmlHeight)
-    window.addEventListener('load', this.adjustHtmlHeight)
+    // window.addEventListener('resize', this.adjustHtmlHeight)
+    // window.addEventListener('load', this.adjustHtmlHeight)
 
     dayjs.extend(duration)
 
