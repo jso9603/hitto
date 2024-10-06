@@ -39,7 +39,10 @@
       <div class="floating">
         <button class="none" @click="oneMore">재선택</button>
         <button :disabled="isLoading" class="primary" @click="onSelectedBall">
-          선택하기
+          <div v-if="isLoading" class="loading-spinner">
+            <img src="@/assets/ic-progress-black.svg" />
+          </div>
+          <template v-if="!isLoading">선택하기</template>
         </button>
       </div>
     </div>
@@ -219,16 +222,6 @@ export default class AfterLogin extends Vue {
   }
 
   getLottoWeek(t2: Dayjs) {
-    // console.log('회차:', this.getLottoWeek('2024-09-08 15:00'))  // 일
-    // console.log('회차:', this.getLottoWeek('2024-09-09 15:00'))  // 월
-    // console.log('회차:', this.getLottoWeek('2024-09-10 15:00')) // 화
-    // console.log('회차:', this.getLottoWeek('2024-09-11 15:00'))  // 수
-    // console.log('회차:', this.getLottoWeek('2024-09-12 13:00')) // 목
-    // console.log('회차:', this.getLottoWeek('2024-09-13 13:00')) // 금요일
-    // console.log('회차:', this.getLottoWeek('2024-09-14 17:00')) // 토요일 오후 5시, 1137회
-    // console.log('회차:', this.getLottoWeek('2024-09-14 18:30')) // 토요일 오후 6시 30분, 1138회
-    // console.log('회차:', this.getLottoWeek('2024-09-15 00:00')) // 일요일 자정, 1138회
-
     const t1 = dayjs('2002-12-07') // 로또 1회차 기준 날짜
     // const currentDate = dayjs(t2) // 입력된 날짜
     const currentDate = t2
@@ -237,9 +230,6 @@ export default class AfterLogin extends Vue {
 
     // 이번 주 토요일 오후 6시를 계산
     let saturdaySixPM = currentDate.startOf('week').add(6, 'day').hour(18).minute(0).second(0)
-
-    console.log('현재 날짜:', currentDate.format('YYYY-MM-DD HH:mm'))
-    console.log('이번 주 토요일 오후 6시:', saturdaySixPM.format('YYYY-MM-DD HH:mm'))
 
     // 만약 현재 시간이 그 주의 토요일 오후 6시 이후라면 다음 회차로 설정
     if (currentDate.day() === 0 || currentDate.isAfter(saturdaySixPM)) {
@@ -266,7 +256,6 @@ export default class AfterLogin extends Vue {
         user = JSON.parse(userData)
 
         const round = this.getLottoWeek(dayjs())
-
         const numbers = [(sessionStorage.getItem('lottoNumbers'))!.replace(/^"|"$/g, '')]
 
         try {
@@ -315,10 +304,14 @@ export default class AfterLogin extends Vue {
           }, 1000)
           
         } catch (e) {
+          this.isLoading = false
+
           console.error('Error adding document: ', e)
           alert('저장하는 과정에서 오류가 발생했습니다. 다시 시도해주세요.')
         }
       } catch (error) {
+        this.isLoading = false
+
         console.error('Failed to parse user data:', error)
         user = null
       }
@@ -596,5 +589,27 @@ export default class AfterLogin extends Vue {
   font-size: 16px;
   font-weight: 700;
   line-height: 19px;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+}
+
+.loading-spinner > img {
+  width: 20px;
+  height: 20px;
+  animation: rotate 1s linear infinite;
 }
 </style>

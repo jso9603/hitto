@@ -2169,7 +2169,7 @@ mainCategories: MainCategory[] = [
 .textarea-box {
   padding: 20px;
   border-radius: 16px;
-  background-color: #222222;
+  background-color: #212736;
   position: relative;
 }
 
@@ -2180,7 +2180,7 @@ mainCategories: MainCategory[] = [
   max-height: 300px;
   border: none;
   outline: none;
-  background-color: #222222;
+  background-color: #212736;
   color: #b3b3b3;
   resize: none;
   font-size: 15px;
@@ -2326,14 +2326,14 @@ mainCategories: MainCategory[] = [
 .floating > button {
   width: 100%;
   min-height: 52px;
-  background-color: #4AFF81;
+  background-color: #ECEEF0;
   padding: 8px 8px;
   border-radius: 24px;
   border-style: none;
   color: #181D23;
   font-size: 16px;
   font-weight: 700;
-  line-height: 20px;
+  line-height: 19px;
   cursor: pointer;
 }
 </style>

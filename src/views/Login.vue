@@ -10,14 +10,6 @@
         <img :src="require(`@/assets/${benefit.icon}`)" />
         <div class="text">{{benefit.text}}</div>
       </div>
-      <!-- <div class="get__started">
-        <img src="@/assets/ic-system-logo.svg" />
-        <div class="text">행운의 숫자로 꿈꾸는 경제적 자유</div>
-        <button @click="kakaoLoginStart" class="kakao">
-          <img src="@/assets/ic-system-kakao.svg" />
-          카카오로 시작하기
-        </button>
-      </div> -->
 
       <div class="floating">
         <div class="participation">
@@ -76,9 +68,8 @@ export default class Login extends Vue {
         window.Kakao.API.request({
           url: '/v2/user/me',
           success: (res: any) => {
-            console.log('카카오 인가 요청 성공')
             const kakaoAccount = res.kakao_account
-            console.log(kakaoAccount)
+            console.log('카카오 인가 요청 성공: ', kakaoAccount)
 
             // DB: find and insert or Ignore
             this.saveUsers(kakaoAccount.email)

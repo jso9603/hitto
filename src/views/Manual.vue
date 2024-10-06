@@ -54,9 +54,14 @@
 
     <div class="floating">
       <button class="primary" @click="onSave">
-        저장하기
+        <div v-if="isLoading" class="loading-spinner">
+          <img src="@/assets/ic-progress-black.svg" />
+        </div>
+        <template v-if="!isLoading">저장하기</template>
       </button>
-      <div class="disclamer">모희또 서비스에서 제공하는 생성번호는 참고 용도이며, <br/>그로 인한 결과는 책임은 사용자에게 있습니다.</div>
+      <div class="disclamer">
+        모희또 서비스에서 제공하는 생성번호는 참고 용도이며, <br/>그로 인한 결과는 책임은 사용자에게 있습니다.
+      </div>
     </div>
   </div>
 </template>
@@ -85,6 +90,8 @@ interface Form {
   },
 })
 export default class Manual extends Vue {
+  isLoading = false
+
   week =''
   currentRound = ''
   saturdayDate = ''
@@ -215,6 +222,8 @@ export default class Manual extends Vue {
 
   // 실제 DB에 저장
   async saveData() {
+    this.isLoading = true
+
     const user = getLoggedUserInfo() as User
     const round = this.getLottoWeek(dayjs())
 
@@ -257,11 +266,13 @@ export default class Manual extends Vue {
       }
 
       setTimeout(() => {
-        // this.isLoading = false
+        this.isLoading = false
 
         this.$router.push('/my/number?tab=manual')
       }, 1000)
     } catch (e) {
+      this.isLoading = false
+
       console.error('Error adding document: ', e)
       alert('저장하는 과정에서 오류가 발생했습니다. 다시 시도해주세요.')
     }
@@ -486,5 +497,27 @@ button.primary {
   line-height: 19px;
   color: #737577;
   text-align: center;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+}
+
+.loading-spinner > img {
+  width: 20px;
+  height: 20px;
+  animation: rotate 1s linear infinite;
 }
 </style>

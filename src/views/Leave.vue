@@ -1,14 +1,5 @@
 <template>
   <div class="leave">
-    <div v-if="isLoading">
-      <div class="waitinging">
-        <div class="bg-img bounce-animation">
-          <img src="@/assets/ic-stefan-2d.svg" />
-        </div>
-        <div class="waiting">잠시만 기달려주세요</div>
-      </div>
-    </div>
-
     <img src="@/assets/img-stefan.svg" />
     <div class="title">모히또를 떠나신다니 아쉬워요!</div>
     <div class="desc">지금 탈퇴하면 아래 정보와 혜택이 모두 사라져요.<br/>회원 탈퇴 신청 전에 아래 사항을 꼭 확인해주세요!</div>
@@ -28,7 +19,12 @@
       >
         좀 더 써볼게요
       </button>
-      <button :disabled="isLoading" class="none" @click="onLeave">탈퇴할게요</button>
+      <button :disabled="isLoading" class="none" @click="onLeave">
+        <div v-if="isLoading" class="loading-spinner">
+          <img src="@/assets/ic-progress.svg" />
+        </div>
+        <template v-if="!isLoading">탈퇴할게요</template>
+      </button>
     </div>
   </div>
 </template>
@@ -52,7 +48,9 @@ export default class Leave extends Vue {
   private intervalId: number | null = null
 
   private benefits = [
-    "저장된 '내 번호' 정보가 모두 사라져요", "회원 전용 다양한 혜택 제공이 중단돼요", "저장된 '내 번호' 정보가 모두 사라져요",
+    "저장된 '내 번호' 정보가 모두 사라져요",
+    "회원 전용 다양한 혜택 제공이 중단돼요",
+    "저장된 '내 번호' 정보가 모두 사라져요",
   ]
 
   private onCancel() {
@@ -172,7 +170,7 @@ img {
   margin-bottom: 12px;
   padding: 16px 20px 16px 20px;
   border-radius: 16px;
-  background-color: #222222;
+  background-color: #1D2330;
   font-size: 15px;
   font-weight: 600;
   line-height: 23px;
@@ -210,11 +208,11 @@ img {
 .floating > button {
   width: 100%;
   min-height: 52px;
-  background-color: #4AFF81;
+  background-color: #ECEEF0;
   padding: 8px 8px;
   border-radius: 24px;
   border-style: none;
-  color: #202223;
+  color: #181D23;
   font-size: 16px;
   font-weight: 700;
   line-height: 19px;
@@ -227,59 +225,32 @@ img {
 }
 
 .floating > button.none {
-  background-color: #171717;
+  background-color: transparent;
   color: #9C9EA0;
   font-size: 15px;
   font-weight: 400;
   line-height: 18px;
 }
 
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
   }
-  40% {
-    transform: translateY(-15px);
-  }
-  60% {
-    transform: translateY(-7.5px);
+  100% {
+    transform: rotate(360deg);
   }
 }
 
-.waitinging {
-  padding: 48px 20px;
+.loading-spinner {
   display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: 12px;
-  opacity: 0.9;
-  position: absolute;
-  transform: translate(-50%, -50%);
-  left: 50%;
-  top: 50%;
-}
-
-.bg-img {
-  display: flex;
-  align-items: center;
   justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: #0085FF;
+  align-items: center;
+  height: 20px;
 }
 
-.waiting {
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 23px;
-  text-align: center;
-  color: #9C9EA0;
-}
-
-.bounce-animation {
-  animation: bounce 2s infinite;
+.loading-spinner > img {
+  width: 20px;
+  height: 20px;
+  animation: rotate 1s linear infinite;
 }
 </style>

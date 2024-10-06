@@ -56,7 +56,10 @@
         <div class="floating">
           <button class="none" @click="oneMore">재선택</button>
           <button :disabled="isLoading" class="primary" @click="onSelectedBall">
-            선택하기
+            <div v-if="isLoading" class="loading-spinner">
+              <img src="@/assets/ic-progress-black.svg" />
+            </div>
+            <template v-if="!isLoading">선택하기</template>
           </button>
         </div>
       </div>
@@ -630,10 +633,14 @@ export default class Random extends Vue {
           }, 1000)
           
         } catch (e) {
+          this.isLoading = false
+
           console.error('Error adding document: ', e)
           alert('저장하는 과정에서 오류가 발생했습니다. 다시 시도해주세요.')
         }
       } catch (error) {
+        this.isLoading = false
+
         console.error('Failed to parse user data:', error)
         user = null
       }
@@ -918,5 +925,27 @@ export default class Random extends Vue {
   font-size: 16px;
   font-weight: 700;
   line-height: 19px;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+}
+
+.loading-spinner > img {
+  width: 20px;
+  height: 20px;
+  animation: rotate 1s linear infinite;
 }
 </style>
