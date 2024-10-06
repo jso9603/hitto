@@ -4,7 +4,6 @@ import Ai from '@/views/Ai.vue'
 import Backup from '@/views/Backup.vue'
 import Random from '@/views/Random.vue'
 import AfterLogin from '@/views/AfterLogin.vue'
-import SelectHope from '@/views/SelectHope.vue'
 import Dream from '@/views/Dream.vue'
 import Category from '@/views/Category.vue'
 import Login from '@/views/Login.vue'
@@ -51,11 +50,6 @@ const routes = [
     path: '/after-login',
     name: 'AfterLogin',
     component: AfterLogin,
-  },
-  {
-    path: '/select-hope',
-    name: 'Select-Hope',
-    component: SelectHope,
   },
   {
     path: '/dream',
