@@ -14,10 +14,26 @@
       </div>
     </div>
 
+    <div class="coopang" @click="onCoopang">
+      <img src="@/assets/AD.png" alt="쿠팡 광고" />
+    </div>
+
     <div class="menu">
       <div class="title">서비스</div>
-        <div v-for="item in services" :key="item.title" class="service-item" @click="onService(item)">
+        <div
+          v-for="item in services"
+          :key="item.title"
+          class="service-item"
+          @click="onService(item)"
+        >
           <span class="service-title">{{ item.title }}</span>
+          <span
+            v-if="item.badge"
+            class="badge"
+            :style="{ color: item.badgeBg, backgroundColor: `${item.badgeBg}14` }"
+          >
+            {{ item.badge }}
+          </span>
           <img src="@/assets/ic-system-arrow-right.svg" />
       </div>
     </div>
@@ -37,6 +53,8 @@
         <img src="@/assets/ic-system-arrow-right.svg" />
       </div>
     </div>
+
+    <div class="coopang-disclamer">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div>
 
     <ins
       class="adsbygoogle"
@@ -61,8 +79,10 @@ export default class My extends Vue {
 
   services = [
     {
-      title: 'Ai 생성',
+      title: 'AI 생성',
       link: '/ai',
+      badge: '인기',
+      badgeBg: '#FF604F',
     },
     {
       title: '수동 생성',
@@ -75,6 +95,8 @@ export default class My extends Vue {
     {
       title: '오늘의 운세',
       link: '/today',
+      badge: '추천',
+      badgeBg: '#61D59D',
     },
   ]
 
@@ -99,6 +121,10 @@ export default class My extends Vue {
   private animals: string[] = [
     '돼지', '호랑이', '사자', '고양이', '강아지', '곰', '여우', '토끼', '독수리', '판다',
   ]
+
+  onCoopang() {
+    window.open('https://link.coupang.com/a/bU6BtZ', '_blank')
+  }
 
   generateNickname(uid: string): string {
     const firstDigit = parseInt(uid.split('_')[1].charAt(0))
@@ -180,7 +206,7 @@ export default class My extends Vue {
 
 <style scoped>
 .my {
-  margin-top: 24px;
+  margin-top: 10px;
   margin-bottom: calc(40px + 64px + env(safe-area-inset-bottom));
   padding: 0 20px;
 }
@@ -249,19 +275,33 @@ export default class My extends Vue {
   height: 13.5px;
 }
 
+.coopang {
+  padding: 7px 0;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #375666;
+  border-radius: 12px;
+}
+
+.coopang > img {
+  width: auto;
+  height: 40px;
+}
+
 .menu {
   margin-bottom: 28px;
   font-size: 14px;
   font-weight: 600;
-  line-height: 21px;
   color: #9C9EA0;
 }
 
 .menu > .title {
   margin-bottom: 1px;
   font-size: 14px;
-  font-weight: 600;
-  line-height: 21px;
+  font-weight: 500;
+  line-height: 22px;
   text-align: left;
   color: #9C9EA0;
 }
@@ -277,22 +317,32 @@ export default class My extends Vue {
   border-bottom: none;
 }
 
-.service-icon {
-  width: 24px;
-  height: 24px;
-  margin-right: 12px;
+.service-item > img {
+  margin-left: auto;
+}
+
+.badge {
+  margin-left: 8px;
+  display: table;
+  padding: 4px 7px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 14px;
 }
 
 .service-title {
-  flex-grow: 1;
   font-size: 18px;
   font-weight: 600;
   line-height: 26px;
   color: #ECEEF0;
 }
 
-.arrow-icon {
-  width: 24px;
-  height: 24px;
+.coopang-disclamer {
+  margin-top: 48px;
+  color: #FFFFFF4D;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
 }
 </style>
