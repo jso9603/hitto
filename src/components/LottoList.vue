@@ -360,7 +360,7 @@ export default class LottoList extends Vue {
 }
 
 .box.bordered {
-  border: 1px solid #5F6163;
+  border: 1px solid #2E364B;
 }
 
 .box.create-number-box {
