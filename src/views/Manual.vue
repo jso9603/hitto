@@ -11,54 +11,53 @@
     <div class="week">{{currentRound}}회</div>
     <div class="date">{{getFormattedDate(saturdayDate)}} 추첨</div>
 
-    <div
-      v-for="(form, index) in forms"
-      :key="index"
-      class="form-box"
-    >
-      <div class="form-header">
-        <h3>P-{{ form.label.charCodeAt() - 64 }}</h3>
-        <button
-          @click="resetForm(index)"
-          class="reset"
-          :disabled="form.selectedNumbers.length === 0"
-          :style="{marginRight: index === 0 ? '0px' : '8px' }"
-        >
-          초기화
-        </button>
-        <button v-if="index !== 0" @click="removeForm(index)" class="remove">삭제</button>
-      </div>
-      <!-- 여기에 번호 입력하는 영역 -->
-      <div class="numbers">
-        <div
-          v-for="(number, numberIndex) in form.numbers"
-          :key="numberIndex"
-          class="number-circle"
-          @click="selectNumber(index, number)"
-          :class="[
-            form.selectedNumbers.includes(number) ? 'selected' : '', 
-            getNumberClass(number)
-          ]"
-        >
-          {{ number }}
+    <div class="selected-form">
+      <div
+        v-for="(form, index) in forms"
+        :key="index"
+        class="form-box"
+      >
+        <div class="form-header">
+          <h3>P-{{ form.label.charCodeAt() - 64 }}</h3>
+          <button
+            @click="resetForm(index)"
+            class="reset"
+            :disabled="form.selectedNumbers.length === 0"
+            :style="{marginRight: index === 0 ? '0px' : '8px' }"
+          >
+            초기화
+          </button>
+          <button v-if="index !== 0" @click="removeForm(index)" class="remove">삭제</button>
+        </div>
+        <!-- 여기에 번호 입력하는 영역 -->
+        <div class="numbers">
+          <div
+            v-for="(number, numberIndex) in form.numbers"
+            :key="numberIndex"
+            class="number-circle"
+            @click="selectNumber(index, number)"
+            :class="[
+              form.selectedNumbers.includes(number) ? 'selected' : '', 
+              getNumberClass(number)
+            ]"
+          >
+            {{ number }}
+          </div>
         </div>
       </div>
+
+      <!-- TODO: 나중에 5개 이상 버튼 추가하기 누르면 광고 -->
+      <button class="add" @click="addForm" v-if="forms.length < 5">
+        <img src="@/assets/ic-system-plus.svg" />
+      </button>
     </div>
 
-    <!-- TODO: 나중에 5개 이상 버튼 추가하기 누르면 광고 -->
-    <button class="add" @click="addForm" v-if="forms.length < 5">
-      <img src="@/assets/ic-system-plus.svg" />
-    </button>
-
-     <button class="primary" @click="onSave">
-        저장하기
-      </button>
-
-    <!-- <div class="floating">
+    <div class="floating">
       <button class="primary" @click="onSave">
         저장하기
       </button>
-    </div> -->
+      <div class="disclamer">모희또 서비스에서 제공하는 생성번호는 참고 용도이며, <br/>그로 인한 결과는 책임은 사용자에게 있습니다.</div>
+    </div>
   </div>
 </template>
 
@@ -330,6 +329,10 @@ export default class Manual extends Vue {
   text-align: center;
 }
 
+.selected-form {
+  margin-bottom: 142px;
+}
+
 .form-box {
   background-color: #212736;
   padding: 24px 20px;
@@ -463,7 +466,6 @@ h3::before {
 }
 
 button.primary {
-  margin-bottom: 20px;
   width: 100%;
   min-height: 54px;
   background-color: #ECEEF0;
@@ -475,5 +477,14 @@ button.primary {
   font-weight: 700;
   line-height: 19px;
   cursor: pointer;
+}
+
+.disclamer {
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 19px;
+  color: #737577;
+  text-align: center;
 }
 </style>
