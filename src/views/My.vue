@@ -42,12 +42,13 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import Cookies from 'js-cookie'
+
+import { getLoggedUserInfo } from '@/utils/user'
 
 @Component
 export default class My extends Vue {
-  nickname = '';
-  user: any = {};
+  nickname = ''
+  user: any = {}
 
   services = [
     {
@@ -66,13 +67,9 @@ export default class My extends Vue {
       title: '오늘의 운세',
       link: '/today',
     },
-  ];
+  ]
 
-  repositories = [
-    {
-      title: '나의 로또 번호'
-    }
-  ];
+  repositories = [{ title: '나의 로또 번호' }]
 
   general = [
     {
@@ -84,15 +81,15 @@ export default class My extends Vue {
     {
       title: '개인 정보 보호 및 약관',
     },
-  ];
+  ]
 
   private adjectives: string[] = [
     '희망찬', '용감한', '즐거운', '활기찬', '씩씩한', '지혜로운', '사랑스러운', '기쁜', '자유로운', '귀여운',
-  ];
+  ]
 
   private animals: string[] = [
     '돼지', '호랑이', '사자', '고양이', '강아지', '곰', '여우', '토끼', '독수리', '판다',
-  ];
+  ]
 
   generateNickname(uid: string): string {
     const firstDigit = parseInt(uid.split('_')[1].charAt(0));
@@ -122,35 +119,39 @@ export default class My extends Vue {
 
   onNumber(title: string) {
     this.$store.dispatch('updateMenuName', title)
-    this.$router.push('/my/number')
+
+    if (this.user) {
+      this.$router.push('/my/number')
+    } else {
+      this.$router.replace(`/login?redirect=my`)
+    }
   }
 
   openEmail(subjectTitle: string) {
-    const email = 'mohito.project@gmail.com'; 
-    const subject = encodeURIComponent(subjectTitle);
-    const body = encodeURIComponent('여기에 내용을 입력하세요.');
+    const email = 'mohito.project@gmail.com'
+    const subject = encodeURIComponent(subjectTitle)
+    const body = encodeURIComponent('여기에 내용을 입력하세요.')
 
-    const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
-    window.location.href = mailtoLink;
+    const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`
+    window.location.href = mailtoLink
   }
 
   onLogin() {
-    this.$router.replace('/login');
+    this.$router.replace('/login?redirect=my')
   }
 
   created() {
-    const userData = Cookies.get('user')
-
-    if (userData) {
+    const user = getLoggedUserInfo()
+    
+    if (user) {
       try {
-        this.user = JSON.parse(userData)
+        this.user = user
         this.nickname = this.generateNickname(this.user.uid)
       } catch (error) {
-        console.error('Failed to parse user data:', error)
-        this.user = null;
+        this.user = null
       }
     } else {
-      this.user = null;
+      this.user = null
       this.nickname = 'Guest'
     }
   }
