@@ -37,6 +37,12 @@
         <img src="@/assets/ic-system-arrow-right.svg" />
       </div>
     </div>
+
+     <ins class="adsbygoogle"
+      style="display:inline-block;width:100%;height:50px"
+      data-ad-client="ca-pub-7548744760182744"
+      data-ad-slot="7644074545">
+    </ins>
   </div>
 </template>
 
@@ -156,6 +162,14 @@ export default class My extends Vue {
     } else {
       this.user = null
       this.nickname = 'Guest'
+    }
+  }
+
+  mounted() {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({})
+    } catch (e) {
+      console.error('AdSense error:', e)
     }
   }
 }
