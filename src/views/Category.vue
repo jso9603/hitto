@@ -2077,7 +2077,11 @@ mainCategories: MainCategory[] = [
   }
 
   private onConfirm() {
-    this.$router.push('/random')
+    if (this.impression.length < 10) {
+      alert('최소 10글자 이상 작성해주세요.')
+    } else {
+      this.$router.push('/random')
+    }
   }
 
   async mounted() {
