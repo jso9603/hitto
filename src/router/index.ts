@@ -147,11 +147,15 @@ const routes = [
     name: 'FortuneLoading',
     component: FortuneLoading,
   }
-];
+]
 
 const router = new Router({
   mode: 'history',
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    // 항상 페이지가 바뀔 때 스크롤을 최상단으로 설정 (라우트가 변경될 때 실행)
+    return { x: 0, y: 0 };
+  }
 })
 
 export default router
