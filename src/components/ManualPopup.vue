@@ -216,6 +216,11 @@ export default class ManualPopup extends Vue {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  margin-bottom: 12px;
+}
+
+.form-row:last-child {
+  margin-bottom: 0;
 }
 
 .lotto-numbers .status {
