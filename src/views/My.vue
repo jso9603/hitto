@@ -38,10 +38,13 @@
       </div>
     </div>
 
-     <ins class="adsbygoogle"
-      style="display:inline-block;width:100%;height:50px"
+    <ins
+      class="adsbygoogle"
+      style="display:block"
       data-ad-client="ca-pub-7548744760182744"
-      data-ad-slot="7644074545">
+      data-ad-slot="5769000954"
+      data-ad-format="auto"
+      data-full-width-responsive="true">
     </ins>
   </div>
 </template>
