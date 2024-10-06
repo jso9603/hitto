@@ -83,7 +83,9 @@ export default class App extends Vue {
 html, body {
   box-sizing: border-box;
   min-height: 100%;
-  background: linear-gradient(180deg, #242A3B 0%, #131720 26.54%);
+  background: linear-gradient(180deg, #242A3B 0%, #131720 26.54%) no-repeat;
+  background-size: 100% 500px;
+  background-color: #131720;
   background-attachment: fixed;
 }
 body {

@@ -65,7 +65,7 @@ export default class ChatGPT extends Vue {
       content: {
         title: '모두의 희망로또',
         description: '친구, 지인과 함께 로또 1등에 도전해보세요.',
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/hitto-1b119.appspot.com/o/img-mohito.png?alt=media&token=3d83642a-91c5-46ac-b144-095bcf728016',
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/hitto-1b119.appspot.com/o/img-mohito.png?alt=media&token=0d070e79-acf8-4f99-82cf-c81142cffe8c',
         link: {
           mobileWebUrl: 'https://mohito.co.kr',
           webUrl: 'https://mohito.co.kr',
