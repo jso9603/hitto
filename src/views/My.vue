@@ -73,7 +73,7 @@ export default class My extends Vue {
 
   general = [
     {
-      title: '문의하기',
+      title: '고객센터',
     },
     {
       title: '광고 문의',
@@ -92,23 +92,26 @@ export default class My extends Vue {
   ]
 
   generateNickname(uid: string): string {
-    const firstDigit = parseInt(uid.split('_')[1].charAt(0));
-    const lastDigit = parseInt(uid.slice(-1), 10);
-    const number = parseInt(uid.split('_')[1].substring(0, 4));
+    const firstDigit = parseInt(uid.split('_')[1].charAt(0))
+    const lastDigit = parseInt(uid.slice(-1), 10)
+    const number = parseInt(uid.split('_')[1].substring(0, 4))
 
-    const adjective = this.adjectives[firstDigit % this.adjectives.length - 1];
-    const index = lastDigit % this.animals.length - 1;
-    const adjustedIndex = index < 0 ? 0 : index;
-    const animal = this.animals[adjustedIndex];
+    const adjective = this.adjectives[firstDigit % this.adjectives.length - 1]
+    const index = lastDigit % this.animals.length - 1
+    const adjustedIndex = index < 0 ? 0 : index
+    const animal = this.animals[adjustedIndex]
 
-    return `${adjective}${animal}${number}`;
+    return `${adjective}${animal}${number}`
   }
 
   onGeneral(index: number) {
-    if (index === 0 || index === 1) {
-      this.openEmail(index === 0 ? '문의사항' : '광고문의');
+    if (index === 0) {
+      const openKakaoUrl = 'https://open.kakao.com/o/gc9Y3ZSg'
+      window.open(openKakaoUrl, '_blank')
+    } else if (index === 1) {
+      this.openEmail('광고문의')
     } else {
-      this.$router.push('/terms');
+      this.$router.push('/terms')
     }
   }
 
