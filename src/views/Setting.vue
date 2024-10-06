@@ -37,14 +37,14 @@ export default class Setting extends Vue {
   private toggleState: boolean = true
 
   private async handleToggle(newState: boolean) {
-    this.toggleState = newState;
+    this.toggleState = newState
 
-    const confirmed = confirm('정말 로그아웃하시겠습니까?');
+    const confirmed = confirm('정말 로그아웃하시겠습니까?')
     if (confirmed) {
       if (!this.toggleState) {
-        await Cookies.remove('user');
-        await alert('로그아웃 되었습니다');
-        await this.$router.push('/');
+        await Cookies.remove('user')
+        await alert('로그아웃 되었습니다')
+        await this.$router.push('/')
       }
     }
   }
@@ -52,25 +52,25 @@ export default class Setting extends Vue {
   // iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
   // 특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음
   setViewportHeight = () => {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    const vh = window.innerHeight * 0.01
+    document.documentElement.style.setProperty('--vh', `${vh}px`)
   }
 
   onLeave() {
-    this.$router.push('/leave');
+    this.$router.push('/leave')
   }
 
   mounted() {
-    window.addEventListener('resize', this.setViewportHeight);
-    window.addEventListener('orientationchange', this.setViewportHeight);
+    window.addEventListener('resize', this.setViewportHeight)
+    window.addEventListener('orientationchange', this.setViewportHeight)
 
-    this.setViewportHeight();
+    this.setViewportHeight()
   }
 
   created() {
-    const user = getLoggedUserInfo();
+    const user = getLoggedUserInfo()
     if (user) {
-      this.user = user;
+      this.user = user
     }
   }
 }

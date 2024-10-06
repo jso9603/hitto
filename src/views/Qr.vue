@@ -18,45 +18,45 @@ import { QrcodeStream } from 'vue-qrcode-reader'
 })
 export default class Qr extends Vue {
   onDecode(decodedString: string) {
-    this.checkLottery(decodedString);
+    this.checkLottery(decodedString)
   }
 
   onInit(promise: Promise<void>) {
     promise.catch((error) => {
       if (error.name === 'NotAllowedError') {
-        alert('카메라 접근이 거부되었습니다.');
+        alert('카메라 접근이 거부되었습니다.')
       } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
-        alert('사용 가능한 카메라 장치를 찾을 수 없습니다.');
+        alert('사용 가능한 카메라 장치를 찾을 수 없습니다.')
       } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
-        alert('카메라를 사용할 수 없습니다. 카메라가 다른 애플리케이션에서 사용 중일 수 있습니다.');
+        alert('카메라를 사용할 수 없습니다. 카메라가 다른 애플리케이션에서 사용 중일 수 있습니다.')
       } else {
         // camera access is only permitted in secure context. Use HTTPS or localhost rather than HTPP.
-        alert('카메라 초기화에 실패했습니다. 오류: ' + error.message);
+        alert('카메라 초기화에 실패했습니다. 오류: ' + error.message)
       }
-    });
+    })
   }
 
   checkLottery(url: string) {
     // QR 코드에서 읽은 URL로 이동
-    window.location.href = url;
+    window.location.href = url
   }
 
   onQrClose() {
-    this.$router.go(-1);
+    this.$router.go(-1)
   }
 
   // iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
   // 특히, 주소창이나 툴바 같은 UI 요소가 나타나거나 사라질 때 브라우저의 뷰포트 높이가 달라질 수 있음
   setViewportHeight = () => {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    const vh = window.innerHeight * 0.01
+    document.documentElement.style.setProperty('--vh', `${vh}px`)
   }
 
    mounted() {
-    window.addEventListener('resize', this.setViewportHeight);
-    window.addEventListener('orientationchange', this.setViewportHeight);
+    window.addEventListener('resize', this.setViewportHeight)
+    window.addEventListener('orientationchange', this.setViewportHeight)
 
-    this.setViewportHeight();
+    this.setViewportHeight()
   }
 }
 </script>

@@ -218,12 +218,10 @@ export default class FortuneInfo extends Vue {
   }
 
   onConfirm() {
-    console.log('sss')
     let valid = true
     this.resetError()
 
     if (!this.name) {
-      console.log('??????')
       this.nameError = '별명을 입력해주세요.'
       valid = false
       return
@@ -254,7 +252,6 @@ export default class FortuneInfo extends Vue {
     }
 
     if (valid) {
-      console.log('????')
       const userInfo = {
         name: this.name,
         gender: this.gender,
