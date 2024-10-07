@@ -268,8 +268,8 @@ export default class ManualPopup extends Vue {
 }
 
 .gray {
-  border: 1px solid #9C9EA0;
-  color: #9C9EA0;
+  border: 1px solid #ABB1B6;
+  color: #ABB1B6;
 }
 
 .green {

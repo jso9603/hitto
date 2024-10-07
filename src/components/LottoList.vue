@@ -40,7 +40,7 @@
                   </div>
               </div>
             </div>
-            <button class="open-card">열기</button>
+            <!-- <button class="open-card">열기</button> -->
           </div>
         </div>
 
@@ -355,7 +355,7 @@ export default class LottoList extends Vue {
 
 .box {
   background-color: #1D2330;
-  padding: 16px;
+  padding: 16px 16px 24px 16px;
   border-radius: 16px;
 }
 
@@ -364,13 +364,13 @@ export default class LottoList extends Vue {
 }
 
 .box.create-number-box {
-  min-height: 200px;
+  /* min-height: 168px; */
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   /* 안의 콘텐츠 height 빼기 */
-  height: calc(100% - 32px);
+  height: calc(100% - 40px);
   cursor: pointer;
 }
 
@@ -410,7 +410,7 @@ export default class LottoList extends Vue {
 }
 
 .numbers {
-  margin-top: 28px;
+  margin-top: 20px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -431,8 +431,8 @@ export default class LottoList extends Vue {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border: 1px solid #414244;
-  color: #414244;
+  border: 1px dashed #FFFFFF66;
+  color: #FFFFFF66;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -507,8 +507,8 @@ export default class LottoList extends Vue {
 }
 
 .gray {
-  border: 1px solid #9C9EA0;
-  color: #9C9EA0;
+  border: 1px solid #ABB1B6;
+  color: #ABB1B6;
 }
 
 .green {
