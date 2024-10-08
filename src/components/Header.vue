@@ -92,10 +92,11 @@
     </template>
     <template v-else-if="$route.path === '/terms'">
       <div class="empty"></div>
-      <button @click="goBack" class="back">
-        <img src="@/assets/ic-system-back-img.svg" />
-      </button>
       <div class="menu">약관</div>
+      <button @click="goBack" class="close">
+        <img src="@/assets/ic-system-close-img.svg" />
+      </button>
+      
     </template>
   </div>
 </template>
@@ -197,10 +198,6 @@ export default class Header extends Vue {
   }
 
   goBack() {
-    console.log('ddd')
-    // !this.isLoggedIn && 
-    console.log(this.$route.path === '/random')
-    console.log(sessionStorage.getItem('lottoNumbers'))
     if (this.$route.path === '/random') {
       this.$emit('goBack')
     } else {
@@ -227,7 +224,6 @@ export default class Header extends Vue {
   }
 
   onSelectedRound() {
-    console.log('eeee')
     this.$store.dispatch('updateRoundPopup', true)
   }
 }

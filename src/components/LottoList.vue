@@ -364,13 +364,15 @@ export default class LottoList extends Vue {
 }
 
 .box.create-number-box {
-  /* min-height: 168px; */
+  padding: 0;
+  min-height: 168px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   /* 안의 콘텐츠 height 빼기 */
-  height: calc(100% - 40px);
+  /* height: calc(100% - 40px); */
+  height: 100%;
   cursor: pointer;
 }
 
