@@ -168,7 +168,7 @@ export default class Home extends Vue {
       content: {
         title: '모두의 희망로또',
         description: '친구, 지인과 함께 로또 1등에 도전해보세요.',
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/hitto-1b119.appspot.com/o/img-mohito.png?alt=media&token=0d070e79-acf8-4f99-82cf-c81142cffe8c',
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/hitto-1b119.appspot.com/o/meta.png?alt=media&token=cd390b5c-4a74-4891-9671-a3db7a14260d',
         link: {
           mobileWebUrl: 'https://mohito.co.kr',
           webUrl: 'https://mohito.co.kr',
