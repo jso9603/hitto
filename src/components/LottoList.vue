@@ -175,6 +175,7 @@ export default class LottoList extends Vue {
     }
 
     // TODO: pagination
+    // 홍보용으로 당첨 내역 확인할 때에는 dbTable을 'promotion'으로 수정 필요
     try {
       const q = query(
         collection(db, dbTable),
