@@ -54,15 +54,18 @@
       </div>
     </div>
 
-    <div class="coopang-disclamer">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div>
+    <!-- <div class="coopang-disclamer">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div> -->
 
-    <ins
-      class="adsbygoogle"
-      style="display:block"
-      data-ad-client="ca-pub-7548744760182744"
-      data-ad-slot="5769000954"
-      data-ad-format="auto"
-      data-full-width-responsive="true">
+    <ins class="adsbygoogle"
+     style="display:inline-block;width:335px;height:60px"
+     data-ad-client="ca-pub-7548744760182744"
+     data-ad-slot="7638100912">
+    </ins>
+
+    <ins class="kakao_ad_area" style="display:none;"
+      data-ad-unit = "DAN-2u949GtMCSfxJbji"
+      data-ad-width = "320"
+      data-ad-height = "50">
     </ins>
   </div>
 </template>

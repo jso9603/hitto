@@ -42,7 +42,7 @@
     <template v-else-if="$route.path === '/my'">
       <div class="empty"></div>
       <div class="menu">더보기</div>
-      <img src="@/assets/ic-setting.svg" v-if="isLoggedIn" @click="onSetting" />
+      <img src="@/assets/ic-setting.svg" v-if="isLoggedIn || !isNotLoggedIn" @click="onSetting" />
     </template>
 
     <template v-else-if="$route.path === '/my/number' && ($route.query.tab === 'automatic' || $route.query.tab === 'manual')">
@@ -114,6 +114,7 @@ import { getLoggedUserInfo } from '@/utils/user'
 })
 export default class Header extends Vue {
   isScrolled: boolean = false
+  isNotLoggedIn: boolean = false
 
   onQr() {
     this.$router.push('/qr')
@@ -173,8 +174,28 @@ export default class Header extends Vue {
     console.log('use click!')
   }
 
+  checkLoginStatus(): void {
+    const user = getLoggedUserInfo()
+    this.isNotLoggedIn = !user
+  }
+
+  // 특정 경로에 있을 때만 로그인 상태를 확인하는 watch 설정
+  watchPath(newPath: string): void {
+    if (newPath === '/my') {
+      this.checkLoginStatus()
+    }
+  }
+
   mounted() {
     window.addEventListener('scroll', this.handleScroll)
+
+    // 페이지 로드 시 현재 경로가 /my인 경우 바로 확인
+    if (this.$route.path === '/my') {
+      this.checkLoginStatus()
+    }
+
+    // 경로 변경을 감시
+    this.$watch('$route.path', this.watchPath)
   }
 
   beforeDestroy() {
