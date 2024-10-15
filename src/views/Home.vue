@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <img class="main" src="@/assets/img-mohito.png" />
-    <div class="desc">행운은 도전하는 자의 것,<br/>지금 경제적 자유에 도전하세요!</div>
+    <div class="desc">행운은 도전하는 자의 것,<br/>스테판에게 행운의 번호를 받아보세요</div>
 
     <div class="boxes">
       <div
@@ -27,14 +27,14 @@
         <img src="@/assets/ic-system-star.png" />
       </div>
       <div class="title">스테판이 생성해주는<br/>정교한 알고리즘</div>
-      <div class="desc">AI 통계기반 알고리즘을 통해<br/>더 높은 로또 당첨 확률을 만나보세요!</div>
+      <div class="desc">AI 통계기반 알고리즘을 통해<br/>행운의 번호를 받고 도전해보세요.</div>
       <img src="@/assets/ic-system-intro-aicard.png" />
     </div>
 
     <div class="dream">
       <img class="cloud" src="@/assets/ic-system-cloud.png" />
       <div class="title">꿈자리를 통한<br/>이상적인 번호 조합</div>
-      <div class="desc">로또 1등 당첨자들이 가장 많이 꾼꿈을 조합하여<br/>이상적인 번호 생성을 도와드려요.</div>
+      <div class="desc">1등 당첨자들이 가장 많이 꾼꿈을 조합하여<br/>이상적인 번호 생성을 도와드려요.</div>
       <img class="list" src="@/assets/ic-system-list.png" />
     </div>
 

@@ -62,11 +62,14 @@
      data-ad-slot="7638100912">
     </ins>
 
-    <ins class="kakao_ad_area" style="display:none;"
-      data-ad-unit = "DAN-2u949GtMCSfxJbji"
-      data-ad-width = "320"
-      data-ad-height = "50">
-    </ins>
+    <div ref="kakaoAddElement">
+      <ins class="kakao_ad_area"
+        :style="{ display: 'none' }"
+        data-ad-unit = "DAN-2u949GtMCSfxJbji"
+        data-ad-width = "320"
+        data-ad-height = "50">
+      </ins>
+    </div>
   </div>
 </template>
 
@@ -79,6 +82,8 @@ import { getLoggedUserInfo } from '@/utils/user'
 export default class My extends Vue {
   nickname = ''
   user: any = {}
+
+  kakaoAddElement: HTMLElement | null = null
 
   services = [
     {
@@ -199,10 +204,25 @@ export default class My extends Vue {
 
   mounted() {
     try {
+      // AdSense 관련 호출
       (window.adsbygoogle = window.adsbygoogle || []).push({})
     } catch (e) {
       console.error('AdSense error:', e)
     }
+
+    this.$nextTick(() => {
+      this.kakaoAddElement = this.$refs.kakaoAddElement as HTMLElement
+
+       if (this.kakaoAddElement) {
+         const script = document.createElement('script')
+        script.setAttribute('src', 'https://t1.daumcdn.net/kas/static/ba.min.js')
+        script.setAttribute('charset', 'utf-8')
+        script.setAttribute('async', 'true')
+        this.kakaoAddElement.appendChild(script)
+       } else {
+        console.error('kakaoAddElement is not defined');
+      }
+    })
   }
 }
 </script>

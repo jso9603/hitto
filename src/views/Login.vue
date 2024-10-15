@@ -3,7 +3,7 @@
     <div class="contents">
       <h3>모두의 희망로또</h3>
       <div class="description">
-        행운은 도전하는 자의 것,<br/>지금 경제적 자유에 도전하세요!
+        행운은 도전하는 자의 것,<br/>스테판에게 행운의 번호를 받아보세요
       </div>
 
       <div class="benefit" v-for="(benefit, index) in benefits" :key="index">
@@ -13,7 +13,7 @@
 
       <div class="floating">
         <div class="participation">
-          {{ formattedCount }}명이 로또에 당첨됐어요!
+          {{ formattedCount }}명이 추천 번호를 받았어요.
         </div>
 
         <button @click="kakaoLoginStart" class="kakao">
@@ -153,7 +153,8 @@ export default class Login extends Vue {
 
     this.setViewportHeight()
 
-    this.targetCount = 985
+    // this.targetCount = 985
+    this.targetCount = 3531
     this.startCounting()
   }
 
