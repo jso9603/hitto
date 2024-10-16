@@ -204,10 +204,30 @@ export default class My extends Vue {
     }
   }
 
+  loadAdSense() {
+    // 이미 스크립트가 로드된 경우, 광고를 초기화
+    if (window.adsbygoogle && window.adsbygoogle.length) {
+      (window.adsbygoogle = window.adsbygoogle || []).push({})
+    } else {
+      // Google AdSense 스크립트를 동적으로 삽입
+      const script = document.createElement('script')
+      script.async = true
+      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
+      script.setAttribute('crossorigin', 'anonymous')
+      document.head.appendChild(script)
+
+      // 스크립트가 로드된 후 광고 초기화
+      script.onload = () => {
+        (window.adsbygoogle = window.adsbygoogle || []).push({})
+      }
+    }
+  }
+
   mounted() {
     try {
       // AdSense 관련 호출
-      (window.adsbygoogle = window.adsbygoogle || []).push({})
+      // (window.adsbygoogle = window.adsbygoogle || []).push({})
+      this.loadAdSense()
     } catch (e) {
       console.error('AdSense error:', e)
     }
