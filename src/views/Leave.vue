@@ -1,7 +1,7 @@
 <template>
   <div class="leave">
     <img src="@/assets/img-stefan.svg" />
-    <div class="title">모히또를 떠나신다니 아쉬워요!</div>
+    <div class="title">모희또를 떠나신다니 아쉬워요!</div>
     <div class="desc">지금 탈퇴하면 아래 정보와 혜택이 모두 사라져요.<br/>회원 탈퇴 신청 전에 아래 사항을 꼭 확인해주세요!</div>
 
     <div class="benefits">

@@ -65,7 +65,7 @@
           <div class="no-data">
             <img src="@/assets/img-stefan.svg" />
             <div class="no-data-title">생성이력이 없어요</div>
-            <div class="no-data-text">행운은 도전하는 자에게 찾아옵니다<br/>경제적 자유로 가는 첫 걸음, 모히또</div>
+            <div class="no-data-text">행운은 도전하는 자에게 찾아옵니다<br/>행운은 도전하는 자의 것, 모희또</div>
           </div>
         </template>
         
