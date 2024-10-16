@@ -14,12 +14,6 @@
       </div>
     </div>
 
-    <ins class="adsbygoogle"
-      style="display:inline-block;width:335px;height:60px"
-      data-ad-client="ca-pub-7548744760182744"
-      data-ad-slot="7638100912">
-    </ins>
-
     <!-- <div class="coopang" @click="onCoopang">
       <img src="@/assets/AD.png" alt="쿠팡 광고" />
     </div> -->
@@ -62,7 +56,11 @@
 
     <!-- <div class="coopang-disclamer">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div> -->
 
-    
+    <ins class="adsbygoogle"
+      style="display:inline-block;width:335px;height:60px"
+      data-ad-client="ca-pub-7548744760182744"
+      data-ad-slot="7638100912">
+    </ins>
 
     <!-- <div ref="kakaoAddElement">
       <ins class="kakao_ad_area"
