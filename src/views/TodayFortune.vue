@@ -108,7 +108,7 @@ export default class TodayFortune extends Vue {
     this.startCounting()
 
     const contents: string =
-      '당신의 오늘은 어떨까요?\n쪽집게 스테판에게 물어보세요!'
+      '당신의 오늘은 어떨까요?\n쪽집게 써니에게 물어보세요!'
     let saveInterval: number | undefined
 
     let index = 0

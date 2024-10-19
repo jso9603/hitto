@@ -72,13 +72,13 @@ export default class Promotion extends Vue {
         user = this.user
 
         // 홍보용으로 쓰일 당첨 회차
-        const round = 1141
+        const round = 1142
 
         for (let i = 0; i < this.lottoNumbers.length; i++) {
           const numbers = [this.lottoNumbers[i].join(', ')]
 
           try {
-            await addDoc(collection(db, 'promotion'), {
+            await addDoc(collection(db, 'promotion2'), {
               date: dayjs().format('YYYYMMDD HH:mm:ss'),
               numbers,
               uid: `uid_${user.uid}`,
