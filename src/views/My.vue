@@ -14,6 +14,15 @@
       </div>
     </div>
 
+    <div ref="kakaoAddElement">
+      <ins class="kakao_ad_area"
+        :style="{ display: 'none' }"
+        data-ad-unit = "DAN-2u949GtMCSfxJbji"
+        data-ad-width = "320"
+        data-ad-height = "50">
+      </ins>
+    </div> 
+
     <!-- <div class="coopang" @click="onCoopang">
       <img src="@/assets/AD.png" alt="쿠팡 광고" />
     </div> -->
@@ -61,15 +70,6 @@
       data-ad-client="ca-pub-7548744760182744"
       data-ad-slot="7638100912">
     </ins>
-
-    <!-- <div ref="kakaoAddElement">
-      <ins class="kakao_ad_area"
-        :style="{ display: 'none' }"
-        data-ad-unit = "DAN-2u949GtMCSfxJbji"
-        data-ad-width = "320"
-        data-ad-height = "50">
-      </ins>
-    </div> -->
   </div>
 </template>
 
@@ -223,26 +223,24 @@ export default class My extends Vue {
 
   mounted() {
     try {
-      // AdSense 관련 호출
-      // (window.adsbygoogle = window.adsbygoogle || []).push({})
       this.loadAdSense()
     } catch (e) {
       console.error('AdSense error:', e)
     }
 
-    // this.$nextTick(() => {
-    //   this.kakaoAddElement = this.$refs.kakaoAddElement as HTMLElement
+    this.$nextTick(() => {
+      this.kakaoAddElement = this.$refs.kakaoAddElement as HTMLElement
 
-    //    if (this.kakaoAddElement) {
-    //      const script = document.createElement('script')
-    //     script.setAttribute('src', 'https://t1.daumcdn.net/kas/static/ba.min.js')
-    //     script.setAttribute('charset', 'utf-8')
-    //     script.setAttribute('async', 'true')
-    //     this.kakaoAddElement.appendChild(script)
-    //    } else {
-    //     console.error('kakaoAddElement is not defined');
-    //   }
-    // })
+       if (this.kakaoAddElement) {
+         const script = document.createElement('script')
+        script.setAttribute('src', 'https://t1.daumcdn.net/kas/static/ba.min.js')
+        script.setAttribute('charset', 'utf-8')
+        script.setAttribute('async', 'true')
+        this.kakaoAddElement.appendChild(script)
+       } else {
+        console.error('kakaoAddElement is not defined')
+      }
+    })
   }
 }
 </script>
@@ -316,6 +314,10 @@ export default class My extends Vue {
 .summary > .email > .kakao > img {
   width: 13.5px;
   height: 13.5px;
+}
+
+.kakao_ad_area {
+  margin-bottom: 24px;
 }
 
 .coopang {
