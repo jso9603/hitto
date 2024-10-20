@@ -6,6 +6,8 @@ import Random from '@/views/Random.vue'
 import AfterLogin from '@/views/AfterLogin.vue'
 import Dream from '@/views/Dream.vue'
 import Category from '@/views/Category.vue'
+import Category2 from '@/views/Category2.vue'
+import Category3 from '@/views/Category3.vue'
 import Login from '@/views/Login.vue'
 import My from '@/views/My.vue'
 import Qr from '@/views/Qr.vue'
@@ -61,6 +63,16 @@ const routes = [
     path: '/category',
     name: 'Category',
     component: Category,
+  },
+  {
+    path: '/category2',
+    name: 'Category2',
+    component: Category2,
+  },
+  {
+    path: '/category3',
+    name: 'Category3',
+    component: Category3,
   },
   {
     path: '/login',

@@ -13,6 +13,8 @@ export default new Vuex.Store({
     },
     menuName: '',
     showRoundPopup: false,
+    selectedMainCategory: null,
+    selectedSubCategory: null,
   },
   mutations: {
     setShowCopyImage(state, payload) {
@@ -31,6 +33,12 @@ export default new Vuex.Store({
     },
     setRoundPopup(state, payload) {
       state.showRoundPopup = payload
+    },
+    setSelectedMainCategory(state, category) {
+      state.selectedMainCategory = category
+    },
+    setSelectedSubCategory(state, subCategory) {
+      state.selectedSubCategory = subCategory
     }
   },
   actions: {
@@ -55,6 +63,12 @@ export default new Vuex.Store({
     updateRoundPopup({ commit }, roundPopup) {
       commit('setRoundPopup', roundPopup)
     },
+    updateMainCategory({ commit }, category) {
+      commit('setSelectedMainCategory', category)
+    },
+    updateSubCategory({ commit }, subCategory) {
+      commit('setSelectedSubCategory', subCategory)
+    }
   },
   getters: {
     menuName(state) {
@@ -62,7 +76,9 @@ export default new Vuex.Store({
     },
     roundPopup(state) {
       return state.showRoundPopup
-    }
+    },
+    getSelectedMainCategory: (state) => state.selectedMainCategory,
+    getSelectedSubCategory: (state) => state.selectedSubCategory,
   },
   plugins: [
     createPersistedState({
