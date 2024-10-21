@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="page2" key="page2" v-if="selectedMainCategory">
+    <div class="page2" key="page2" v-if="selectedMainCategoryData">
       <div class="title">
         {{mainCategories[selectedMainCategory].icon}}
         <span>{{mainCategories[selectedMainCategory].name}}</span>
@@ -21,15 +21,19 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component } from 'vue-property-decorator'
 import CategoriesMixin from '@/mixins/categoriesMixin'
+import { mixins } from 'vue-class-component'
 
-@Component({
-  mixins: [CategoriesMixin],
-})
-export default class Category2 extends Vue {
+@Component
+export default class Category2 extends mixins(CategoriesMixin) {
   selectedMainCategory: number | null = null
   selectedSubCategory: number | null = null
+
+  get selectedMainCategoryData() {
+    // selectedMainCategory가 0인 경우도 있으니 null 또는 undefined인지 체크
+    return this.mainCategories[this.selectedMainCategory as number] ?? null
+  }
   
   onSubCategory(index: number) {
     this.selectedSubCategory = index
@@ -47,6 +51,7 @@ export default class Category2 extends Vue {
 
   mounted() {
     this.selectedMainCategory = Number(this.$store.state.selectedMainCategory)
+    console.log('aa: ', this.selectedMainCategory)
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="page3" key="page3" v-if="selectedMainCategory && selectedSubCategory">
+    <div class="page3" key="page3" v-if="isValidCategory(selectedMainCategory, selectedSubCategory)">
       <div class="title">
         {{mainCategories[selectedMainCategory].subCategories[selectedSubCategory].name}}
       </div>
@@ -20,16 +20,22 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component } from 'vue-property-decorator'
 import CategoriesMixin from '@/mixins/categoriesMixin'
+import { mixins } from 'vue-class-component'
 
-@Component({
-  mixins: [CategoriesMixin]
-})
-export default class Category3 extends Vue {
+@Component
+export default class Category3 extends mixins(CategoriesMixin) {
   selectedMainCategory: number | null = null
   selectedSubCategory: number | null = null
   selectedLastCategory: number | null = null
+
+  isValidCategory(mainCategoryIndex: number | null, subCategoryIndex: number | null) {
+    if (mainCategoryIndex === null || subCategoryIndex === null) return false
+    const mainCategory = this.mainCategories[mainCategoryIndex]
+    if (!mainCategory || !mainCategory.subCategories[subCategoryIndex]) return false
+    return true
+  }
 
   onLastCategory(index: number) {
     this.selectedLastCategory = index
