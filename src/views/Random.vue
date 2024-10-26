@@ -117,7 +117,7 @@ export default class Random extends Vue {
   background = ''
 
   // 확률 높은 숫자들
-  highProbNumbers: number[] = [1, 3, 6, 7, 12, 14, 17, 24, 26, 27, 33, 34, 42, 43, 45]
+  highProbNumbers: number[] = [6, 7, 12, 14, 17, 24, 26, 27, 33, 34, 42, 43, 45]
   private lottoNumbers: number[][] = []
 
   isLoginPopupVisible = false
@@ -480,14 +480,66 @@ export default class Random extends Vue {
   }
   
   generateLotteryNumbers(): number[] {
-    const selectedHighProbNumbers = this.getRandomNumbers(this.highProbNumbers, 3)
-    const remainingNumbers = this.getRemainingNumbers(selectedHighProbNumbers)
-    const selectedRemainingNumbers = this.getRandomNumbers(remainingNumbers, 3)
-    return selectedHighProbNumbers.concat(selectedRemainingNumbers).sort((a, b) => a - b)
+    // const selectedHighProbNumbers = this.getRandomNumbers(this.highProbNumbers, 3)
+    // const remainingNumbers = this.getRemainingNumbers(selectedHighProbNumbers)
+    // const selectedRemainingNumbers = this.getRandomNumbers(remainingNumbers, 3)
+    // return selectedHighProbNumbers.concat(selectedRemainingNumbers).sort((a, b) => a - b)
+
+    // 연속되는 숫자가 나오는 번호대는 더이상 나오지 않도록 수정
+    // ex) 16, 17이 나오면 더이상 10번대는 나오지 않게 / 연속되는 수는 번호대와 상관없음  => 16, 17, 27, 28 나올 수 있음
+    const ranges = [
+      { min: 1, max: 10 },
+      { min: 11, max: 20 },
+      { min: 21, max: 30 },
+      { min: 31, max: 40 },
+      { min: 41, max: 45 },
+    ]
+
+    const selectedNumbers: number[] = []
+    const selectedRanges: Set<number> = new Set()
+    let attempts = 0
+
+    // 첫 번째 3개의 번호는 자릿대별로 중복 없이 선택
+    while (selectedNumbers.length < 3 && attempts < 20) {
+      const number = this.getRandomNumbers(this.highProbNumbers, 1)[0]
+      const range = ranges.findIndex(r => number >= r.min && number <= r.max)
+
+      if (!selectedRanges.has(range) && !selectedNumbers.includes(number)) {
+        selectedNumbers.push(number)
+        selectedRanges.add(range)
+      }
+      attempts++
+    }
+
+    // 나머지 3개의 번호는 전체 자릿대에서 중복 없이 선택
+    const remainingNumbers = this.getRemainingNumbers(selectedNumbers)
+    attempts = 0
+
+    while (selectedNumbers.length < 6 && attempts < 20) {
+      const number = this.getRandomNumbers(remainingNumbers, 1)[0]
+      const range = ranges.findIndex(r => number >= r.min && number <= r.max)
+
+      // 이미 선택된 번호나 자릿대는 제외하고 추가
+      if (!selectedNumbers.includes(number) && !selectedRanges.has(range)) {
+        selectedNumbers.push(number)
+        selectedRanges.add(range)
+      }
+      attempts++
+    }
+
+    // 만약 조건으로 인해 6개의 숫자가 선택되지 않았다면, 남은 숫자에서 추가로 뽑기
+    while (selectedNumbers.length < 6) {
+      const number = this.getRandomNumbers(remainingNumbers, 1)[0]
+      if (!selectedNumbers.includes(number)) {
+        selectedNumbers.push(number)
+      }
+    }
+
+    return selectedNumbers.sort((a, b) => a - b)
   }
 
   generateHighNumbers(rounds: number) {
-    this.lottoNumbers = [];
+    this.lottoNumbers = []
     for (let i = 0; i < rounds; i++) {
       this.lottoNumbers.push(this.generateLotteryNumbers())
     }
