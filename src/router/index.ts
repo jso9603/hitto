@@ -23,6 +23,7 @@ import FortuneInfo from '@/views/FortuneInfo.vue'
 import ChatGPT from '@/views/chatGPT.vue'
 import TodayFortune from '@/views/TodayFortune.vue'
 import FortuneLoading from '@/views/FortuneLoading.vue'
+import Bridge from '@/views/Bridge.vue'
 import Promotion from '@/views/Promotion.vue'
 import Router from 'vue-router'
 
@@ -153,6 +154,11 @@ const routes = [
     path: '/fortune-loading',
     name: 'FortuneLoading',
     component: FortuneLoading,
+  },
+  {
+    path: '/bridge',
+    name: 'Bridge',
+    component: Bridge,
   },
   {
     path: '/promotion',
