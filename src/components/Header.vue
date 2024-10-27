@@ -22,7 +22,6 @@
         $route.path === '/manual' ||
         $route.path === '/fortuneInfo' ||
         $route.path === '/today' ||
-        $route.path === '/chatGPT' ||
         $route.path === '/loading' ||
         $route.path === '/fortune-loading' ||
         $route.path === '/after-login'
@@ -38,6 +37,14 @@
       <div class="empty"></div>
       <div class="menu">소망 선택</div>
       <button @click="goBackHope" class="close">
+        <img src="@/assets/ic-system-close-img.svg" />
+      </button>
+    </template>
+
+    <template v-else-if="$route.path === '/chatGPT'">
+      <div class="empty"></div>
+      <div class="empty"></div>
+      <button @click="goClose" class="close">
         <img src="@/assets/ic-system-close-img.svg" />
       </button>
     </template>
