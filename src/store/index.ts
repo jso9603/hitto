@@ -15,6 +15,15 @@ export default new Vuex.Store({
     showRoundPopup: false,
     selectedMainCategory: null,
     selectedSubCategory: null,
+    adsEndPoint: '',
+    fortuneUser: {
+      name: '',
+      gender: '',
+      birthday: '',
+      calendarType: '',
+      birthTime: '',
+      zodiac: '',
+    },
   },
   mutations: {
     setShowCopyImage(state, payload) {
@@ -39,7 +48,13 @@ export default new Vuex.Store({
     },
     setSelectedSubCategory(state, subCategory) {
       state.selectedSubCategory = subCategory
-    }
+    },
+    setAdsEndPoint(state, endPoint) {
+      state.adsEndPoint = endPoint
+    },
+    setForttuneUser(state, userInfo) {
+      state.fortuneUser = userInfo
+    },
   },
   actions: {
     showCopyImage({ commit }) {
@@ -68,7 +83,13 @@ export default new Vuex.Store({
     },
     updateSubCategory({ commit }, subCategory) {
       commit('setSelectedSubCategory', subCategory)
-    }
+    },
+    updateAdsEndPoint({ commit }, endPoint) {
+      commit('setAdsEndPoint', endPoint)
+    },
+    updateFortuneUser({ commit }, userInfo) {
+      commit('setForttuneUser', userInfo)
+    },
   },
   getters: {
     menuName(state) {
@@ -79,10 +100,12 @@ export default new Vuex.Store({
     },
     getSelectedMainCategory: (state) => state.selectedMainCategory,
     getSelectedSubCategory: (state) => state.selectedSubCategory,
+    getAdsEndPoint: (state) => state.adsEndPoint,
+    getFortuneUser: (state) => state.fortuneUser,
   },
   plugins: [
     createPersistedState({
-      storage: window.localStorage // 상태를 localStorage에 저장
-    })
-  ]
+      storage: window.localStorage, // 상태를 localStorage에 저장
+    }),
+  ],
 })

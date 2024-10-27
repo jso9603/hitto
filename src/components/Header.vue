@@ -18,6 +18,7 @@
         $route.path === '/category2' ||
         $route.path === '/category3' ||
         $route.path === '/random' ||
+        $route.path === '/result' ||
         $route.path === '/manual' ||
         $route.path === '/fortuneInfo' ||
         $route.path === '/today' ||
@@ -44,7 +45,7 @@
     <template v-else-if="$route.path === '/bridge'">
       <div class="empty"></div>
       <div class="empty"></div>
-      <button @click="goClose" class="close">
+      <button @click="goNext" class="close">
         <img src="@/assets/ic-system-close-img.svg" />
       </button>
     </template>
@@ -256,7 +257,7 @@ export default class Header extends Vue {
   }
 
   goBack() {
-    if (this.$route.path === '/random') {
+    if (this.$route.path === '/result') {
       this.$emit('goBack')
     } else {
       this.$router.back()
@@ -275,6 +276,11 @@ export default class Header extends Vue {
 
   goBackChallenge() {
     this.$router.back()
+  }
+
+  goNext() {
+    const endPoint = this.$store.state.adsEndPoint
+    this.$router.push(`/${endPoint}`)
   }
 
   onSetting() {

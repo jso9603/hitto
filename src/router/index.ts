@@ -3,6 +3,7 @@ import Home from '@/views/Home.vue'
 import Ai from '@/views/Ai.vue'
 import Backup from '@/views/Backup.vue'
 import Random from '@/views/Random.vue'
+import Result from '@/views/RandomResult.vue'
 import AfterLogin from '@/views/AfterLogin.vue'
 import Dream from '@/views/Dream.vue'
 import Category from '@/views/Category.vue'
@@ -13,7 +14,7 @@ import My from '@/views/My.vue'
 import Qr from '@/views/Qr.vue'
 import MyNumber from '@/views/MyNumber.vue'
 import Guess from '@/views/Guess.vue'
-import Challenge from '@/views/Challenge.vue' 
+import Challenge from '@/views/Challenge.vue'
 import Setting from '@/views/Setting.vue'
 import Leave from '@/views/Leave.vue'
 import Terms from '@/views/Terms.vue'
@@ -33,10 +34,10 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
   },
   {
-    path:'/ai',
+    path: '/ai',
     name: 'Ai',
     component: Ai,
   },
@@ -49,6 +50,11 @@ const routes = [
     path: '/random',
     name: 'Random',
     component: Random,
+  },
+  {
+    path: '/result',
+    name: 'Result',
+    component: Result,
   },
   {
     path: '/after-login',
@@ -133,7 +139,7 @@ const routes = [
   {
     path: '/fortuneInfo',
     name: 'FortuneInfo',
-    component: FortuneInfo
+    component: FortuneInfo,
   },
   {
     path: '/chatGPT',
@@ -164,7 +170,7 @@ const routes = [
     path: '/promotion',
     name: 'Promotion',
     component: Promotion,
-  }
+  },
 ]
 
 const router = new Router({
@@ -172,8 +178,8 @@ const router = new Router({
   routes,
   scrollBehavior(to, from, savedPosition) {
     // 항상 페이지가 바뀔 때 스크롤을 최상단으로 설정 (라우트가 변경될 때 실행)
-    return { x: 0, y: 0 };
-  }
+    return { x: 0, y: 0 }
+  },
 })
 
 export default router

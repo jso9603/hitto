@@ -1,6 +1,11 @@
 <template>
   <div class="container">
-    <div v-for="(message, index) in messages" :key="index" class="message" :style="{ animationDelay: `${index * 0.2}s` }">
+    <div
+      v-for="(message, index) in messages"
+      :key="index"
+      class="message"
+      :style="{ animationDelay: `${index * 0.2}s` }"
+    >
       {{ message }}
     </div>
     <div class="random-animation">
@@ -31,14 +36,24 @@ export default class FortuneLoading extends Vue {
   private ballCount = 10 // 공의 개수
   private animationId: number = 0
   private progress: number = 0 // 로딩바 진행 상태
-  private colors: string[] = ['#FEC03E', '#4790FF', '#E64D3D', '#2ECD70', '#BEC3C7']
+  private colors: string[] = [
+    '#FEC03E',
+    '#4790FF',
+    '#E64D3D',
+    '#2ECD70',
+    '#BEC3C7',
+  ]
 
   // 원의 중심점과 반지름
   private circleCenter = { x: 80, y: 80 } // canvas의 중앙
   private circleRadius = 80 // 원의 반지름 (로딩 바)
 
   private messages = ['AI 통계기반', '운세 정보를 생성하고 있어요']
-  private floatings = ['객관적인 운세 결과를 위해 30초 정도가 소요됩니다', '이름과 성별을 분석 중입니다', '생년월일과 태어난 시를 분석 중입니다 ']
+  private floatings = [
+    '객관적인 운세 결과를 위해 30초 정도가 소요됩니다',
+    '이름과 성별을 분석 중입니다',
+    '생년월일과 태어난 시를 분석 중입니다 ',
+  ]
 
   // 현재 보여줄 텍스트의 인덱스
   private currentIndex: number = 0
@@ -58,13 +73,13 @@ export default class FortuneLoading extends Vue {
       // 고해상도 스크린을 위해 배율 설정
       const dpr = window.devicePixelRatio || 1
       // 실제 픽셀 크기와 스타일 크기 분리
-      const canvasSize = 160; // 화면상에서의 크기
-      this.canvas.width = canvasSize * dpr; // 실제 픽셀 크기
-      this.canvas.height = canvasSize * dpr; // 실제 픽셀 크기
+      const canvasSize = 160 // 화면상에서의 크기
+      this.canvas.width = canvasSize * dpr // 실제 픽셀 크기
+      this.canvas.height = canvasSize * dpr // 실제 픽셀 크기
 
-      this.canvas.style.width = `${canvasSize}px`; // 화면 상의 크기
-      this.canvas.style.height = `${canvasSize}px`; // 화면 상의 크기
-      
+      this.canvas.style.width = `${canvasSize}px` // 화면 상의 크기
+      this.canvas.style.height = `${canvasSize}px` // 화면 상의 크기
+
       ctx?.scale(dpr, dpr) // 배율 조정
 
       if (ctx) {
@@ -118,25 +133,27 @@ export default class FortuneLoading extends Vue {
   // 공 그리기 함수
   drawBall(ctx: CanvasRenderingContext2D, ball: Ball) {
     const gradient = ctx.createLinearGradient(
-      ball.x, ball.y - ball.radius, // 그라데이션 시작점 (위쪽)
-      ball.x, ball.y + ball.radius  // 그라데이션 끝점 (아래쪽)
+      ball.x,
+      ball.y - ball.radius, // 그라데이션 시작점 (위쪽)
+      ball.x,
+      ball.y + ball.radius, // 그라데이션 끝점 (아래쪽)
     )
 
     if (ball.color === '#4790FF') {
-      gradient.addColorStop(0, '#74B9FF')  // 밝은 파랑
-      gradient.addColorStop(1, '#2980B9')  // 어두운 파랑
+      gradient.addColorStop(0, '#74B9FF') // 밝은 파랑
+      gradient.addColorStop(1, '#2980B9') // 어두운 파랑
     } else if (ball.color === '#FEC03E') {
-      gradient.addColorStop(0, '#FFD700')  // 밝은 노랑
-      gradient.addColorStop(1, '#FFA500')  // 어두운 오렌지
+      gradient.addColorStop(0, '#FFD700') // 밝은 노랑
+      gradient.addColorStop(1, '#FFA500') // 어두운 오렌지
     } else if (ball.color === '#E64D3D') {
-      gradient.addColorStop(0, '#FF6F61')  // 밝은 빨강
-      gradient.addColorStop(1, '#C0392B')  // 어두운 빨강
+      gradient.addColorStop(0, '#FF6F61') // 밝은 빨강
+      gradient.addColorStop(1, '#C0392B') // 어두운 빨강
     } else if (ball.color === '#2ECD70') {
-      gradient.addColorStop(0, '#66FF99')  // 밝은 초록
-      gradient.addColorStop(1, '#27AE60')  // 어두운 초록
+      gradient.addColorStop(0, '#66FF99') // 밝은 초록
+      gradient.addColorStop(1, '#27AE60') // 어두운 초록
     } else if (ball.color === '#BEC3C7') {
-      gradient.addColorStop(0, '#E0E0E0')  // 밝은 회색
-      gradient.addColorStop(1, '#7C8388')  // 어두운 회색
+      gradient.addColorStop(0, '#E0E0E0') // 밝은 회색
+      gradient.addColorStop(1, '#7C8388') // 어두운 회색
     }
 
     // 공 그리기
@@ -194,23 +211,41 @@ export default class FortuneLoading extends Vue {
           const pos1 = { x: dx * cos + dy * sin, y: dy * cos - dx * sin }
 
           // 공의 속도 회전
-          const vel0 = { x: this.balls[i].dx * cos + this.balls[i].dy * sin, y: this.balls[i].dy * cos - this.balls[i].dx * sin }
-          const vel1 = { x: this.balls[j].dx * cos + this.balls[j].dy * sin, y: this.balls[j].dy * cos - this.balls[j].dx * sin }
+          const vel0 = {
+            x: this.balls[i].dx * cos + this.balls[i].dy * sin,
+            y: this.balls[i].dy * cos - this.balls[i].dx * sin,
+          }
+          const vel1 = {
+            x: this.balls[j].dx * cos + this.balls[j].dy * sin,
+            y: this.balls[j].dy * cos - this.balls[j].dx * sin,
+          }
 
           // 충돌 후 속도
           const vxTotal = vel0.x - vel1.x
-          vel0.x = ((this.balls[i].radius - this.balls[j].radius) * vel0.x + 2 * this.balls[j].radius * vel1.x) / (this.balls[i].radius + this.balls[j].radius)
+          vel0.x =
+            ((this.balls[i].radius - this.balls[j].radius) * vel0.x +
+              2 * this.balls[j].radius * vel1.x) /
+            (this.balls[i].radius + this.balls[j].radius)
           vel1.x = vxTotal + vel0.x
 
           // 공 위치 조정
           const absV = Math.abs(vel0.x) + Math.abs(vel1.x)
-          const overlap = (this.balls[i].radius + this.balls[j].radius) - Math.abs(pos0.x - pos1.x)
-          pos0.x += vel0.x / absV * overlap
-          pos1.x += vel1.x / absV * overlap
+          const overlap =
+            this.balls[i].radius +
+            this.balls[j].radius -
+            Math.abs(pos0.x - pos1.x)
+          pos0.x += (vel0.x / absV) * overlap
+          pos1.x += (vel1.x / absV) * overlap
 
           // 위치를 다시 회전
-          const pos0F = { x: pos0.x * cos - pos0.y * sin, y: pos0.y * cos + pos0.x * sin }
-          const pos1F = { x: pos1.x * cos - pos1.y * sin, y: pos1.y * cos + pos1.x * sin }
+          const pos0F = {
+            x: pos0.x * cos - pos0.y * sin,
+            y: pos0.y * cos + pos0.x * sin,
+          }
+          const pos1F = {
+            x: pos1.x * cos - pos1.y * sin,
+            y: pos1.y * cos + pos1.x * sin,
+          }
 
           this.balls[j].x = this.balls[i].x + pos1F.x
           this.balls[j].y = this.balls[i].y + pos1F.y
@@ -218,8 +253,14 @@ export default class FortuneLoading extends Vue {
           this.balls[i].y += pos0F.y
 
           // 속도를 다시 회전
-          const vel0F = { x: vel0.x * cos - vel0.y * sin, y: vel0.y * cos + vel0.x * sin }
-          const vel1F = { x: vel1.x * cos - vel1.y * sin, y: vel1.y * cos + vel1.x * sin }
+          const vel0F = {
+            x: vel0.x * cos - vel0.y * sin,
+            y: vel0.y * cos + vel0.x * sin,
+          }
+          const vel1F = {
+            x: vel1.x * cos - vel1.y * sin,
+            y: vel1.y * cos + vel1.x * sin,
+          }
 
           this.balls[i].dx = vel0F.x
           this.balls[i].dy = vel0F.y
@@ -234,12 +275,12 @@ export default class FortuneLoading extends Vue {
   drawLoadingBar(ctx: CanvasRenderingContext2D) {
     const dpr = window.devicePixelRatio || 1 // 배율 적용
 
-    const centerX = this.canvas!.width  / 2 // 배율 적용하여 좌표 조정
+    const centerX = this.canvas!.width / 2 // 배율 적용하여 좌표 조정
     const centerY = this.canvas!.height / 2
-    const radius = 70 * dpr; // 배율에 맞게 반지름 조정
-    const lineWidth = 13 * dpr; // 선 두께를 dpr에 맞게 조정
+    const radius = 70 * dpr // 배율에 맞게 반지름 조정
+    const lineWidth = 13 * dpr // 선 두께를 dpr에 맞게 조정
     const startAngle = -Math.PI / 2 // 12시 방향에서 시작
-    const endAngle = startAngle + (Math.PI * 2 * (this.progress / 100)) // 진행 상태에 따라 각도를 조정
+    const endAngle = startAngle + Math.PI * 2 * (this.progress / 100) // 진행 상태에 따라 각도를 조정
 
     // 배경 원형 그리기 (회색 원)
     ctx.beginPath()
@@ -250,10 +291,15 @@ export default class FortuneLoading extends Vue {
     ctx.closePath()
 
     // 그라데이션 추가
-    const gradient = ctx.createLinearGradient(0, 0, 0, this.canvas!.height / dpr)
-    gradient.addColorStop(0.0, '#61D59D'); // 진한 초록색이 처음부터 끝까지 유지
-    gradient.addColorStop(0.8, '#61D59D'); // 진한 초록색 유지
-    gradient.addColorStop(1.0, '#61D59D'); // 마지막에 색상이 옅어짐
+    const gradient = ctx.createLinearGradient(
+      0,
+      0,
+      0,
+      this.canvas!.height / dpr,
+    )
+    gradient.addColorStop(0.0, '#61D59D') // 진한 초록색이 처음부터 끝까지 유지
+    gradient.addColorStop(0.8, '#61D59D') // 진한 초록색 유지
+    gradient.addColorStop(1.0, '#61D59D') // 마지막에 색상이 옅어짐
 
     // 진행 상태에 따른 원형 그라데이션 그리기
     ctx.beginPath()
@@ -288,8 +334,8 @@ export default class FortuneLoading extends Vue {
 
   startTextFlip() {
     setInterval(() => {
-      this.currentIndex = (this.currentIndex + 1) % this.floatings.length;
-    }, 4000); // 3초마다 텍스트 전환
+      this.currentIndex = (this.currentIndex + 1) % this.floatings.length
+    }, 4000) // 3초마다 텍스트 전환
   }
 
   async getFortune() {
@@ -315,30 +361,32 @@ export default class FortuneLoading extends Vue {
                   { "category": "시험운", "summary": "1줄 요약", "text": "5줄 이상의 상세 설명" }
                 ]
               }
-              `
-            }
+              `,
+            },
           ],
         },
         {
           headers: {
             Authorization: `Bearer ${process.env.VUE_APP_GPT_API_KEY}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+            'Content-Type': 'application/json',
+          },
+        },
+      )
 
       // 운세 데이터를 파싱하여 각 항목에 저장
       const result = JSON.parse(response.data.choices[0].message.content)
 
-    if (result.fortunes && Array.isArray(result.fortunes)) {
-
-      this.$router.push({ 
-        name: 'ChatGPT',
-        params: { fortunes: JSON.stringify(result.fortunes), fortuneUserName: this.fortuneUserName }
-      })
-    } else {
-      console.error('운세 데이터가 올바르지 않습니다.')
-    }
+      if (result.fortunes && Array.isArray(result.fortunes)) {
+        this.$router.push({
+          name: 'ChatGPT',
+          params: {
+            fortunes: JSON.stringify(result.fortunes),
+            fortuneUserName: this.fortuneUserName,
+          },
+        })
+      } else {
+        console.error('운세 데이터가 올바르지 않습니다.')
+      }
     } catch (error) {
       console.error('운세 데이터를 불러오는 중 오류가 발생했습니다:', error)
     }
@@ -358,10 +406,10 @@ export default class FortuneLoading extends Vue {
 
     this.getFortune()
 
-    const fortuneUserName = this.$route.params.fortuneName
+    const fortuneUserName = this.$store.state.fortuneUser.name
     if (fortuneUserName) {
       this.fortuneUserName = fortuneUserName
-      Cookies.set('fortuneName', this.fortuneUserName, {expires: 1})
+      Cookies.set('fortuneName', this.fortuneUserName, { expires: 1 })
     }
   }
 }
@@ -421,9 +469,13 @@ canvas {
   display: flex;
   gap: 10px;
   padding: 20px;
-  background: linear-gradient(180deg, rgba(19, 23, 32, 0) 0%, #131720 15.46%, #131720 82.53%);
+  background: linear-gradient(
+    180deg,
+    rgba(19, 23, 32, 0) 0%,
+    #131720 15.46%,
+    #131720 82.53%
+  );
   padding-bottom: calc(40px + env(safe-area-inset-bottom));
-  
 }
 
 .floating-text {

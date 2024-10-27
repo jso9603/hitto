@@ -11,7 +11,11 @@
           placeholder="별명"
           maxlength="6"
           class="form-input"
-          :class="{ 'input-filled': name, 'input-empty': !name, 'input-error': nameError }"
+          :class="{
+            'input-filled': name,
+            'input-empty': !name,
+            'input-error': nameError,
+          }"
           @focus="inputFocused = true"
           @blur="inputFocused = false"
         />
@@ -20,7 +24,11 @@
 
       <div class="form-group group-1-3">
         <!-- 성별 선택 필드 -->
-        <select v-model="gender" class="form-select" :class="{ 'placeholder': !gender, 'input-error': genderError }">
+        <select
+          v-model="gender"
+          class="form-select"
+          :class="{ placeholder: !gender, 'input-error': genderError }"
+        >
           <option disabled value="">성별</option>
           <option value="male">남성</option>
           <option value="female">여성</option>
@@ -39,7 +47,11 @@
           placeholder="생년월일"
           maxlength="8"
           class="form-input"
-          :class="{ 'input-filled': birthday, 'input-empty': !birthday, 'input-error': birthdayError }"
+          :class="{
+            'input-filled': birthday,
+            'input-empty': !birthday,
+            'input-error': birthdayError,
+          }"
           @focus="inputFocused = true"
           @blur="inputFocused = false"
         />
@@ -48,20 +60,33 @@
 
       <div class="form-group group-1-3">
         <!-- 양력/음력 선택 필드 -->
-        <select v-model="calendarType" class="form-select" :class="{ 'placeholder': !calendarType, 'input-error': calendarTypeError }">
+        <select
+          v-model="calendarType"
+          class="form-select"
+          :class="{
+            placeholder: !calendarType,
+            'input-error': calendarTypeError,
+          }"
+        >
           <!-- <option disabled value="">양력/음력</option> -->
           <option value="solar">양력</option>
           <option value="lunar">음력</option>
           <option value="leap">윤달</option>
         </select>
-        <span v-if="calendarTypeError" class="error-text">{{ calendarTypeError }}</span>
+        <span v-if="calendarTypeError" class="error-text">{{
+          calendarTypeError
+        }}</span>
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-group group-2-3">
         <!-- 출생 시간 선택 필드 -->
-        <select v-model="birthTime" class="form-select" :class="{ 'placeholder': !birthTime, 'input-error': birthTimeError }">
+        <select
+          v-model="birthTime"
+          class="form-select"
+          :class="{ placeholder: !birthTime, 'input-error': birthTimeError }"
+        >
           <option disabled value="">출생 시간</option>
           <option value="no">생시 모름</option>
           <option value="01:30">축시 (01:30 ~ 03:29)</option>
@@ -77,7 +102,9 @@
           <option value="21:30">해시 (21:30 ~ 23:29)</option>
           <option value="23:30">자시 (23:30 ~ 01:29)</option>
         </select>
-        <span v-if="birthTimeError" class="error-text">{{ birthTimeError }}</span>
+        <span v-if="birthTimeError" class="error-text">{{
+          birthTimeError
+        }}</span>
       </div>
 
       <!-- <div class="form-group group-1-3">
@@ -101,8 +128,12 @@
     </div>
 
     <div class="form-notice">
-      <p>양력 또는 음력을 선택하여 정확한 생년월일과 출생 시간을 입력해 주세요.</p>
-      <p>제공된 정보는 저장되지 않으며, 사용자의 사생활 보호를 최우선으로 합니다.</p>
+      <p>
+        양력 또는 음력을 선택하여 정확한 생년월일과 출생 시간을 입력해 주세요.
+      </p>
+      <p>
+        제공된 정보는 저장되지 않으며, 사용자의 사생활 보호를 최우선으로 합니다.
+      </p>
     </div>
 
     <div class="floating">
@@ -123,7 +154,7 @@ export default class FortuneInfo extends Vue {
   birthTime = ''
   zodiac = ''
   inputFocused = false
-  
+
   nameError = ''
   genderError = ''
   birthdayError = ''
@@ -262,10 +293,13 @@ export default class FortuneInfo extends Vue {
       }
 
       console.log('userInfo: ', userInfo)
-      this.$router.push({ 
-        name: 'FortuneLoading',
-        params: { fortuneName: this.name}
-      })
+      this.$store.dispatch('updateAdsEndPoint', 'loading')
+      this.$store.dispatch('updateFortuneUser', userInfo)
+      this.$router.push('/bridge')
+      // this.$router.push({
+      //   name: 'FortuneLoading',
+      //   params: { fortuneName: this.name}
+      // })
     }
   }
 }
@@ -277,7 +311,7 @@ export default class FortuneInfo extends Vue {
 }
 
 .form-title {
-  color: #ECEEF0;
+  color: #eceef0;
   font-size: 22px;
   font-weight: 700;
   text-align: center;
@@ -316,9 +350,9 @@ export default class FortuneInfo extends Vue {
   padding: 0 16px;
   /* padding: 12px 16px; */
   border-radius: 12px;
-  border: 1px solid #2E364B;
-  background-color: #1D2330;
-  color: #9C9EA0;
+  border: 1px solid #2e364b;
+  background-color: #1d2330;
+  color: #9c9ea0;
   font-size: 15px;
   font-weight: 500;
   transition: all 0.2s;
@@ -337,16 +371,16 @@ export default class FortuneInfo extends Vue {
 
 /* placeholder (선택되지 않은 기본값) 스타일 */
 .form-select.placeholder {
-  color: #9C9EA0;
+  color: #9c9ea0;
 }
 
 /* 선택된 옵션 스타일 */
 .form-select:not(.placeholder) {
-  color: #9C9EA0;
+  color: #9c9ea0;
 }
 
 .form-input.input-empty {
-  border: 1px solid #2E364B;
+  border: 1px solid #2e364b;
 }
 
 /* .form-input.input-filled {
@@ -355,9 +389,9 @@ export default class FortuneInfo extends Vue {
 
 .form-input:focus,
 .form-select:focus {
-  border: 1px solid #ECEEF0; /* 활성화 상태 */
+  border: 1px solid #eceef0; /* 활성화 상태 */
   outline: none;
-  color: #FFFFFFCC;
+  color: #ffffffcc;
 }
 
 .form-notice {
@@ -388,12 +422,12 @@ export default class FortuneInfo extends Vue {
 
 /* 오류 상태일 때의 스타일 */
 .input-error {
-  border-color: #FF604F !important;
+  border-color: #ff604f !important;
 }
 
 /* 오류 메시지 스타일 */
 .error-text {
-  color: #FF604F;
+  color: #ff604f;
   font-size: 13px;
   margin-top: 8px;
 }
@@ -407,18 +441,23 @@ export default class FortuneInfo extends Vue {
   margin-right: auto;
   max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
-  background: linear-gradient(180deg, rgba(19, 23, 32, 0) 0%, #131720 15.46%, #131720 82.53%);
+  background: linear-gradient(
+    180deg,
+    rgba(19, 23, 32, 0) 0%,
+    #131720 15.46%,
+    #131720 82.53%
+  );
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 
 .floating > button {
   width: 100%;
   min-height: 52px;
-  background-color: #ECEEF0;
+  background-color: #eceef0;
   padding: 8px 8px;
   border-radius: 24px;
   border-style: none;
-  color: #181D23;
+  color: #181d23;
   font-size: 16px;
   font-weight: 700;
   line-height: 19px;
