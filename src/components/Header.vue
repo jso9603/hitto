@@ -131,7 +131,7 @@
     </template>
     <template v-else-if="$route.path === '/terms'">
       <div class="empty"></div>
-      <div class="menu">약관</div>
+      <div class="menu">개인 정보 보호 및 약관</div>
       <button @click="goBack" class="close">
         <img src="@/assets/ic-system-close-img.svg" />
       </button>

@@ -4,24 +4,28 @@
       <div class="img-bg">
         <img src="@/assets/img-stefan-3d.png" class="person" />
       </div>
-      <div class="nickname">{{nickname}}</div>
+      <div class="nickname">{{ nickname }}</div>
       <div class="email">
         <div class="kakao">
           <img src="@/assets/ic-system-kakao.svg" />
         </div>
-        <div v-if="user !== null">{{user.email}}</div>
-        <div v-if="user === null" class="kakao-login" @click="onLogin">카카오 계정으로 로그인해주세요.</div>
+        <div v-if="user !== null">{{ user.email }}</div>
+        <div v-if="user === null" class="kakao-login" @click="onLogin">
+          카카오 계정으로 로그인해주세요.
+        </div>
       </div>
     </div>
 
     <div ref="kakaoAddElement">
-      <ins class="kakao_ad_area"
+      <ins
+        class="kakao_ad_area"
         :style="{ display: 'none' }"
-        data-ad-unit = "DAN-2u949GtMCSfxJbji"
-        data-ad-width = "320"
-        data-ad-height = "50">
+        data-ad-unit="DAN-2u949GtMCSfxJbji"
+        data-ad-width="320"
+        data-ad-height="50"
+      >
       </ins>
-    </div> 
+    </div>
 
     <!-- <div class="coopang" @click="onCoopang">
       <img src="@/assets/AD.png" alt="쿠팡 광고" />
@@ -29,27 +33,32 @@
 
     <div class="menu">
       <div class="title">서비스</div>
-        <div
-          v-for="item in services"
-          :key="item.title"
-          class="service-item"
-          @click="onService(item)"
+      <div
+        v-for="item in services"
+        :key="item.title"
+        class="service-item"
+        @click="onService(item)"
+      >
+        <span class="service-title">{{ item.title }}</span>
+        <span
+          v-if="item.badge"
+          class="badge"
+          :style="{ color: item.badgeBg, backgroundColor: `${item.badgeBg}14` }"
         >
-          <span class="service-title">{{ item.title }}</span>
-          <span
-            v-if="item.badge"
-            class="badge"
-            :style="{ color: item.badgeBg, backgroundColor: `${item.badgeBg}14` }"
-          >
-            {{ item.badge }}
-          </span>
-          <img src="@/assets/ic-system-arrow-right.svg" />
+          {{ item.badge }}
+        </span>
+        <img src="@/assets/ic-system-arrow-right.svg" />
       </div>
     </div>
 
     <div class="menu">
       <div class="title">저장소</div>
-      <div v-for="item in repositories" :key="item.title" class="service-item" @click="onNumber(item.title)">
+      <div
+        v-for="item in repositories"
+        :key="item.title"
+        class="service-item"
+        @click="onNumber(item.title)"
+      >
         <span class="service-title">{{ item.title }}</span>
         <img src="@/assets/ic-system-arrow-right.svg" />
       </div>
@@ -57,7 +66,12 @@
 
     <div class="menu">
       <div class="title">일반</div>
-      <div v-for="(item, i) in general" :key="item.title" class="service-item" @click="onGeneral(i)">
+      <div
+        v-for="(item, i) in general"
+        :key="item.title"
+        class="service-item"
+        @click="onGeneral(i)"
+      >
         <span class="service-title">{{ item.title }}</span>
         <img src="@/assets/ic-system-arrow-right.svg" />
       </div>
@@ -65,10 +79,12 @@
 
     <!-- <div class="coopang-disclamer">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div> -->
 
-    <ins class="adsbygoogle"
-      style="display:inline-block;width:335px;height:60px"
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 335px; height: 60px"
       data-ad-client="ca-pub-7548744760182744"
-      data-ad-slot="7638100912">
+      data-ad-slot="7638100912"
+    >
     </ins>
   </div>
 </template>
@@ -123,11 +139,29 @@ export default class My extends Vue {
   ]
 
   private adjectives: string[] = [
-    '희망찬', '용감한', '즐거운', '활기찬', '씩씩한', '지혜로운', '사랑스러운', '기쁜', '자유로운', '귀여운',
+    '희망찬',
+    '용감한',
+    '즐거운',
+    '활기찬',
+    '씩씩한',
+    '지혜로운',
+    '사랑스러운',
+    '기쁜',
+    '자유로운',
+    '귀여운',
   ]
 
   private animals: string[] = [
-    '돼지', '호랑이', '사자', '고양이', '강아지', '곰', '여우', '토끼', '독수리', '판다',
+    '돼지',
+    '호랑이',
+    '사자',
+    '고양이',
+    '강아지',
+    '곰',
+    '여우',
+    '토끼',
+    '독수리',
+    '판다',
   ]
 
   onCoopang() {
@@ -139,8 +173,8 @@ export default class My extends Vue {
     const lastDigit = parseInt(uid.slice(-1), 10)
     const number = parseInt(uid.split('_')[1].substring(0, 4))
 
-    const adjective = this.adjectives[firstDigit % this.adjectives.length - 1]
-    const index = lastDigit % this.animals.length - 1
+    const adjective = this.adjectives[(firstDigit % this.adjectives.length) - 1]
+    const index = (lastDigit % this.animals.length) - 1
     const adjustedIndex = index < 0 ? 0 : index
     const animal = this.animals[adjustedIndex]
 
@@ -158,7 +192,7 @@ export default class My extends Vue {
     }
   }
 
-  onService(item: { title: string, link: string }) {
+  onService(item: { title: string; link: string }) {
     this.$store.dispatch('updateMenuName', item.title)
     this.$router.push(item.link)
   }
@@ -188,7 +222,7 @@ export default class My extends Vue {
 
   created() {
     const user = getLoggedUserInfo()
-    
+
     if (user) {
       try {
         this.user = user
@@ -205,18 +239,21 @@ export default class My extends Vue {
   loadAdSense() {
     // 이미 스크립트가 로드된 경우, 광고를 초기화
     if (window.adsbygoogle && window.adsbygoogle.length) {
-      (window.adsbygoogle = window.adsbygoogle || []).push({})
+      // eslint-disable-next-line no-extra-semi
+      ;(window.adsbygoogle = window.adsbygoogle || []).push({})
     } else {
       // Google AdSense 스크립트를 동적으로 삽입
       const script = document.createElement('script')
       script.async = true
-      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
+      script.src =
+        'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
       script.setAttribute('crossorigin', 'anonymous')
       document.head.appendChild(script)
 
       // 스크립트가 로드된 후 광고 초기화
       script.onload = () => {
-        (window.adsbygoogle = window.adsbygoogle || []).push({})
+        // eslint-disable-next-line no-extra-semi
+        ;(window.adsbygoogle = window.adsbygoogle || []).push({})
       }
     }
   }
@@ -231,13 +268,16 @@ export default class My extends Vue {
     this.$nextTick(() => {
       this.kakaoAddElement = this.$refs.kakaoAddElement as HTMLElement
 
-       if (this.kakaoAddElement) {
-         const script = document.createElement('script')
-        script.setAttribute('src', 'https://t1.daumcdn.net/kas/static/ba.min.js')
+      if (this.kakaoAddElement) {
+        const script = document.createElement('script')
+        script.setAttribute(
+          'src',
+          'https://t1.daumcdn.net/kas/static/ba.min.js',
+        )
         script.setAttribute('charset', 'utf-8')
         script.setAttribute('async', 'true')
         this.kakaoAddElement.appendChild(script)
-       } else {
+      } else {
         console.error('kakaoAddElement is not defined')
       }
     })
@@ -265,7 +305,7 @@ export default class My extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #0085FF;
+  background-color: #0085ff;
   border-radius: 50%;
   margin-bottom: 12px;
 }
@@ -283,7 +323,7 @@ export default class My extends Vue {
   line-height: 33px;
   letter-spacing: -0.5px;
   text-align: center;
-  color:#ECEEF0;
+  color: #eceef0;
 }
 
 .summary > .email {
@@ -294,7 +334,7 @@ export default class My extends Vue {
   font-size: 15px;
   font-weight: 400;
   line-height: 18px;
-  color: #9C9EA0;
+  color: #9c9ea0;
 }
 
 .kakao-login {
@@ -302,7 +342,7 @@ export default class My extends Vue {
 }
 
 .summary > .email > .kakao {
-  background-color: #ECEEF0;
+  background-color: #eceef0;
   width: 18px;
   height: 18px;
   display: flex;
@@ -339,7 +379,7 @@ export default class My extends Vue {
   margin-bottom: 28px;
   font-size: 14px;
   font-weight: 600;
-  color: #9C9EA0;
+  color: #9c9ea0;
 }
 
 .menu > .title {
@@ -348,7 +388,7 @@ export default class My extends Vue {
   font-weight: 500;
   line-height: 22px;
   text-align: left;
-  color: #9C9EA0;
+  color: #9c9ea0;
 }
 
 .service-item {
@@ -380,12 +420,12 @@ export default class My extends Vue {
   font-size: 18px;
   font-weight: 600;
   line-height: 26px;
-  color: #ECEEF0;
+  color: #eceef0;
 }
 
 .coopang-disclamer {
   margin-top: 48px;
-  color: #FFFFFF4D;
+  color: #ffffff4d;
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
