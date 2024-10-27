@@ -341,7 +341,7 @@ export default class Random extends Vue {
     setTimeout(() => {
       this.showPage1 = false
       // this.showMessage2 = true
-      this.$store.dispatch('updateAdsEndPoint', 'random')
+      this.$store.dispatch('updateAdsEndPoint', 'result')
       this.$router.push('/bridge')
       this.generateHighNumbers(1)
     }, 3000)
