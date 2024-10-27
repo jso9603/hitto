@@ -28,7 +28,7 @@ export default class Bridge extends Vue {
         const script = document.createElement('script')
         script.setAttribute(
           'src',
-          'https://t1.daumcdn.net/kas/static/ba.min.js'
+          'https://t1.daumcdn.net/kas/static/ba.min.js',
         )
         script.setAttribute('charset', 'utf-8')
         script.setAttribute('async', 'true')
@@ -43,6 +43,7 @@ export default class Bridge extends Vue {
 
 <style scoped>
 .bridge {
+  margin-top: 24px;
   display: flex;
   align-items: center;
   justify-content: center;

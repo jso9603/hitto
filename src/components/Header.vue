@@ -1,13 +1,31 @@
 <template>
-  <div :class="['header', headerClass, { 'scrolled': isScrolled }]">
+  <div :class="['header', headerClass, { scrolled: isScrolled }]">
     <template v-if="$route.path === '/' || $route.path === '/home'">
-      <img src="@/assets/ic-system-logo.svg" class="logo" @click="$router.replace('/')" />
-      <img src="@/assets/ic-system-qr.svg" class="qr" @click="onQr"/>
+      <img
+        src="@/assets/ic-system-logo.svg"
+        class="logo"
+        @click="$router.replace('/')"
+      />
+      <img src="@/assets/ic-system-qr.svg" class="qr" @click="onQr" />
       <button class="share" @click="onShare">공유</button>
     </template>
 
     <template
-      v-else-if="$route.path === '/ai' || $route.path === '/dream' || $route.path === '/category' || $route.path === '/category2' || $route.path === '/category3' || $route.path === '/random' || $route.path === '/manual' || $route.path === '/fortuneInfo' || $route.path === '/today' || $route.path === '/chatGPT' || $route.path === '/loading' || $router.path === '/fortune-loading' || $router.path === '/after-login'"
+      v-else-if="
+        $route.path === '/ai' ||
+        $route.path === '/dream' ||
+        $route.path === '/category' ||
+        $route.path === '/category2' ||
+        $route.path === '/category3' ||
+        $route.path === '/random' ||
+        $route.path === '/manual' ||
+        $route.path === '/fortuneInfo' ||
+        $route.path === '/today' ||
+        $route.path === '/chatGPT' ||
+        $route.path === '/loading' ||
+        $route.path === '/fortune-loading' ||
+        $route.path === '/after-login'
+      "
     >
       <button @click="goBack" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
@@ -23,17 +41,21 @@
       </button>
     </template>
 
-    <template v-else-if="$route.path === '/qr'">
+    <template v-else-if="$route.path === '/bridge'">
       <div class="empty"></div>
-      <img src="@/assets/ic-system-logo.svg" class="logo" @click="$router.replace('/')" />
+      <div class="empty"></div>
       <button @click="goClose" class="close">
         <img src="@/assets/ic-system-close-img.svg" />
       </button>
     </template>
 
-    <template v-else-if="$route.path === '/login'">
+    <template v-else-if="$route.path === '/qr' || $route.path === '/login'">
       <div class="empty"></div>
-      <img src="@/assets/ic-system-logo.svg" class="logo" @click="$router.replace('/')" />
+      <img
+        src="@/assets/ic-system-logo.svg"
+        class="logo"
+        @click="$router.replace('/')"
+      />
       <button @click="goClose" class="close">
         <img src="@/assets/ic-system-close-img.svg" />
       </button>
@@ -42,10 +64,19 @@
     <template v-else-if="$route.path === '/my'">
       <div class="empty"></div>
       <div class="menu">더보기</div>
-      <img src="@/assets/ic-setting.svg" v-if="isLoggedIn || !isNotLoggedIn" @click="onSetting" />
+      <img
+        src="@/assets/ic-setting.svg"
+        v-if="isLoggedIn || !isNotLoggedIn"
+        @click="onSetting"
+      />
     </template>
 
-    <template v-else-if="$route.path === '/my/number' && ($route.query.tab === 'automatic' || $route.query.tab === 'manual')">
+    <template
+      v-else-if="
+        $route.path === '/my/number' &&
+        ($route.query.tab === 'automatic' || $route.query.tab === 'manual')
+      "
+    >
       <button @click="goClose" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
@@ -96,7 +127,6 @@
       <button @click="goBack" class="close">
         <img src="@/assets/ic-system-close-img.svg" />
       </button>
-      
     </template>
   </div>
 </template>
@@ -125,11 +155,14 @@ export default class Header extends Vue {
 
     // Check if navigator.clipboard.writeText is available
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(currentUrl).then(() => {
-        this.$store.dispatch('showCopyImage')
-      }).catch(err => {
-        console.error('링크 복사에 실패했습니다:', err)
-      })
+      navigator.clipboard
+        .writeText(currentUrl)
+        .then(() => {
+          this.$store.dispatch('showCopyImage')
+        })
+        .catch((err) => {
+          console.error('링크 복사에 실패했습니다:', err)
+        })
     } else {
       // Fallback for iOS Safari
       const textArea = document.createElement('textarea')
@@ -207,7 +240,11 @@ export default class Header extends Vue {
   }
 
   get headerClass() {
-    return this.$route.path === '/' ? 'home' : this.$route.path === '/qr' ? 'qr' : 'subpage'
+    return this.$route.path === '/'
+      ? 'home'
+      : this.$route.path === '/qr'
+        ? 'qr'
+        : 'subpage'
   }
 
   get showBackButton() {
@@ -241,7 +278,7 @@ export default class Header extends Vue {
   }
 
   onSetting() {
-    this.$router.push('/my/setting');
+    this.$router.push('/my/setting')
   }
 
   onSelectedRound() {
@@ -319,7 +356,7 @@ export default class Header extends Vue {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  color: #ECEEF0;
+  color: #eceef0;
   font-size: 18px;
   font-weight: 600;
 }
@@ -343,18 +380,17 @@ img.qr {
   font-size: 15px;
   font-weight: 500;
   line-height: 24px;
-  background-color: #2E364B;
-  color: #ECEEF0;
+  background-color: #2e364b;
+  color: #eceef0;
   cursor: pointer;
 }
-
 
 .service {
   font-size: 18px;
   font-weight: 600;
   line-height: 26px;
   text-align: center;
-  color: #ECEEF0;
+  color: #eceef0;
   display: flex;
   align-items: center;
   justify-content: center;
