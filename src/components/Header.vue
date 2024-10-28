@@ -49,14 +49,6 @@
       </button>
     </template>
 
-    <template v-else-if="$route.path === '/bridge'">
-      <div class="empty"></div>
-      <div class="empty"></div>
-      <button @click="goNext" class="close">
-        <img src="@/assets/ic-system-close-img.svg" />
-      </button>
-    </template>
-
     <template v-else-if="$route.path === '/qr' || $route.path === '/login'">
       <div class="empty"></div>
       <img
@@ -283,11 +275,6 @@ export default class Header extends Vue {
 
   goBackChallenge() {
     this.$router.back()
-  }
-
-  goNext() {
-    const endPoint = this.$store.state.adsEndPoint
-    this.$router.push(`/${endPoint}`)
   }
 
   onSetting() {

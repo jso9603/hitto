@@ -3,7 +3,6 @@ import Home from '@/views/Home.vue'
 import Ai from '@/views/Ai.vue'
 import Backup from '@/views/Backup.vue'
 import Random from '@/views/Random.vue'
-import Result from '@/views/RandomResult.vue'
 import AfterLogin from '@/views/AfterLogin.vue'
 import Dream from '@/views/Dream.vue'
 import Category from '@/views/Category.vue'
@@ -24,7 +23,6 @@ import FortuneInfo from '@/views/FortuneInfo.vue'
 import ChatGPT from '@/views/chatGPT.vue'
 import TodayFortune from '@/views/TodayFortune.vue'
 import FortuneLoading from '@/views/FortuneLoading.vue'
-import Bridge from '@/views/Bridge.vue'
 import Promotion from '@/views/Promotion.vue'
 import Router from 'vue-router'
 
@@ -50,11 +48,6 @@ const routes = [
     path: '/random',
     name: 'Random',
     component: Random,
-  },
-  {
-    path: '/result',
-    name: 'Result',
-    component: Result,
   },
   {
     path: '/after-login',
@@ -160,11 +153,6 @@ const routes = [
     path: '/fortune-loading',
     name: 'FortuneLoading',
     component: FortuneLoading,
-  },
-  {
-    path: '/bridge',
-    name: 'Bridge',
-    component: Bridge,
   },
   {
     path: '/promotion',

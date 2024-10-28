@@ -406,7 +406,7 @@ export default class FortuneLoading extends Vue {
 
     this.getFortune()
 
-    const fortuneUserName = this.$store.state.fortuneUser.name
+    const fortuneUserName = this.$route.params.fortuneName
     if (fortuneUserName) {
       this.fortuneUserName = fortuneUserName
       Cookies.set('fortuneName', this.fortuneUserName, { expires: 1 })

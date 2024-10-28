@@ -293,13 +293,12 @@ export default class FortuneInfo extends Vue {
       }
 
       console.log('userInfo: ', userInfo)
-      this.$store.dispatch('updateAdsEndPoint', 'loading')
-      this.$store.dispatch('updateFortuneUser', userInfo)
-      this.$router.push('/bridge')
-      // this.$router.push({
-      //   name: 'FortuneLoading',
-      //   params: { fortuneName: this.name}
-      // })
+      // this.$store.dispatch('updateAdsEndPoint', 'loading')
+      // this.$store.dispatch('updateFortuneUser', userInfo)
+      this.$router.push({
+        name: 'FortuneLoading',
+        params: { fortuneName: this.name },
+      })
     }
   }
 }
