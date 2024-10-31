@@ -13,7 +13,12 @@
       </div>
 
       <div v-if="showMessage2">
-        <div v-for="(message, index) in messages2" :key="index" class="message2" :style="{ animationDelay: `${index * 0.2}s` }">
+        <div
+          v-for="(message, index) in messages2"
+          :key="index"
+          class="message2"
+          :style="{ animationDelay: `${index * 0.2}s` }"
+        >
           {{ message }}
         </div>
       </div>
@@ -21,12 +26,20 @@
       <div class="result__box">
         <div v-for="(round, index) in lottoNumbers" :key="index" class="round">
           <div class="row">
-            <div v-for="number in round.slice(0, 3)" :key="number" :class="getNumberClass(number)">
+            <div
+              v-for="number in round.slice(0, 3)"
+              :key="number"
+              :class="getNumberClass(number)"
+            >
               {{ number }}
             </div>
           </div>
           <div class="row">
-            <div v-for="number in round.slice(3, 5)" :key="number" :class="getNumberClass(number)">
+            <div
+              v-for="number in round.slice(3, 5)"
+              :key="number"
+              :class="getNumberClass(number)"
+            >
               {{ number }}
             </div>
             <div :class="[getNumberClass(round[6])]">
@@ -75,8 +88,8 @@ export default class AfterLogin extends Vue {
   private circleCenter = { x: 80, y: 80 } // canvas의 중앙
   private circleRadius = 80 // 원의 반지름 (로딩 바)
 
-  private messages: string[] = ['AI 통계기반', '로또 번호를 생성하고 있어요']
-  private messages2 = ['로또 번호를 생성했어요!', '맘에 드시나요?']
+  private messages: string[] = ['AI 통계기반', '행운 번호를 생성하고 있어요']
+  private messages2 = ['행운 번호를 생성했어요!', '맘에 드시나요?']
   private selectedMessage: string | null = null
   private showMessage2: boolean = true
 
@@ -88,14 +101,16 @@ export default class AfterLogin extends Vue {
   background = ''
 
   // 확률 높은 숫자들
-  highProbNumbers: number[] = [1, 3, 6, 7, 12, 14, 17, 24, 26, 27, 33, 34, 42, 43, 45]
+  highProbNumbers: number[] = [
+    1, 3, 6, 7, 12, 14, 17, 24, 26, 27, 33, 34, 42, 43, 45,
+  ]
   private lottoNumbers: number[][] = []
 
   isLoginPopupVisible = false
   private LoginPopupNumbers: number[] = []
 
   get showLoginPopup() {
-    return this.$store.state.showLoginPopup;
+    return this.$store.state.showLoginPopup
   }
 
   get dynamicHeight() {
@@ -118,7 +133,11 @@ export default class AfterLogin extends Vue {
       // this.$router.replace('/')
       const user = getLoggedUserInfo()
 
-      if (!user && this.$route.path === '/random' && sessionStorage.getItem('lottoNumbers')) {
+      if (
+        !user &&
+        this.$route.path === '/random' &&
+        sessionStorage.getItem('lottoNumbers')
+      ) {
         this.showPopup()
 
         // 히스토리를 조작하여 페이지 이동을 막음
@@ -129,21 +148,25 @@ export default class AfterLogin extends Vue {
 
   showPopup() {
     const storedNumbers = sessionStorage.getItem('lottoNumbers')
-    
+
     if (storedNumbers) {
       // 문자열에서 양쪽의 따옴표를 제거하고, 쉼표로 분리하여 배열로 변환 후 숫자로 변환
       this.LoginPopupNumbers = storedNumbers
-        .replace(/^"|"$/g, '')  // 양 끝의 따옴표 제거
-        .split(',')             // 쉼표로 문자열 분리
-        .map(num => Number(num.trim())) // 각 요소를 숫자로 변환
+        .replace(/^"|"$/g, '') // 양 끝의 따옴표 제거
+        .split(',') // 쉼표로 문자열 분리
+        .map((num) => Number(num.trim())) // 각 요소를 숫자로 변환
     }
 
     this.isLoginPopupVisible = true
   }
 
   created() {
-    this.background = this.$store.state.menuName!.includes('꿈해몽') ? 'yellow-bg' : 'blue-bg'
-    this.charater = this.$store.state.menuName!.includes('꿈해몽') ? 'img-stella-3d.png' : 'img-stefan-3d.png'
+    this.background = this.$store.state.menuName!.includes('꿈해몽')
+      ? 'yellow-bg'
+      : 'blue-bg'
+    this.charater = this.$store.state.menuName!.includes('꿈해몽')
+      ? 'img-stella-3d.png'
+      : 'img-stefan-3d.png'
   }
 
   mounted() {
@@ -154,23 +177,23 @@ export default class AfterLogin extends Vue {
 
     const storedLottoNumbers = sessionStorage.getItem('lottoNumbers')
     console.log(storedLottoNumbers)
-    
+
     if (storedLottoNumbers) {
       // 문자열을 숫자 배열로 변환
       const numberArray = storedLottoNumbers
-        .replace(/^"|"$/g, '')  // 양 끝의 따옴표 제거
-        .split(',')             // 쉼표로 문자열 분리
-        .map(num => Number(num.trim())) // 각 요소를 숫자로 변환
+        .replace(/^"|"$/g, '') // 양 끝의 따옴표 제거
+        .split(',') // 쉼표로 문자열 분리
+        .map((num) => Number(num.trim())) // 각 요소를 숫자로 변환
 
       // 1차원 배열을 2차원 배열로 변환하여 lottoNumbers에 추가
-      this.lottoNumbers.push(numberArray);
+      this.lottoNumbers.push(numberArray)
     }
 
     // 페이지 로드 시 히스토리 상태 추가 (페이지 이동 막기 위해 pushState 사용)
     window.history.pushState(null, '', window.location.href)
     window.addEventListener('popstate', this.handleBackButton)
   }
-  
+
   getRandomNumbers(array: number[], count: number): number[] {
     const result = []
     const _array = [...array]
@@ -190,16 +213,21 @@ export default class AfterLogin extends Vue {
     }
     return remaining
   }
-  
+
   generateLotteryNumbers(): number[] {
-    const selectedHighProbNumbers = this.getRandomNumbers(this.highProbNumbers, 3)
+    const selectedHighProbNumbers = this.getRandomNumbers(
+      this.highProbNumbers,
+      3,
+    )
     const remainingNumbers = this.getRemainingNumbers(selectedHighProbNumbers)
     const selectedRemainingNumbers = this.getRandomNumbers(remainingNumbers, 3)
-    return selectedHighProbNumbers.concat(selectedRemainingNumbers).sort((a, b) => a - b)
+    return selectedHighProbNumbers
+      .concat(selectedRemainingNumbers)
+      .sort((a, b) => a - b)
   }
 
   generateHighNumbers(rounds: number) {
-    this.lottoNumbers = [];
+    this.lottoNumbers = []
     for (let i = 0; i < rounds; i++) {
       this.lottoNumbers.push(this.generateLotteryNumbers())
     }
@@ -229,7 +257,12 @@ export default class AfterLogin extends Vue {
     let currentWeek = diffWeeks + 1 // 회차는 1회차부터 시작하므로 1을 더해줌
 
     // 이번 주 토요일 오후 6시를 계산
-    let saturdaySixPM = currentDate.startOf('week').add(6, 'day').hour(18).minute(0).second(0)
+    let saturdaySixPM = currentDate
+      .startOf('week')
+      .add(6, 'day')
+      .hour(18)
+      .minute(0)
+      .second(0)
 
     // 만약 현재 시간이 그 주의 토요일 오후 6시 이후라면 다음 회차로 설정
     if (currentDate.day() === 0 || currentDate.isAfter(saturdaySixPM)) {
@@ -256,7 +289,9 @@ export default class AfterLogin extends Vue {
         user = JSON.parse(userData)
 
         const round = this.getLottoWeek(dayjs())
-        const numbers = [(sessionStorage.getItem('lottoNumbers'))!.replace(/^"|"$/g, '')]
+        const numbers = [
+          sessionStorage.getItem('lottoNumbers')!.replace(/^"|"$/g, ''),
+        ]
 
         try {
           // automatic or dream 컬렉션에 새로운 문서 추가
@@ -279,18 +314,26 @@ export default class AfterLogin extends Vue {
 
           if (!datas) {
             // sessionStorage에 아무 데이터도 없으면, 배열에 insertData를 넣어서 저장
-            sessionStorage.setItem(`myNumbers-${round}`, JSON.stringify(insertData))
+            sessionStorage.setItem(
+              `myNumbers-${round}`,
+              JSON.stringify(insertData),
+            )
           } else {
             const alreadyDatas = JSON.parse(datas)
 
-            const updatedData = Array.isArray(alreadyDatas) ? alreadyDatas : [alreadyDatas]
+            const updatedData = Array.isArray(alreadyDatas)
+              ? alreadyDatas
+              : [alreadyDatas]
             updatedData.push(insertData)
 
             updatedData.sort((a, b) => {
               return dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1
             })
 
-            sessionStorage.setItem(`myNumbers-${round}`, JSON.stringify(updatedData))
+            sessionStorage.setItem(
+              `myNumbers-${round}`,
+              JSON.stringify(updatedData),
+            )
           }
 
           sessionStorage.removeItem('hope')
@@ -302,7 +345,6 @@ export default class AfterLogin extends Vue {
 
             this.$router.push('/my/number?tab=automatic')
           }, 1000)
-          
         } catch (e) {
           this.isLoading = false
 
@@ -375,11 +417,11 @@ export default class AfterLogin extends Vue {
 }
 
 .img-bg.yellow-bg {
-  background-color: #FCD53F;
+  background-color: #fcd53f;
 }
 
 .img-bg.blue-bg {
-  background-color: #0085FF;
+  background-color: #0085ff;
 }
 
 .img-bg > img {
@@ -521,28 +563,28 @@ export default class AfterLogin extends Vue {
 }
 
 .yellow {
-  border: 2px solid #DD9A17;
-  color: #DD9A17;
+  border: 2px solid #dd9a17;
+  color: #dd9a17;
 }
 
 .blue {
-  border: 2px solid #0085FF;
-  color: #0085FF;
+  border: 2px solid #0085ff;
+  color: #0085ff;
 }
 
 .red {
-  border: 2px solid #E64D3D;
-  color: #E64D3D;
+  border: 2px solid #e64d3d;
+  color: #e64d3d;
 }
 
 .grey {
-  border: 2px solid #9C9EA0;
-  color: #9C9EA0;
+  border: 2px solid #9c9ea0;
+  color: #9c9ea0;
 }
 
 .green {
-  border: 2px solid #33C759;
-  color: #33C759;
+  border: 2px solid #33c759;
+  color: #33c759;
 }
 
 .floating {
@@ -556,15 +598,19 @@ export default class AfterLogin extends Vue {
   display: flex;
   gap: 10px;
   padding: 20px;
-  background: linear-gradient(180deg, rgba(19, 23, 32, 0) 0%, #131720 15.46%, #131720 82.53%);
+  background: linear-gradient(
+    180deg,
+    rgba(19, 23, 32, 0) 0%,
+    #131720 15.46%,
+    #131720 82.53%
+  );
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
-  
 }
 
 .floating > button {
   width: 100%;
   min-height: 54px;
-  background-color: #ECEEF0;
+  background-color: #eceef0;
   padding: 8px 8px;
   border-radius: 100px;
   border-style: none;
@@ -585,7 +631,7 @@ export default class AfterLogin extends Vue {
 .floating > button.none {
   background-color: transparent;
   border: 1px solid #414244;
-  color: #ECEEF0;
+  color: #eceef0;
   font-size: 16px;
   font-weight: 700;
   line-height: 19px;

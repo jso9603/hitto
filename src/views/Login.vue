@@ -1,14 +1,14 @@
 <template>
   <div class="container">
     <div class="contents">
-      <h3>모두의 희망로또</h3>
+      <h3>모두의 희망번호</h3>
       <div class="description">
-        행운은 도전하는 자의 것,<br/>스테판에게 행운의 번호를 받아보세요
+        행운은 도전하는 자의 것,<br />스테판에게 행운의 번호를 받아보세요
       </div>
 
       <div class="benefit" v-for="(benefit, index) in benefits" :key="index">
         <img :src="require(`@/assets/${benefit.icon}`)" />
-        <div class="text">{{benefit.text}}</div>
+        <div class="text">{{ benefit.text }}</div>
       </div>
 
       <div class="floating">
@@ -45,15 +45,15 @@ export default class Login extends Vue {
   private benefits = [
     {
       icon: 'ic-stefan-2d.svg',
-      text: '무료로 ai 로또 번호를 생성해보세요',
+      text: '무료로 ai 행운번호를 생성해보세요',
     },
     {
       icon: 'ball.svg',
-      text: '매주 로또 1등을 맞춰 보세요',
+      text: '매주 행운번호 1등을 맞춰 보세요',
     },
     {
       icon: 'folder.png',
-      text: '로또번호를 보관하고 관리해 보세요',
+      text: '행운번호를 보관하고 관리해 보세요',
     },
   ]
 
@@ -95,7 +95,7 @@ export default class Login extends Vue {
       if (querySnapshot.empty) {
         const user = {
           email,
-          uid: `uid_${Date.now()}` // 고유한 uid 생성
+          uid: `uid_${Date.now()}`, // 고유한 uid 생성
         }
         await addDoc(collection(db, 'users'), user)
 
@@ -112,9 +112,11 @@ export default class Login extends Vue {
   }
 
   storeDispache(user: User) {
-    Cookies.set('user', JSON.stringify(user), {expires: 30})
+    Cookies.set('user', JSON.stringify(user), { expires: 30 })
 
-    this.redirectUrl ? this.$router.replace(`/${this.redirectUrl}`) : this.$router.go(-1)
+    this.redirectUrl
+      ? this.$router.replace(`/${this.redirectUrl}`)
+      : this.$router.go(-1)
   }
 
   // iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
@@ -193,7 +195,7 @@ h3 {
   font-weight: 700;
   line-height: 30px;
   text-align: center;
-  color: #ECEEF0;
+  color: #eceef0;
 }
 
 .description {
@@ -203,7 +205,7 @@ h3 {
   font-weight: 400;
   line-height: 23px;
   text-align: center;
-  color: #9C9EA0;
+  color: #9c9ea0;
 }
 
 .benefit {
@@ -213,7 +215,7 @@ h3 {
   gap: 12px;
   padding: 20px;
   border-radius: 16px;
-  background-color: #1D2330;
+  background-color: #1d2330;
 }
 
 .benefit > img {
@@ -228,7 +230,7 @@ h3 {
   line-height: 23px;
   letter-spacing: -0.5px;
   text-align: left;
-  color: #ECEEF0;
+  color: #eceef0;
 }
 
 .get__started {
@@ -259,10 +261,10 @@ h3 {
   justify-content: center;
   gap: 8px;
   width: 100%;
-  background-color: #FFE812;
+  background-color: #ffe812;
   border-radius: 40px;
   padding: 14px 29.5px;
-  color: #181D23;
+  color: #181d23;
   font-size: 16px;
   font-weight: 700;
   line-height: 19px;
@@ -283,7 +285,12 @@ h3 {
   margin-right: auto;
   max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
-  background: linear-gradient(180deg, rgba(19, 23, 32, 0) 0%, #131720 15.46%, #131720 82.53%);
+  background: linear-gradient(
+    180deg,
+    rgba(19, 23, 32, 0) 0%,
+    #131720 15.46%,
+    #131720 82.53%
+  );
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 
@@ -313,6 +320,6 @@ h3 {
   height: 24px;
   background-color: #414244;
   border-radius: 50%;
-  border: 1px solid #181D23;
+  border: 1px solid #181d23;
 }
 </style>

@@ -1,22 +1,21 @@
 <template>
-<div>
-  <div class="random__lotto">
-    <h1>로또 번호 추첨기</h1>
-    <button @click="generateNumbers">번호 추첨</button>
-    <li v-for="(numbers, index) in lottoNumbers" :key="index">
-      {{ index + 1 }}회차: {{ numbers.join(', ') }}
-    </li>
-  </div>
+  <div>
+    <div class="random__lotto">
+      <h1>행운번호 추첨기</h1>
+      <button @click="generateNumbers">번호 추첨</button>
+      <li v-for="(numbers, index) in lottoNumbers" :key="index">
+        {{ index + 1 }}회차: {{ numbers.join(', ') }}
+      </li>
+    </div>
 
-  <div class="high-probability">
-    <div>확률 높은 번호 추첨</div>
-    <button @click="generateHighNumbers">확률 높은 번호 추첨</button>
-    <li v-for="(set, index) in lotterySets" :key="index">
-      {{ index + 1 }}회차: {{ set.join(', ') }}
-    </li>
+    <div class="high-probability">
+      <div>확률 높은 번호 추첨</div>
+      <button @click="generateHighNumbers">확률 높은 번호 추첨</button>
+      <li v-for="(set, index) in lotterySets" :key="index">
+        {{ index + 1 }}회차: {{ set.join(', ') }}
+      </li>
+    </div>
   </div>
-</div>
-  
 </template>
 
 <script lang="ts">
@@ -27,15 +26,22 @@ export default class Backup extends Vue {
   lottoNumbers: number[][] = []
 
   // 확률 높은 숫자를 숫자 번대로 2개씩 선택
-  highProbNumbers: number[] = [1, 3, 6, 7, 12, 14, 17, 24, 26, 27, 33, 34, 42, 43, 45]
+  highProbNumbers: number[] = [
+    1, 3, 6, 7, 12, 14, 17, 24, 26, 27, 33, 34, 42, 43, 45,
+  ]
   lotterySets: number[][] = []
 
- // Function to generate a single set of lottery numbers
+  // Function to generate a single set of lottery numbers
   generateLotteryNumbers(): number[] {
-    const selectedHighProbNumbers = this.getRandomNumbers(this.highProbNumbers, 3)
+    const selectedHighProbNumbers = this.getRandomNumbers(
+      this.highProbNumbers,
+      3,
+    )
     const remainingNumbers = this.getRemainingNumbers(selectedHighProbNumbers)
     const selectedRemainingNumbers = this.getRandomNumbers(remainingNumbers, 3)
-    return selectedHighProbNumbers.concat(selectedRemainingNumbers).sort((a, b) => a - b)
+    return selectedHighProbNumbers
+      .concat(selectedRemainingNumbers)
+      .sort((a, b) => a - b)
   }
 
   // Helper function to get random numbers from an array
@@ -62,7 +68,7 @@ export default class Backup extends Vue {
 
   // Function to generate 5 sets of lottery numbers
   generateHighNumbers() {
-    this.lotterySets = [];
+    this.lotterySets = []
     for (let i = 0; i < 5; i++) {
       this.lotterySets.push(this.generateLotteryNumbers())
     }

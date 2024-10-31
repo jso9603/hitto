@@ -8,26 +8,24 @@
       @save="saveData"
     />
 
-    <div class="week">{{currentRound}}회</div>
-    <div class="date">{{getFormattedDate(saturdayDate)}} 추첨</div>
+    <div class="week">{{ currentRound }}회</div>
+    <div class="date">{{ getFormattedDate(saturdayDate) }} 추첨</div>
 
     <div class="selected-form">
-      <div
-        v-for="(form, index) in forms"
-        :key="index"
-        class="form-box"
-      >
+      <div v-for="(form, index) in forms" :key="index" class="form-box">
         <div class="form-header">
           <h3>P-{{ form.label.charCodeAt() - 64 }}</h3>
           <button
             @click="resetForm(index)"
             class="reset"
             :disabled="form.selectedNumbers.length === 0"
-            :style="{marginRight: index === 0 ? '0px' : '8px' }"
+            :style="{ marginRight: index === 0 ? '0px' : '8px' }"
           >
             초기화
           </button>
-          <button v-if="index !== 0" @click="removeForm(index)" class="remove">삭제</button>
+          <button v-if="index !== 0" @click="removeForm(index)" class="remove">
+            삭제
+          </button>
         </div>
         <!-- 여기에 번호 입력하는 영역 -->
         <div class="numbers">
@@ -37,8 +35,8 @@
             class="number-circle"
             @click="selectNumber(index, number)"
             :class="[
-              form.selectedNumbers.includes(number) ? 'selected' : '', 
-              getNumberClass(number)
+              form.selectedNumbers.includes(number) ? 'selected' : '',
+              getNumberClass(number),
             ]"
           >
             {{ number }}
@@ -60,7 +58,8 @@
         <template v-if="!isLoading">저장하기</template>
       </button>
       <div class="disclamer">
-        모희또 서비스에서 제공하는 생성번호는 참고 용도이며, <br/>그로 인한 결과는 책임은 사용자에게 있습니다.
+        모희또 서비스에서 제공하는 생성번호는 참고 용도이며, <br />그로 인한
+        결과는 책임은 사용자에게 있습니다.
       </div>
     </div>
   </div>
@@ -92,7 +91,7 @@ interface Form {
 export default class Manual extends Vue {
   isLoading = false
 
-  week =''
+  week = ''
   currentRound = ''
   saturdayDate = ''
   isPopupVisible = false
@@ -100,7 +99,7 @@ export default class Manual extends Vue {
     { label: 'A', numbers: this.generateNumbers(), selectedNumbers: [] },
   ]
 
-  user: User = {uid: '', email: ''}
+  user: User = { uid: '', email: '' }
 
   get isRoundMatched() {
     const storedRound = sessionStorage.getItem('round')
@@ -113,19 +112,24 @@ export default class Manual extends Vue {
 
   // 1부터 45까지의 숫자를 생성하는 메서드
   generateNumbers(): number[] {
-    return Array.from({ length: 45 }, (_, i) => i + 1)  // 1부터 45까지 배열 생성
+    return Array.from({ length: 45 }, (_, i) => i + 1) // 1부터 45까지 배열 생성
   }
 
   addForm() {
     const nextLabel = String.fromCharCode(65 + this.forms.length)
-    this.forms.push({ label: nextLabel, numbers: this.generateNumbers(), selectedNumbers: [] })
+    this.forms.push({
+      label: nextLabel,
+      numbers: this.generateNumbers(),
+      selectedNumbers: [],
+    })
 
     this.$nextTick(() => {
-    const addedForm = this.$el.querySelectorAll('.form-box')[this.forms.length - 1] // 새로 추가된 form
-    if (addedForm) {
-      addedForm.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
-  })
+      const addedForm =
+        this.$el.querySelectorAll('.form-box')[this.forms.length - 1] // 새로 추가된 form
+      if (addedForm) {
+        addedForm.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    })
   }
 
   removeForm(index: number) {
@@ -157,15 +161,19 @@ export default class Manual extends Vue {
   onSave() {
     console.log(this.forms)
 
-    let allValid = true  // 모든 폼이 유효한지 확인하는 플래그
+    let allValid = true // 모든 폼이 유효한지 확인하는 플래그
     this.forms.forEach((form) => {
       const selectedCount = form.selectedNumbers.length
 
       if (selectedCount < 6) {
-        alert(`P-${form.label.charCodeAt(0) - 64}에서 ${6 - selectedCount}개의 숫자를 더 선택해야 합니다.`)
+        alert(
+          `P-${form.label.charCodeAt(0) - 64}에서 ${6 - selectedCount}개의 숫자를 더 선택해야 합니다.`,
+        )
         allValid = false
       } else if (selectedCount > 6) {
-        alert(`P-${form.label.charCodeAt(0) - 64}에서 ${selectedCount - 6}개의 숫자를 덜 선택해야 합니다.`)
+        alert(
+          `P-${form.label.charCodeAt(0) - 64}에서 ${selectedCount - 6}개의 숫자를 덜 선택해야 합니다.`,
+        )
         allValid = false
       }
     })
@@ -194,17 +202,25 @@ export default class Manual extends Vue {
     // console.log('회차:', this.getLottoWeek('2024-09-14 18:30')) // 토요일 오후 6시 30분, 1138회
     // console.log('회차:', this.getLottoWeek('2024-09-15 00:00')) // 일요일 자정, 1138회
 
-    const t1 = dayjs('2002-12-07') // 로또 1회차 기준 날짜
+    const t1 = dayjs('2002-12-07') // 번호 1회차 기준 날짜
     // const currentDate = dayjs(t2) // 입력된 날짜
     const currentDate = t2
     let diffWeeks = currentDate.diff(t1, 'week') // 기준 날짜와의 주차 차이
     let currentWeek = diffWeeks + 1 // 회차는 1회차부터 시작하므로 1을 더해줌
 
     // 이번 주 토요일 오후 6시를 계산
-    let saturdaySixPM = currentDate.startOf('week').add(6, 'day').hour(18).minute(0).second(0)
+    let saturdaySixPM = currentDate
+      .startOf('week')
+      .add(6, 'day')
+      .hour(18)
+      .minute(0)
+      .second(0)
 
     console.log('현재 날짜:', currentDate.format('YYYY-MM-DD HH:mm'))
-    console.log('이번 주 토요일 오후 6시:', saturdaySixPM.format('YYYY-MM-DD HH:mm'))
+    console.log(
+      '이번 주 토요일 오후 6시:',
+      saturdaySixPM.format('YYYY-MM-DD HH:mm'),
+    )
 
     // 만약 현재 시간이 그 주의 토요일 오후 6시 이후라면 다음 회차로 설정
     if (currentDate.day() === 0 || currentDate.isAfter(saturdaySixPM)) {
@@ -250,18 +266,26 @@ export default class Manual extends Vue {
 
         if (!datas) {
           // sessionStorage에 아무 데이터도 없으면, 배열에 insertData를 넣어서 저장
-          sessionStorage.setItem(`myChallenge-${round}`, JSON.stringify(insertData))
+          sessionStorage.setItem(
+            `myChallenge-${round}`,
+            JSON.stringify(insertData),
+          )
         } else {
           const alreadyDatas = JSON.parse(datas)
 
-          const updatedData = Array.isArray(alreadyDatas) ? alreadyDatas : [alreadyDatas]
+          const updatedData = Array.isArray(alreadyDatas)
+            ? alreadyDatas
+            : [alreadyDatas]
           updatedData.push(insertData)
 
           updatedData.sort((a, b) => {
             return dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1
           })
 
-          sessionStorage.setItem(`myChallenge-${round}`, JSON.stringify(updatedData))
+          sessionStorage.setItem(
+            `myChallenge-${round}`,
+            JSON.stringify(updatedData),
+          )
         }
       }
 
@@ -280,21 +304,21 @@ export default class Manual extends Vue {
 
   getNumberClass(number: number) {
     if (number >= 1 && number <= 10) {
-      return 'yellow';
+      return 'yellow'
     } else if (number >= 11 && number <= 20) {
-      return 'blue';
+      return 'blue'
     } else if (number >= 21 && number <= 30) {
-      return 'red';
+      return 'red'
     } else if (number >= 31 && number <= 40) {
-      return 'gray';
+      return 'gray'
     } else if (number >= 41 && number <= 45) {
-      return 'green';
+      return 'green'
     }
-    return '';
+    return ''
   }
 
   mounted() {
-    this.week = (this.getLottoWeek(dayjs())).toString()
+    this.week = this.getLottoWeek(dayjs()).toString()
     this.currentRound = this.week
     this.saturdayDate = this.getSaturdayDate(+this.currentRound - 1)
 
@@ -326,14 +350,14 @@ export default class Manual extends Vue {
   font-weight: 700;
   line-height: 32px;
   text-align: center;
-  color: #ECEEF0;
+  color: #eceef0;
   cursor: pointer;
 }
 
 .date {
   margin-top: 4px;
   margin-bottom: 24px;
-  color: #9C9EA0;
+  color: #9c9ea0;
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
@@ -357,7 +381,7 @@ export default class Manual extends Vue {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #FFF;
+  color: #fff;
 }
 
 .reset {
@@ -367,13 +391,13 @@ export default class Manual extends Vue {
 
 .reset,
 .remove {
-  background-color: #2A3246;
+  background-color: #2a3246;
   border-radius: 8px;
   font-size: 15px;
   font-weight: 500;
   line-height: 18px;
   letter-spacing: -0.5px;
-  color: #BABCBE;
+  color: #babcbe;
   border: none;
   padding: 8px;
 }
@@ -390,7 +414,7 @@ h3::before {
   width: 6px;
   height: 6px;
   margin-right: 6px;
-  background-color: #4AFF81;
+  background-color: #4aff81;
   border-radius: 50%;
 }
 
@@ -413,7 +437,7 @@ h3::before {
   height: 32px;
   margin: auto;
   border-radius: 50%;
-  color: #BABCBE;
+  color: #babcbe;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -423,28 +447,28 @@ h3::before {
 }
 
 .selected.yellow {
-  border: 1px solid #FFBD00;
-  color: #FFBD00;
+  border: 1px solid #ffbd00;
+  color: #ffbd00;
 }
 
 .selected.blue {
-  border: 1px solid #0085FF;
-  color: #0085FF;
+  border: 1px solid #0085ff;
+  color: #0085ff;
 }
 
 .selected.red {
-  border: 1px solid #E64D3D;
-  color: #E64D3D;
+  border: 1px solid #e64d3d;
+  color: #e64d3d;
 }
 
 .selected.gray {
-  border: 1px solid #ABB1B6;
-  color: #ABB1B6;
+  border: 1px solid #abb1b6;
+  color: #abb1b6;
 }
 
 .selected.green {
-  border: 1px solid #33C759;
-  color: #33C759
+  border: 1px solid #33c759;
+  color: #33c759;
 }
 
 .add {
@@ -454,7 +478,7 @@ h3::before {
   padding: 8px 8px;
   border-radius: 16px;
   border-style: none;
-  color: #ECEEF0;
+  color: #eceef0;
   font-size: 16px;
   font-weight: 500;
   line-height: 19px;
@@ -462,7 +486,7 @@ h3::before {
   /* margin-bottom: 114px; */
   margin-bottom: 20px;
 }
- 
+
 .floating {
   position: fixed;
   bottom: 0;
@@ -472,18 +496,23 @@ h3::before {
   margin-right: auto;
   max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
-  background: linear-gradient(180deg, rgba(19, 23, 32, 0) 0%, #131720 15.46%, #131720 82.53%);
+  background: linear-gradient(
+    180deg,
+    rgba(19, 23, 32, 0) 0%,
+    #131720 15.46%,
+    #131720 82.53%
+  );
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 
 button.primary {
   width: 100%;
   min-height: 54px;
-  background-color: #ECEEF0;
+  background-color: #eceef0;
   padding: 8px 8px;
   border-radius: 100px;
   border-style: none;
-  color: #181D23;
+  color: #181d23;
   font-size: 16px;
   font-weight: 700;
   line-height: 19px;

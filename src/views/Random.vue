@@ -131,8 +131,8 @@ export default class Random extends Vue {
   private circleCenter = { x: 80, y: 80 } // canvas의 중앙
   private circleRadius = 80 // 원의 반지름 (로딩 바)
 
-  private messages: string[] = ['AI 통계기반', '로또 번호를 생성하고 있어요']
-  private messages2 = ['로또 번호를 생성했어요!', '맘에 드시나요?']
+  private messages: string[] = ['AI 통계기반', '행운번호를 생성하고 있어요']
+  private messages2 = ['행운번호를 생성했어요!', '맘에 드시나요?']
   private selectedMessage: string | null = null
   private showMessage: boolean = false
   private showMessage2: boolean = false
@@ -666,7 +666,7 @@ export default class Random extends Vue {
     // console.log('회차:', this.getLottoWeek('2024-09-14 18:30')) // 토요일 오후 6시 30분, 1138회
     // console.log('회차:', this.getLottoWeek('2024-09-15 00:00')) // 일요일 자정, 1138회
 
-    const t1 = dayjs('2002-12-07') // 로또 1회차 기준 날짜
+    const t1 = dayjs('2002-12-07') // 번호 1회차 기준 날짜
     // const currentDate = dayjs(t2) // 입력된 날짜
     const currentDate = t2
     let diffWeeks = currentDate.diff(t1, 'week') // 기준 날짜와의 주차 차이

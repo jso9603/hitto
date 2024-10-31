@@ -1,7 +1,9 @@
 <template>
   <div class="home">
     <img class="main" src="@/assets/img-mohito.png" />
-    <div class="desc">행운은 도전하는 자의 것,<br/>스테판에게 행운의 번호를 받아보세요</div>
+    <div class="desc">
+      행운은 도전하는 자의 것,<br />스테판에게 행운의 번호를 받아보세요
+    </div>
 
     <div class="boxes">
       <div
@@ -26,20 +28,27 @@
       <div class="light">
         <img src="@/assets/ic-system-star.png" />
       </div>
-      <div class="title">스테판이 생성해주는<br/>정교한 알고리즘</div>
-      <div class="desc">AI 통계기반 알고리즘을 통해<br/>행운의 번호를 받고 도전해보세요.</div>
+      <div class="title">스테판이 생성해주는<br />정교한 알고리즘</div>
+      <div class="desc">
+        AI 통계기반 알고리즘을 통해<br />행운의 번호를 받고 도전해보세요.
+      </div>
       <img src="@/assets/ic-system-intro-aicard.png" />
     </div>
 
     <div class="dream">
       <img class="cloud" src="@/assets/ic-system-cloud.png" />
-      <div class="title">꿈자리를 통한<br/>이상적인 번호 조합</div>
-      <div class="desc">1등 당첨자들이 가장 많이 꾼꿈을 조합하여<br/>이상적인 번호 생성을 도와드려요.</div>
+      <div class="title">꿈자리를 통한<br />이상적인 번호 조합</div>
+      <div class="desc">
+        1등 당첨자들이 가장 많이 꾼꿈을 조합하여<br />이상적인 번호 생성을
+        도와드려요.
+      </div>
       <img class="list" src="@/assets/ic-system-list.png" />
     </div>
 
     <div class="share">
-      <div class="title">친구, 지인과 함께<br/>로또 1등에 도전해보세요</div>
+      <div class="title">
+        친구, 지인과 함께<br />행운번호 1등에 도전해보세요
+      </div>
       <div class="share-channel">
         <div class="round kakao" @click="shareKakao">
           <img src="@/assets/ic-system-kakao.svg" alt="kakao" />
@@ -47,9 +56,7 @@
         <div class="round sms" @click="shareSms">
           <img src="@/assets/ic-system-sms.svg" alt="sms" />
         </div>
-        <div class="round url" @click="shareUrl">
-          URL
-        </div>
+        <div class="round url" @click="shareUrl">URL</div>
         <div class="round more" @click="shareNative">
           <div></div>
           <div></div>
@@ -104,13 +111,13 @@ export default class Home extends Vue {
       icon: 'img-sunny-3d.png',
       badge: '추천',
       badgeBg: '#61D59D',
-    }   
+    },
   ]
 
   onStart(menuTitle: string) {
     this.$store.dispatch('updateMenuName', menuTitle)
 
-    switch(menuTitle) {
+    switch (menuTitle) {
       case 'AI 생성':
         this.$router.push('/ai')
         break
@@ -166,9 +173,10 @@ export default class Home extends Vue {
     window.Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
-        title: '모두의 희망로또',
-        description: '친구, 지인과 함께 로또 1등에 도전해보세요.',
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/hitto-1b119.appspot.com/o/meta.png?alt=media&token=cd390b5c-4a74-4891-9671-a3db7a14260d',
+        title: '모두의 희망번호',
+        description: '친구, 지인과 함께 행운번호 1등에 도전해보세요.',
+        imageUrl:
+          'https://firebasestorage.googleapis.com/v0/b/hitto-1b119.appspot.com/o/meta.png?alt=media&token=cd390b5c-4a74-4891-9671-a3db7a14260d',
         link: {
           mobileWebUrl: 'https://mohito.co.kr',
           webUrl: 'https://mohito.co.kr',
@@ -187,7 +195,8 @@ export default class Home extends Vue {
   }
 
   shareSms() {
-    const message = '친구와 함께 로또1등 당첨 도전해보세요. 모두의 희망로또!: https://mohito.co.kr'
+    const message =
+      '친구, 지인과 함께 행운번호 1등에 도전해보세요. 모두의 희망번호!: https://mohito.co.kr'
     const phoneNumber = ''
     window.location.href = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`
   }
@@ -197,11 +206,14 @@ export default class Home extends Vue {
 
     // Check if navigator.clipboard.writeText is available
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(currentUrl).then(() => {
-        this.$store.dispatch('showCopyImage')
-      }).catch(err => {
-        console.error('링크 복사에 실패했습니다:', err)
-      })
+      navigator.clipboard
+        .writeText(currentUrl)
+        .then(() => {
+          this.$store.dispatch('showCopyImage')
+        })
+        .catch((err) => {
+          console.error('링크 복사에 실패했습니다:', err)
+        })
     } else {
       // Fallback for iOS Safari
       const textArea = document.createElement('textarea')
@@ -238,17 +250,18 @@ export default class Home extends Vue {
 
   shareNative() {
     if (typeof navigator !== 'undefined' && navigator.share) {
-      navigator.share({
-        title: '모두의 희망로또',
-        text: '친구, 지인과 함께 로또 1등에 도전해보세요.',
-        url: 'https://mohito.co.kr',
-      })
-      .then(() => {
-        console.log('공유 성공')
-      })
-      .catch((error: any) => {
-        console.error('공유 실패:', error)
-      })
+      navigator
+        .share({
+          title: '모두의 희망번호',
+          text: '친구, 지인과 함께 행운번호 1등에 도전해보세요.',
+          url: 'https://mohito.co.kr',
+        })
+        .then(() => {
+          console.log('공유 성공')
+        })
+        .catch((error: any) => {
+          console.error('공유 실패:', error)
+        })
     } else {
       alert('이 브라우저에서는 지원되지 않습니다.')
     }
@@ -272,7 +285,7 @@ export default class Home extends Vue {
   font-weight: 400;
   line-height: 16.71px;
   text-align: center;
-  color: #BABCBE;
+  color: #babcbe;
 }
 
 .count__down {
@@ -281,11 +294,11 @@ export default class Home extends Vue {
   justify-content: center;
   flex-direction: column;
   gap: 4px;
-  background-color: #1D2330CC;
+  background-color: #1d2330cc;
   border-radius: 16px;
   border: 1px solid #2e364b;
   padding: 16px;
-  color: #61D59D;
+  color: #61d59d;
   font-size: 18px;
   font-weight: 700;
   line-height: 22px;
@@ -297,7 +310,7 @@ export default class Home extends Vue {
 
 .home > .desc {
   margin-bottom: 50px;
-  color: #9C9EA0;
+  color: #9c9ea0;
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
@@ -315,7 +328,7 @@ export default class Home extends Vue {
   position: relative;
   min-height: 128px;
   padding: 16px;
-  background-color: #1D2330;
+  background-color: #1d2330;
   border-radius: 16px;
   cursor: pointer;
   text-align: left;
@@ -323,14 +336,14 @@ export default class Home extends Vue {
 
 .box > .title {
   margin-bottom: 6px;
-  color: #ECEEF0;
+  color: #eceef0;
   font-size: 17px;
   font-weight: 600;
   line-height: 20px;
 }
 
 .box > .text {
-  color: #9C9EA0;
+  color: #9c9ea0;
   font-size: 14px;
   font-weight: 400;
   line-height: 16px;
@@ -347,7 +360,7 @@ export default class Home extends Vue {
   line-height: 14px;
 }
 
-.box  > img {
+.box > img {
   position: absolute;
   bottom: 16px;
   right: 16px;
@@ -384,7 +397,7 @@ export default class Home extends Vue {
   font-size: 26px;
   font-weight: 900;
   line-height: 36px;
-  color: #ECEEF0;
+  color: #eceef0;
 }
 
 .algorithm > .desc {
@@ -392,7 +405,7 @@ export default class Home extends Vue {
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
-  color: #9C9EA0;
+  color: #9c9ea0;
 }
 
 .algorithm > img {
@@ -411,7 +424,7 @@ export default class Home extends Vue {
 
 .dream > .title {
   margin-top: 12px;
-  color: #ECEEF0;
+  color: #eceef0;
   font-size: 26px;
   font-weight: 900;
   line-height: 36px;
@@ -422,7 +435,7 @@ export default class Home extends Vue {
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
-  color: #9C9EA0;
+  color: #9c9ea0;
 }
 
 .dream > .list {
@@ -438,7 +451,7 @@ export default class Home extends Vue {
 
 .title {
   margin-bottom: 20px;
-  color: #ECEEF0;
+  color: #eceef0;
   font-size: 18px;
   font-weight: 700;
   line-height: 26px;
@@ -462,7 +475,7 @@ export default class Home extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #FFE600;
+  background-color: #ffe600;
 }
 
 .kakao > img,
@@ -475,15 +488,15 @@ export default class Home extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #61D59D;
+  background-color: #61d59d;
 }
 
 .url {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #2E80FA;
-  color: #FFFFFF;
+  background-color: #2e80fa;
+  color: #ffffff;
   font-size: 13px;
   font-weight: 500;
   line-height: 20px;
@@ -500,7 +513,7 @@ export default class Home extends Vue {
 .more > div {
   width: 5px;
   height: 5px;
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   border-radius: 50%;
 }
 

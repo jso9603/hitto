@@ -1,6 +1,5 @@
 <template>
   <transition name="popup-fade">
-    
     <div v-if="visible" class="popup-overlay">
       <div @click="goBackRandom" class="close">
         <img src="@/assets/ic-system-close-img.svg" />
@@ -9,14 +8,29 @@
         <div class="popup-content">
           <div class="bar" />
 
-          <div v-for="(message, index) in texts" :key="index" class="text" :style="{ animationDelay: `${index * 0.2}s` }">
+          <div
+            v-for="(message, index) in texts"
+            :key="index"
+            class="text"
+            :style="{ animationDelay: `${index * 0.2}s` }"
+          >
             {{ message }}
           </div>
 
           <div class="tab-container">
             <div class="tab">
-              <div :class="['tab-item', { active: activeTab === 'select' }]" @click="setActiveTab('select')">소망 선택</div>
-              <div :class="['tab-item', { active: activeTab === 'input' }]" @click="setActiveTab('input')">직접입력</div>
+              <div
+                :class="['tab-item', { active: activeTab === 'select' }]"
+                @click="setActiveTab('select')"
+              >
+                소망 선택
+              </div>
+              <div
+                :class="['tab-item', { active: activeTab === 'input' }]"
+                @click="setActiveTab('input')"
+              >
+                직접입력
+              </div>
               <div class="tab-indicator" :style="indicatorStyle"></div>
             </div>
           </div>
@@ -39,9 +53,17 @@
                 v-model="impression"
                 @input="handleInput"
               />
-              <div class="placeholder" @click="onPlaceholder" v-if="!impression">{{ placeholderText }}</div>
+              <div
+                class="placeholder"
+                @click="onPlaceholder"
+                v-if="!impression"
+              >
+                {{ placeholderText }}
+              </div>
               <div class="textarea-footer">
-                <span class="current">{{ impression.length }}<span class="max"> / 300</span></span>
+                <span class="current"
+                  >{{ impression.length }}<span class="max"> / 300</span></span
+                >
               </div>
             </div>
           </div>
@@ -57,12 +79,15 @@
           </div> -->
         </div>
       </div>
-      <div v-if="activeTab !== 'select'" :class="['floating', { select: activeTab === 'select' }]">
+      <div
+        v-if="activeTab !== 'select'"
+        :class="['floating', { select: activeTab === 'select' }]"
+      >
         <button
           class="primary"
           :disabled="isLoading || impression.length < 1"
           @click="onLogin"
-        > 
+        >
           입력 완료
         </button>
       </div>
@@ -115,16 +140,16 @@ export default class SelectHopePopup extends Vue {
   private selectOptions: SelectOption[] = [
     { icon: '✨', text: '포르쉐 파나메라 사게해주세요' },
     { icon: '🏡', text: '반포 아크로리버파크 사게해주세요' },
-    { icon: '✈️', text: '몰디브에서 모히또 한잔하고 싶어요'},
-    { icon: '🏄‍', text: '은퇴해 슬로우 라이프를 즐기고 싶어요'},
-    { icon: '🏖️', text: '바다가 보이는 오션뷰에 살고 싶어요'},
-    { icon: '🤱', text: '자녀 교육에 걱정 없게 해주세요'},
-    { icon: '🦄', text: '꿈꾸던 사업을 시작하고 싶어요'},
-    { icon: '🍵', text: '카페를 열어 사장님 라이프 살래요'},
-    { icon: '🕌', text: '갓물주가 되어 임대수익을 받고싶어요'},
-    { icon: '🇺🇸', text: '해외 ETF투자해 배당수익받고 싶어요'},
-    { icon: '🤑', text: '인생 한방! 비트코인에 올인할래요'},
-    { icon: '🌳', text: '어려운 이웃을 위해 사회에 기부하고 싶어요'},
+    { icon: '✈️', text: '몰디브에서 모히또 한잔하고 싶어요' },
+    { icon: '🏄‍', text: '은퇴해 슬로우 라이프를 즐기고 싶어요' },
+    { icon: '🏖️', text: '바다가 보이는 오션뷰에 살고 싶어요' },
+    { icon: '🤱', text: '자녀 교육에 걱정 없게 해주세요' },
+    { icon: '🦄', text: '꿈꾸던 사업을 시작하고 싶어요' },
+    { icon: '🍵', text: '카페를 열어 사장님 라이프 살래요' },
+    { icon: '🕌', text: '갓물주가 되어 임대수익을 받고싶어요' },
+    { icon: '🇺🇸', text: '해외 ETF투자해 배당수익받고 싶어요' },
+    { icon: '🤑', text: '인생 한방! 비트코인에 올인할래요' },
+    { icon: '🌳', text: '어려운 이웃을 위해 사회에 기부하고 싶어요' },
   ]
 
   texts = ['이제 소망을 선택해보세요.', '토요일 좋은 일이 생길거예요']
@@ -135,7 +160,8 @@ export default class SelectHopePopup extends Vue {
 
   get indicatorStyle() {
     return {
-      transform: this.activeTab === 'select' ? 'translateX(0)' : 'translateX(100%)',
+      transform:
+        this.activeTab === 'select' ? 'translateX(0)' : 'translateX(100%)',
     }
   }
 
@@ -147,7 +173,7 @@ export default class SelectHopePopup extends Vue {
   private handleInput(event: Event) {
     const textarea = document.getElementById('textarea') as HTMLTextAreaElement
     const placeholder = document.querySelector('.placeholder') as HTMLDivElement
-    
+
     if (textarea && placeholder) {
       // 텍스트 영역에 입력된 값이 없으면 placeholder를 보여줌
       placeholder.style.display = textarea.value ? 'none' : 'block'
@@ -161,7 +187,8 @@ export default class SelectHopePopup extends Vue {
   }
 
   private onPlaceholder() {
-    (this.$refs.myTextarea as HTMLTextAreaElement).focus()
+    // eslint-disable-next-line no-extra-semi
+    ;(this.$refs.myTextarea as HTMLTextAreaElement).focus()
   }
 
   private onItsOk() {
@@ -173,7 +200,10 @@ export default class SelectHopePopup extends Vue {
 
     try {
       if (this.activeTab === 'select') {
-        sessionStorage.setItem('hope', this.selectedIndex === null ? '' : this.selectedIndex!.toString())
+        sessionStorage.setItem(
+          'hope',
+          this.selectedIndex === null ? '' : this.selectedIndex!.toString(),
+        )
         sessionStorage.setItem('hope-select', 'true')
       } else {
         sessionStorage.setItem('hope', `${this.impression}`)
@@ -210,10 +240,18 @@ export default class SelectHopePopup extends Vue {
     let currentWeek = diffWeeks + 1 // 회차는 1회차부터 시작하므로 1을 더해줌
 
     // 이번 주 토요일 오후 6시를 계산
-    let saturdaySixPM = currentDate.startOf('week').add(6, 'day').hour(18).minute(0).second(0)
+    let saturdaySixPM = currentDate
+      .startOf('week')
+      .add(6, 'day')
+      .hour(18)
+      .minute(0)
+      .second(0)
 
     console.log('현재 날짜:', currentDate.format('YYYY-MM-DD HH:mm'))
-    console.log('이번 주 토요일 오후 6시:', saturdaySixPM.format('YYYY-MM-DD HH:mm'))
+    console.log(
+      '이번 주 토요일 오후 6시:',
+      saturdaySixPM.format('YYYY-MM-DD HH:mm'),
+    )
 
     // 만약 현재 시간이 그 주의 토요일 오후 6시 이후라면 다음 회차로 설정
     if (currentDate.day() === 0 || currentDate.isAfter(saturdaySixPM)) {
@@ -241,11 +279,18 @@ export default class SelectHopePopup extends Vue {
 
         const round = this.getLottoWeek(dayjs())
 
-        const numbers = [(sessionStorage.getItem('lottoNumbers'))!.replace(/^"|"$/g, '')]
+        const numbers = [
+          sessionStorage.getItem('lottoNumbers')!.replace(/^"|"$/g, ''),
+        ]
 
         try {
           // automatic or dream 컬렉션에 새로운 문서 추가
-          const winningText = this.activeTab === 'select' ? this.selectedIndex === null ? '' : this.selectOptions[this.selectedIndex!].text : this.impression
+          const winningText =
+            this.activeTab === 'select'
+              ? this.selectedIndex === null
+                ? ''
+                : this.selectOptions[this.selectedIndex!].text
+              : this.impression
           await addDoc(collection(db, 'automatic'), {
             date: dayjs().format('YYYYMMDD HH:mm:ss'),
             numbers,
@@ -265,18 +310,26 @@ export default class SelectHopePopup extends Vue {
 
           if (!datas) {
             // sessionStorage에 아무 데이터도 없으면, 배열에 insertData를 넣어서 저장
-            sessionStorage.setItem(`myNumbers-${round}`, JSON.stringify(insertData))
+            sessionStorage.setItem(
+              `myNumbers-${round}`,
+              JSON.stringify(insertData),
+            )
           } else {
             const alreadyDatas = JSON.parse(datas)
 
-            const updatedData = Array.isArray(alreadyDatas) ? alreadyDatas : [alreadyDatas]
+            const updatedData = Array.isArray(alreadyDatas)
+              ? alreadyDatas
+              : [alreadyDatas]
             updatedData.push(insertData)
 
             updatedData.sort((a, b) => {
               return dayjs(b.date).isAfter(dayjs(a.date)) ? 1 : -1
             })
 
-            sessionStorage.setItem(`myNumbers-${round}`, JSON.stringify(updatedData))
+            sessionStorage.setItem(
+              `myNumbers-${round}`,
+              JSON.stringify(updatedData),
+            )
           }
 
           sessionStorage.removeItem('hope')
@@ -288,7 +341,6 @@ export default class SelectHopePopup extends Vue {
 
             this.$router.push('/my/number?tab=automatic')
           }, 1000)
-          
         } catch (e) {
           console.error('Error adding document: ', e)
           alert('저장하는 과정에서 오류가 발생했습니다. 다시 시도해주세요.')
@@ -306,7 +358,11 @@ export default class SelectHopePopup extends Vue {
   private handleBackButton(): void {
     const user = getLoggedUserInfo()
 
-    if (!user && this.$route.path === '/select-hope' && sessionStorage.getItem('lottoNumbers')) {
+    if (
+      !user &&
+      this.$route.path === '/select-hope' &&
+      sessionStorage.getItem('lottoNumbers')
+    ) {
       this.showPopup()
 
       // 히스토리를 조작하여 페이지 이동을 막음
@@ -316,13 +372,13 @@ export default class SelectHopePopup extends Vue {
 
   showPopup() {
     const storedNumbers = sessionStorage.getItem('lottoNumbers')
-    
+
     if (storedNumbers) {
       // 문자열에서 양쪽의 따옴표를 제거하고, 쉼표로 분리하여 배열로 변환 후 숫자로 변환
       this.LoginPopupNumbers = storedNumbers
-        .replace(/^"|"$/g, '')  // 양 끝의 따옴표 제거
-        .split(',')             // 쉼표로 문자열 분리
-        .map(num => Number(num.trim())) // 각 요소를 숫자로 변환
+        .replace(/^"|"$/g, '') // 양 끝의 따옴표 제거
+        .split(',') // 쉼표로 문자열 분리
+        .map((num) => Number(num.trim())) // 각 요소를 숫자로 변환
     }
 
     this.isPopupVisible = true
@@ -336,9 +392,14 @@ export default class SelectHopePopup extends Vue {
 
   // redirect (login)
   created() {
-    this.charater = this.$store.state.menuName!.includes('꿈해몽') ? 'img-stella-3d.png' : 'img-stefan-3d.png'
+    this.charater = this.$store.state.menuName!.includes('꿈해몽')
+      ? 'img-stella-3d.png'
+      : 'img-stefan-3d.png'
 
-    if (sessionStorage.getItem('hope') && sessionStorage.getItem('lottoNumbers')) {
+    if (
+      sessionStorage.getItem('hope') &&
+      sessionStorage.getItem('lottoNumbers')
+    ) {
       if (sessionStorage.getItem('hope-select') === 'true') {
         this.selectedIndex = Number(sessionStorage.getItem('hope'))
         this.activeTab = 'select'
@@ -346,7 +407,7 @@ export default class SelectHopePopup extends Vue {
         this.impression = sessionStorage.getItem('hope') || ''
         this.activeTab = 'input'
       }
-      
+
       this.saveLottoNumbers()
     }
   }
@@ -374,7 +435,7 @@ export default class SelectHopePopup extends Vue {
 }
 
 .popup-overlay-content {
-  background: #242A3B;
+  background: #242a3b;
   border-top-left-radius: 32px;
   border-top-right-radius: 32px;
   overflow-y: auto;
@@ -391,7 +452,7 @@ export default class SelectHopePopup extends Vue {
   width: 32px;
   height: 32px;
   cursor: pointer;
-  background-color: #2E364B;
+  background-color: #2e364b;
   border-radius: 50%;
 }
 
@@ -404,7 +465,9 @@ export default class SelectHopePopup extends Vue {
   /* transform: translateY(100%); */
   transform: translateY(0%);
   opacity: 1;
-  transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+  transition:
+    transform 0.5s ease-out,
+    opacity 0.5s ease-out;
   z-index: 999;
 }
 
@@ -414,12 +477,14 @@ export default class SelectHopePopup extends Vue {
   height: 5px;
   gap: 0px;
   border-radius: 100px;
-  background-color: #2E364B;
+  background-color: #2e364b;
 }
 
 .popup-fade-enter-active,
 .popup-fade-leave-active {
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
 }
 
 .popup-fade-enter,
@@ -472,7 +537,7 @@ export default class SelectHopePopup extends Vue {
   padding-right: 20px;
   width: 100%;
   box-sizing: border-box;
-  background-color: #242A3B;
+  background-color: #242a3b;
 }
 
 .text {
@@ -514,7 +579,7 @@ export default class SelectHopePopup extends Vue {
   padding: 12px 0;
   border-radius: 100px;
   font-size: 14px;
-  color: #9C9EA0;
+  color: #9c9ea0;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
@@ -528,7 +593,7 @@ export default class SelectHopePopup extends Vue {
   bottom: 0;
   left: 0;
   width: 50%; /* 탭 인디케이터 너비는 두 개의 탭에 맞춰 50%로 설정 */
-  background-color: #ECEEF0;
+  background-color: #eceef0;
   border-radius: 100px;
   transition: transform 0.3s ease; /* 슬라이드 트랜지션 */
   z-index: 0; /* 텍스트 뒤에 배경 인디케이터를 배치 */
@@ -554,7 +619,7 @@ export default class SelectHopePopup extends Vue {
   display: flex;
   align-items: center;
   padding: 18px;
-  background-color: #1D2330;
+  background-color: #1d2330;
   border-radius: 16px;
   margin-bottom: 12px;
   cursor: pointer;
@@ -577,7 +642,7 @@ export default class SelectHopePopup extends Vue {
 .textarea-box {
   padding: 20px;
   border-radius: 10px;
-  background-color: #1D2330;
+  background-color: #1d2330;
   position: relative;
 }
 
@@ -587,7 +652,7 @@ export default class SelectHopePopup extends Vue {
   height: 46px;
   border: none;
   outline: none;
-  background-color: #1D2330;
+  background-color: #1d2330;
   color: #b3b3b3;
   resize: none;
   font-size: 15px;
@@ -599,7 +664,7 @@ export default class SelectHopePopup extends Vue {
 .placeholder {
   position: absolute;
   top: 16px;
-  color: #9C9EA0;
+  color: #9c9ea0;
   white-space: pre-line;
   font-size: 15px;
   font-weight: 400;
@@ -616,7 +681,7 @@ export default class SelectHopePopup extends Vue {
 }
 
 .textarea-footer span {
-  color: #ECEEF0;
+  color: #eceef0;
   font-size: 14px;
   font-weight: 400;
 }
@@ -637,7 +702,7 @@ export default class SelectHopePopup extends Vue {
   margin-right: auto;
   max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
-  background: #242A3B;
+  background: #242a3b;
 }
 
 .floating.select {
@@ -653,7 +718,7 @@ export default class SelectHopePopup extends Vue {
   padding: 8px 8px;
   border-radius: 100px;
   border-style: none;
-  color: #ECEEF0;
+  color: #eceef0;
   font-size: 16px;
   font-weight: 700;
   line-height: 19px;
@@ -663,11 +728,11 @@ export default class SelectHopePopup extends Vue {
 .floating > button {
   width: 100%;
   min-height: 52px;
-  background-color: #4AFF81;
+  background-color: #4aff81;
   padding: 8px 8px;
   border-radius: 100px;
   border-style: none;
-  color: #181D23;
+  color: #181d23;
   font-size: 16px;
   font-weight: 700;
   line-height: 19px;
@@ -688,14 +753,18 @@ export default class SelectHopePopup extends Vue {
 
 .floating > button.none {
   background-color: #171717;
-  color: #9C9EA0;
+  color: #9c9ea0;
   font-size: 16px;
   font-weight: 700;
   line-height: 20px;
 }
 
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
     transform: translateY(0);
   }
   40% {
@@ -723,7 +792,7 @@ export default class SelectHopePopup extends Vue {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background-color: #0085FF;
+  background-color: #0085ff;
 }
 
 .bg-img > img {
@@ -736,7 +805,7 @@ export default class SelectHopePopup extends Vue {
   font-weight: 400;
   line-height: 23px;
   text-align: center;
-  color: #9C9EA0;
+  color: #9c9ea0;
 }
 
 .bounce-animation {

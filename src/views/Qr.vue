@@ -1,6 +1,6 @@
 <template>
   <div class="qr">
-    <div class="text">QR코드로 간편하게<br/>로또당첨 확인하세요</div>
+    <div class="text">QR코드로 간편하게<br />번호 당첨 확인하세요</div>
     <div class="qr__zone">
       <qrcode-stream @decode="onDecode" @init="onInit"></qrcode-stream>
     </div>
@@ -25,10 +25,18 @@ export default class Qr extends Vue {
     promise.catch((error) => {
       if (error.name === 'NotAllowedError') {
         alert('카메라 접근이 거부되었습니다.')
-      } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+      } else if (
+        error.name === 'NotFoundError' ||
+        error.name === 'DevicesNotFoundError'
+      ) {
         alert('사용 가능한 카메라 장치를 찾을 수 없습니다.')
-      } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
-        alert('카메라를 사용할 수 없습니다. 카메라가 다른 애플리케이션에서 사용 중일 수 있습니다.')
+      } else if (
+        error.name === 'NotReadableError' ||
+        error.name === 'TrackStartError'
+      ) {
+        alert(
+          '카메라를 사용할 수 없습니다. 카메라가 다른 애플리케이션에서 사용 중일 수 있습니다.',
+        )
       } else {
         // camera access is only permitted in secure context. Use HTTPS or localhost rather than HTPP.
         alert('카메라 초기화에 실패했습니다. 오류: ' + error.message)
@@ -52,7 +60,7 @@ export default class Qr extends Vue {
     document.documentElement.style.setProperty('--vh', `${vh}px`)
   }
 
-   mounted() {
+  mounted() {
     window.addEventListener('resize', this.setViewportHeight)
     window.addEventListener('orientationchange', this.setViewportHeight)
 
@@ -85,13 +93,13 @@ export default class Qr extends Vue {
   font-size: 22px;
   font-weight: 600;
   line-height: 33px;
-  color: #ECEEF0;
+  color: #eceef0;
 }
 
 .qr__zone {
   width: 300px;
   height: 280px;
-  background-color: #1D2330;
+  background-color: #1d2330;
   border: 2px solid;
   border-radius: 24px;
   /* border-image-source: linear-gradient(131.67deg, #4AFF81 3.05%, #9348F1 97.51%);
@@ -115,14 +123,18 @@ export default class Qr extends Vue {
   bottom: -2px;
   border-radius: 24px;
   padding: 2px;
-  background: linear-gradient(131.67deg, #4AFF81 3.05%, #9348F1 97.51%);
+  background: linear-gradient(131.67deg, #4aff81 3.05%, #9348f1 97.51%);
   z-index: -1;
 }
 
 ::v-deep video.qrcode-stream-camera {
   border-radius: 24px;
   border: 2px solid;
-  border-image-source: linear-gradient(131.67deg, #4AFF81 3.05%, #9348F1 97.51%);
+  border-image-source: linear-gradient(
+    131.67deg,
+    #4aff81 3.05%,
+    #9348f1 97.51%
+  );
   border-image-slice: 1; /* 이 값을 1로 설정하여 전체 이미지가 적용되도록 */
   border-image-outset: 0;
   border-image-repeat: round; /* Border를 둥글게 만듭니다 */

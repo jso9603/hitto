@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="bar" />
       <div class="modal-header">
-        <h2>어어~잠깐!<br/>생성된 소중한 로또번호가 사라져요.</h2>
+        <h2>어어~잠깐!<br />생성된 소중한 행운번호가 사라져요.</h2>
         <p>카카오로 시작하면 번호를 저장하고 관리할 수 있어요!</p>
       </div>
       <div class="modal-body">
@@ -22,7 +22,8 @@
       </div>
       <div class="modal-footer">
         <button class="kakao-btn" @click="startWithKakao">
-          <img src="@/assets/ic-system-kakao.svg" alt="Kakao" /> 카카오로 시작하기
+          <img src="@/assets/ic-system-kakao.svg" alt="Kakao" /> 카카오로
+          시작하기
         </button>
         <button class="later-btn" @click="onHome">나중에 할게요</button>
       </div>
@@ -74,32 +75,37 @@ export default class LoginPopup extends Vue {
             console.log(kakaoAccount)
 
             try {
-            // 이메일로 기존 유저 검색
-            const q = query(collection(db, 'users'), where('email', '==', kakaoAccount.email))
-            const querySnapshot = await getDocs(q)
+              // 이메일로 기존 유저 검색
+              const q = query(
+                collection(db, 'users'),
+                where('email', '==', kakaoAccount.email),
+              )
+              const querySnapshot = await getDocs(q)
 
-            if (!querySnapshot.empty) {
-              // 이메일이 이미 존재할 경우
-              const existingUserDoc = querySnapshot.docs[0]
-              const existingUser = existingUserDoc.data() as User
-              console.log('이미 존재하는 사용자:', existingUser)
+              if (!querySnapshot.empty) {
+                // 이메일이 이미 존재할 경우
+                const existingUserDoc = querySnapshot.docs[0]
+                const existingUser = existingUserDoc.data() as User
+                console.log('이미 존재하는 사용자:', existingUser)
 
-              Cookies.set('user', JSON.stringify(existingUser), {expires: 30})
-            } else {
-              // 새로운 유저 생성
-              const newUser = {
-                email: kakaoAccount.email,
-                uid: `uid_${Date.now()}` // 고유한 uid 생성
+                Cookies.set('user', JSON.stringify(existingUser), {
+                  expires: 30,
+                })
+              } else {
+                // 새로운 유저 생성
+                const newUser = {
+                  email: kakaoAccount.email,
+                  uid: `uid_${Date.now()}`, // 고유한 uid 생성
+                }
+
+                // Firestore에 사용자 추가
+                await addDoc(collection(db, 'users'), newUser)
+                console.log('새로운 사용자 추가:', newUser)
+                Cookies.set('user', JSON.stringify(newUser), { expires: 30 })
               }
-
-              // Firestore에 사용자 추가
-              await addDoc(collection(db, 'users'), newUser)
-              console.log('새로운 사용자 추가:', newUser)
-              Cookies.set('user', JSON.stringify(newUser), {expires: 30})
+            } catch (e) {
+              console.error('사용자 저장 중 오류 발생:', e)
             }
-          } catch (e) {
-            console.error('사용자 저장 중 오류 발생:', e)
-          }
 
             this.closePopup()
           },
@@ -154,7 +160,7 @@ export default class LoginPopup extends Vue {
   height: 5px;
   gap: 0px;
   border-radius: 100px;
-  background-color: #DEE0E2;
+  background-color: #dee0e2;
 }
 
 .modal-header h2 {
@@ -187,7 +193,7 @@ export default class LoginPopup extends Vue {
   background: #222222;
   padding: 20px;
   border-radius: 16px;
-  color: #DEE0E2;
+  color: #dee0e2;
   font-size: 16px;
   font-weight: 400;
   line-height: 20px;
@@ -197,11 +203,11 @@ export default class LoginPopup extends Vue {
   font-size: 16px;
   font-weight: 400;
   line-height: 20px;
-  color: #DEE0E2;
+  color: #dee0e2;
 }
 
 .lotto-numbers .status {
-  background-color: #ECEEF0;
+  background-color: #eceef0;
   border-radius: 40px;
   padding: 4px 10px;
   font-size: 13px;
@@ -230,28 +236,28 @@ export default class LoginPopup extends Vue {
 }
 
 .yellow {
-  border: 1px solid #DD9A17;
-  color: #DD9A17;
+  border: 1px solid #dd9a17;
+  color: #dd9a17;
 }
 
 .blue {
-  border: 1px solid #0085FF;
-  color: #0085FF;
+  border: 1px solid #0085ff;
+  color: #0085ff;
 }
 
 .red {
-  border: 1px solid #E64D3D;
-  color: #E64D3D;
+  border: 1px solid #e64d3d;
+  color: #e64d3d;
 }
 
 .gray {
-  border: 1px solid #ABB1B6;
-  color: #ABB1B6;
+  border: 1px solid #abb1b6;
+  color: #abb1b6;
 }
 
 .green {
-  border: 1px solid #33C759;
-  color: #33C759
+  border: 1px solid #33c759;
+  color: #33c759;
 }
 
 .result {
@@ -260,8 +266,8 @@ export default class LoginPopup extends Vue {
 }
 
 .kakao-btn {
-  background-color: #FFE812;
-  color: #181D23;
+  background-color: #ffe812;
+  color: #181d23;
   border: none;
   width: 100%;
   padding: 15px;
@@ -285,7 +291,7 @@ export default class LoginPopup extends Vue {
   margin-top: 8px;
   background-color: transparent;
   color: #333;
-  border: 1px solid #BABCBE;
+  border: 1px solid #babcbe;
   width: 100%;
   padding: 15px;
   border-radius: 40px;

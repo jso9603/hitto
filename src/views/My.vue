@@ -124,7 +124,7 @@ export default class My extends Vue {
     },
   ]
 
-  repositories = [{ title: '나의 로또 번호' }]
+  repositories = [{ title: '나의 행운번호' }]
 
   general = [
     {
