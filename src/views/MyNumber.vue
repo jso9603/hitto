@@ -8,12 +8,10 @@
       @selected="onSelected"
     />
 
-    <div class="week">
-      {{currentRound}}회
-    </div>
+    <div class="week">{{ currentRound }}회</div>
 
     <div class="date">
-      {{getFormattedDate(saturdayDate)}} 추첨
+      {{ getFormattedDate(saturdayDate) }} 추첨
       <span v-if="isRoundMatched">예정</span>
     </div>
 
@@ -48,11 +46,11 @@ import { mapState } from 'vuex'
   },
 })
 export default class MyNumber extends Vue {
-  week =''
+  week = ''
   currentRound = ''
   saturdayDate = ''
 
-  user: User = {email: '', uid: ''}
+  user: User = { email: '', uid: '' }
 
   get isRoundMatched() {
     const storedRound = sessionStorage.getItem('round')
@@ -73,16 +71,24 @@ export default class MyNumber extends Vue {
   }
 
   getLottoWeek(t2: Dayjs) {
-    const t1 = dayjs('2002-12-07') // 로또 1회차 기준 날짜
+    const t1 = dayjs('2002-12-07') // 번호 1회차 기준 날짜
     const currentDate = t2
     let diffWeeks = currentDate.diff(t1, 'week') // 기준 날짜와의 주차 차이
     let currentWeek = diffWeeks + 1 // 회차는 1회차부터 시작하므로 1을 더해줌
 
     // 이번 주 토요일 오후 6시를 계산
-    let saturdaySixPM = currentDate.startOf('week').add(6, 'day').hour(18).minute(0).second(0)
+    let saturdaySixPM = currentDate
+      .startOf('week')
+      .add(6, 'day')
+      .hour(18)
+      .minute(0)
+      .second(0)
 
     console.log('현재 날짜:', currentDate.format('YYYY-MM-DD HH:mm'))
-    console.log('이번 주 토요일 오후 6시:', saturdaySixPM.format('YYYY-MM-DD HH:mm'))
+    console.log(
+      '이번 주 토요일 오후 6시:',
+      saturdaySixPM.format('YYYY-MM-DD HH:mm'),
+    )
 
     // 만약 현재 시간이 그 주의 토요일 오후 6시 이후라면 다음 회차로 설정
     if (currentDate.day() === 0 || currentDate.isAfter(saturdaySixPM)) {
@@ -115,10 +121,10 @@ export default class MyNumber extends Vue {
 
     dayjs.extend(duration)
 
-    this.week = (this.getLottoWeek(dayjs())).toString()
+    this.week = this.getLottoWeek(dayjs()).toString()
     this.currentRound = this.week
     sessionStorage.setItem('round', this.week)
-    
+
     this.saturdayDate = this.getSaturdayDate(+this.week - 1)
 
     const userData = Cookies.get('user') as string
@@ -148,7 +154,7 @@ export default class MyNumber extends Vue {
   // }
 
   // getLottoWeek(t2: Dayjs) {
-  //   const t1 = dayjs('2002-12-07') // 로또 1회차 기준 날짜
+  //   const t1 = dayjs('2002-12-07') // 번호 1회차 기준 날짜
   //   const currentDate = t2
   //   let diffWeeks = currentDate.diff(t1, 'week') // 기준 날짜와의 주차 차이
   //   let currentWeek = diffWeeks + 1 // 회차는 1회차부터 시작하므로 1을 더해줌
@@ -197,7 +203,7 @@ export default class MyNumber extends Vue {
   padding-right: 20px;
 
   min-height: calc(100vh - 54px);
-  background: linear-gradient(180deg, #242A3B 0%);
+  background: linear-gradient(180deg, #242a3b 0%);
 }
 
 .week {
@@ -209,12 +215,12 @@ export default class MyNumber extends Vue {
   font-weight: 700;
   line-height: 32px;
   text-align: center;
-  color: #ECEEF0;
+  color: #eceef0;
 }
 
 .date {
   margin-top: 4px;
-  color: #9C9EA0;
+  color: #9c9ea0;
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
@@ -232,14 +238,19 @@ export default class MyNumber extends Vue {
   display: flex;
   gap: 10px;
   padding: 20px;
-  background: linear-gradient(180deg, rgba(19, 23, 32, 0) 0%, #131720 15.46%, #131720 82.53%);
+  background: linear-gradient(
+    180deg,
+    rgba(19, 23, 32, 0) 0%,
+    #131720 15.46%,
+    #131720 82.53%
+  );
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 
 .floating > button {
   width: 100%;
   min-height: 54px;
-  background-color: #ECEEF0;
+  background-color: #eceef0;
   padding: 8px 8px;
   border-radius: 100px;
   border-style: none;

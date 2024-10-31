@@ -1,20 +1,24 @@
 <template>
   <div class="fortune">
-    <div class="today">{{today}}</div>
-    <div class="name">{{fortuneUserName}}님</div>
+    <div class="today">{{ today }}</div>
+    <div class="name">{{ fortuneUserName }}님</div>
 
     <div class="img">
-      <img src='@/assets/img-fortune.png' at="fortune 이미지" />
+      <img src="@/assets/img-fortune.png" at="fortune 이미지" />
     </div>
 
-    <div v-for="fortune in fortunes" :key="fortune.category" class="fortune-box">
-      <div class="category">{{fortune.category}}</div>
-      <div class="summary">{{fortune.summary}}</div>
-      <div class="text">{{fortune.text}}</div>
+    <div
+      v-for="fortune in fortunes"
+      :key="fortune.category"
+      class="fortune-box"
+    >
+      <div class="category">{{ fortune.category }}</div>
+      <div class="summary">{{ fortune.summary }}</div>
+      <div class="text">{{ fortune.text }}</div>
     </div>
 
     <div class="share">
-      <div class="title">친구, 지인과 함께<br/>로또 1등에 도전해보세요</div>
+      <div class="title">친구, 지인과 함께<br />행운 1등에 도전해보세요</div>
       <div class="share-channel">
         <div class="round kakao" @click="shareKakao">
           <img src="@/assets/ic-system-kakao.svg" alt="kakao" />
@@ -22,9 +26,7 @@
         <div class="round sms" @click="shareSms">
           <img src="@/assets/ic-system-sms.svg" alt="sms" />
         </div>
-        <div class="round url" @click="shareUrl">
-          URL
-        </div>
+        <div class="round url" @click="shareUrl">URL</div>
         <div class="round more" @click="shareNative">
           <div></div>
           <div></div>
@@ -42,9 +44,9 @@ import Cookies from 'js-cookie'
 import dayjs from 'dayjs'
 
 interface Fortune {
-  category: string,
-  summary: string,
-  text: string,
+  category: string
+  summary: string
+  text: string
 }
 
 @Component
@@ -55,7 +57,7 @@ export default class ChatGPT extends Vue {
 
   fortuneUserName = ''
 
-  get today () {
+  get today() {
     return dayjs().format('YYYY년 MM월 DD일')
   }
 
@@ -63,9 +65,10 @@ export default class ChatGPT extends Vue {
     window.Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
-        title: '모두의 희망로또',
-        description: '친구, 지인과 함께 로또 1등에 도전해보세요.',
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/hitto-1b119.appspot.com/o/meta.png?alt=media&token=cd390b5c-4a74-4891-9671-a3db7a14260d',
+        title: '모두의 희망번호',
+        description: '친구, 지인과 함께 행운 1등에 도전해보세요.',
+        imageUrl:
+          'https://firebasestorage.googleapis.com/v0/b/hitto-1b119.appspot.com/o/meta.png?alt=media&token=cd390b5c-4a74-4891-9671-a3db7a14260d',
         link: {
           mobileWebUrl: 'https://mohito.co.kr',
           webUrl: 'https://mohito.co.kr',
@@ -84,7 +87,8 @@ export default class ChatGPT extends Vue {
   }
 
   shareSms() {
-    const message = '친구와 함께 로또1등 당첨 도전해보세요. 모두의 희망로또!: https://mohito.co.kr'
+    const message =
+      '친구와 함께 행운 1등 당첨 도전해보세요. 모두의 희망번호!: https://mohito.co.kr'
     const phoneNumber = ''
     window.location.href = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`
   }
@@ -94,11 +98,14 @@ export default class ChatGPT extends Vue {
 
     // Check if navigator.clipboard.writeText is available
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(currentUrl).then(() => {
-        this.$store.dispatch('showCopyImage')
-      }).catch(err => {
-        console.error('링크 복사에 실패했습니다:', err)
-      })
+      navigator.clipboard
+        .writeText(currentUrl)
+        .then(() => {
+          this.$store.dispatch('showCopyImage')
+        })
+        .catch((err) => {
+          console.error('링크 복사에 실패했습니다:', err)
+        })
     } else {
       // Fallback for iOS Safari
       const textArea = document.createElement('textarea')
@@ -135,33 +142,34 @@ export default class ChatGPT extends Vue {
 
   shareNative() {
     if (typeof navigator !== 'undefined' && navigator.share) {
-      navigator.share({
-        title: '모두의 희망로또',
-        text: '친구, 지인과 함께 로또 1등에 도전해보세요.',
-        url: 'https://mohito.co.kr',
-      })
-      .then(() => {
-        console.log('공유 성공')
-      })
-      .catch((error: any) => {
-        console.error('공유 실패:', error)
-      })
+      navigator
+        .share({
+          title: '모두의 희망번호',
+          text: '친구, 지인과 함께 행운번호 1등에 도전해보세요.',
+          url: 'https://mohito.co.kr',
+        })
+        .then(() => {
+          console.log('공유 성공')
+        })
+        .catch((error: any) => {
+          console.error('공유 실패:', error)
+        })
     } else {
       alert('이 브라우저에서는 지원되지 않습니다.')
     }
   }
 
   // 자정까지 남은 시간을 계산하여 fortune 데이터를 localStorage에 저장하는 함수
-  setTodayFortune(fortunes: any) {    
+  setTodayFortune(fortunes: any) {
     // 오늘 자정 시간을 계산
     const tomorrow = new Date()
-    tomorrow.setHours(24, 0, 0, 0)  // 자정 시간 설정 (내일 00:00:00)
-    
+    tomorrow.setHours(24, 0, 0, 0) // 자정 시간 설정 (내일 00:00:00)
+
     const data = {
-      fortunes: fortunes,          // 저장할 fortune 데이터
-      expiry: tomorrow.getTime()   // 자정의 시간을 만료 시간으로 저장
+      fortunes: fortunes, // 저장할 fortune 데이터
+      expiry: tomorrow.getTime(), // 자정의 시간을 만료 시간으로 저장
     }
-    
+
     // localStorage에 저장 (todayFortune)
     localStorage.setItem('todayFortune', JSON.stringify(data))
   }
@@ -169,10 +177,10 @@ export default class ChatGPT extends Vue {
   // todayFortune 데이터를 가져오는 함수 (만료 시간 확인)
   getTodayFortune() {
     const storedData = localStorage.getItem('todayFortune')
-    
+
     if (storedData) {
       const data = JSON.parse(storedData)
-      
+
       // 현재 시간과 만료 시간을 비교
       const now = new Date()
       if (now.getTime() > data.expiry) {
@@ -180,10 +188,10 @@ export default class ChatGPT extends Vue {
         localStorage.removeItem('todayFortune')
         return null // 만료된 데이터는 null 반환
       }
-      
+
       return data.fortunes // 만료되지 않았다면 fortune 데이터 반환
     }
-    
+
     return null // 저장된 데이터가 없으면 null 반환
   }
 
@@ -248,7 +256,7 @@ export default class ChatGPT extends Vue {
 }
 
 .today {
-  color: #9C9EA0;
+  color: #9c9ea0;
   font-size: 15px;
   font-weight: 400;
   line-height: 22px;
@@ -256,7 +264,7 @@ export default class ChatGPT extends Vue {
 
 .name {
   margin-top: 4px;
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 24px;
   font-weight: 600;
   line-height: 32px;
@@ -276,7 +284,6 @@ export default class ChatGPT extends Vue {
   height: 120px;
 }
 
-
 .fortune-box {
   background-color: #212736;
   border-radius: 16px;
@@ -294,19 +301,19 @@ export default class ChatGPT extends Vue {
   font-size: 13px;
   font-weight: 400;
   line-height: 21px;
-  color: #61D59D;
+  color: #61d59d;
 }
 
 .summary {
   margin-bottom: 12px;
-  color: #ECEEF0;
+  color: #eceef0;
   font-size: 17px;
   font-weight: 600;
   line-height: 25px;
 }
 
 .text {
-  color: #9C9EA0;
+  color: #9c9ea0;
   font-size: 15px;
   font-weight: 400;
   line-height: 23px;
@@ -320,7 +327,7 @@ export default class ChatGPT extends Vue {
 
 .title {
   margin-bottom: 20px;
-  color: #ECEEF0;
+  color: #eceef0;
   font-size: 18px;
   font-weight: 700;
   line-height: 26px;
@@ -345,7 +352,7 @@ export default class ChatGPT extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #FFE600;
+  background-color: #ffe600;
 }
 
 .kakao > img,
@@ -358,15 +365,15 @@ export default class ChatGPT extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #61D59D;
+  background-color: #61d59d;
 }
 
 .url {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #2E80FA;
-  color: #FFFFFF;
+  background-color: #2e80fa;
+  color: #ffffff;
   font-size: 13px;
   font-weight: 500;
   line-height: 20px;
@@ -383,7 +390,7 @@ export default class ChatGPT extends Vue {
 .more > div {
   width: 5px;
   height: 5px;
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   border-radius: 50%;
 }
 

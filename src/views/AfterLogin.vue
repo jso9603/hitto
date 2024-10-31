@@ -250,7 +250,7 @@ export default class AfterLogin extends Vue {
   }
 
   getLottoWeek(t2: Dayjs) {
-    const t1 = dayjs('2002-12-07') // 로또 1회차 기준 날짜
+    const t1 = dayjs('2002-12-07') // 번호 1회차 기준 날짜
     // const currentDate = dayjs(t2) // 입력된 날짜
     const currentDate = t2
     let diffWeeks = currentDate.diff(t1, 'week') // 기준 날짜와의 주차 차이
