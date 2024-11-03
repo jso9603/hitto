@@ -24,6 +24,7 @@ import ChatGPT from '@/views/chatGPT.vue'
 import TodayFortune from '@/views/TodayFortune.vue'
 import FortuneLoading from '@/views/FortuneLoading.vue'
 import Promotion from '@/views/Promotion.vue'
+import Test from '@/views/Test.vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
@@ -158,6 +159,11 @@ const routes = [
     path: '/promotion',
     name: 'Promotion',
     component: Promotion,
+  },
+  {
+    path: '/test',
+    name: 'Test',
+    component: Test,
   },
 ]
 
