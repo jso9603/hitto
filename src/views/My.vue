@@ -92,7 +92,12 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 
+import Cookies from 'js-cookie'
+import { db } from '../../src/config/firebaseConfig'
+import { collection, addDoc, query, where, getDocs } from 'firebase/firestore'
+
 import { getLoggedUserInfo } from '@/utils/user'
+import { User } from '../models/User'
 
 @Component
 export default class My extends Vue {
@@ -203,7 +208,10 @@ export default class My extends Vue {
     if (this.user) {
       this.$router.push('/my/number')
     } else {
-      this.$router.replace(`/login?redirect=my`)
+      // 앱, 웹 구분
+      this.$store.state.isApp
+        ? this.webviewLogin()
+        : this.$router.replace(`/login?redirect=my`)
     }
   }
 
@@ -217,7 +225,18 @@ export default class My extends Vue {
   }
 
   onLogin() {
-    this.$router.replace('/login?redirect=my')
+    // 앱, 웹 구분
+    this.$store.state.isApp
+      ? this.webviewLogin()
+      : this.$router.replace('/login?redirect=my')
+  }
+
+  webviewLogin() {
+    console.log('웹뷰 로그인 요청')
+    if ((window as any).LoginChannel) {
+      // eslint-disable-next-line no-extra-semi
+      ;(window as any).LoginChannel.postMessage('Login Requested')
+    }
   }
 
   created() {
@@ -258,7 +277,53 @@ export default class My extends Vue {
     }
   }
 
+  async saveUsers(email: string) {
+    try {
+      // 기존 이메일 확인
+      const q = query(collection(db, 'users'), where('email', '==', email))
+      const querySnapshot = await getDocs(q)
+      console.log('querySnapshot: ', querySnapshot)
+
+      if (querySnapshot.empty) {
+        const user = {
+          email,
+          uid: `uid_${Date.now()}`, // 고유한 uid 생성
+        }
+        await addDoc(collection(db, 'users'), user)
+
+        this.storeDispache(user)
+      } else {
+        const doc = querySnapshot.docs[0]
+        const userData = doc.data() as User
+
+        this.storeDispache(userData)
+      }
+    } catch (e) {
+      console.error('Error adding document: ', e)
+    }
+  }
+
+  storeDispache(user: User) {
+    Cookies.set('user', JSON.stringify(user), { expires: 30 })
+  }
+
+  loginSuccess(accessToken: string, email: string) {
+    this.saveUsers(email)
+  }
+
+  loginFailure(errorMessage: any) {
+    alert(errorMessage)
+  }
+
   mounted() {
+    // eslint-disable-next-line no-extra-semi
+    ;(window as any).loginSuccess = (accessToken: string, email: string) => {
+      this.loginSuccess(accessToken, email)
+      return {
+        loginFailure: this.loginFailure,
+      }
+    }
+
     try {
       this.loadAdSense()
     } catch (e) {

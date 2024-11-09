@@ -1,14 +1,17 @@
 <template>
+  <!-- 현재 사용하지 않는 페이지 -->
   <div class="challenge">
-    <div class="week"><span>{{week}}회</span><br/>당첨번호를 맞춰보세요</div>
+    <div class="week">
+      <span>{{ week }}회</span><br />당첨번호를 맞춰보세요
+    </div>
 
     <div class="marking">
       <h2>✍️ 번호 마킹</h2>
 
       <div class="number-grid">
-        <div 
-          v-for="number in numbers" 
-          :key="number" 
+        <div
+          v-for="number in numbers"
+          :key="number"
           :class="getClass(number)"
           @click="selectNumber(number)"
           class="number-item"
@@ -72,16 +75,16 @@ export default class Challenge extends Vue {
   private selectOptions: SelectOption[] = [
     { icon: '✨', text: '포르쉐 파나메라 사게해주세요' },
     { icon: '🏡', text: '반포 아크로리버파크 사게해주세요' },
-    { icon: '✈️', text: '몰디브에서 모히또 한잔하고 싶어요'},
-    { icon: '🏄‍', text: '은퇴해 슬로우 라이프를 즐기고 싶어요'},
-    { icon: '🏖️', text: '바다가 보이는 오션뷰에 살고 싶어요'},
-    { icon: '🤱', text: '자녀 교육에 걱정 없게 해주세요'},
-    { icon: '🦄', text: '꿈꾸던 사업을 시작하고 싶어요'},
-    { icon: '🍵', text: '카페를 열어 사장님 라이프 살래요'},
-    { icon: '🕌', text: '갓물주가 되어 임대수익을 받고싶어요'},
-    { icon: '🇺🇸', text: '해외 ETF투자해 배당수익받고 싶어요'},
-    { icon: '🤑', text: '인생 한방! 비트코인에 올인할래요'},
-    { icon: '🌳', text: '어려운 이웃을 위해 사회에 기부하고 싶어요'},
+    { icon: '✈️', text: '몰디브에서 모히또 한잔하고 싶어요' },
+    { icon: '🏄‍', text: '은퇴해 슬로우 라이프를 즐기고 싶어요' },
+    { icon: '🏖️', text: '바다가 보이는 오션뷰에 살고 싶어요' },
+    { icon: '🤱', text: '자녀 교육에 걱정 없게 해주세요' },
+    { icon: '🦄', text: '꿈꾸던 사업을 시작하고 싶어요' },
+    { icon: '🍵', text: '카페를 열어 사장님 라이프 살래요' },
+    { icon: '🕌', text: '갓물주가 되어 임대수익을 받고싶어요' },
+    { icon: '🇺🇸', text: '해외 ETF투자해 배당수익받고 싶어요' },
+    { icon: '🤑', text: '인생 한방! 비트코인에 올인할래요' },
+    { icon: '🌳', text: '어려운 이웃을 위해 사회에 기부하고 싶어요' },
   ]
   private selectedIndex: number | null = null
 
@@ -94,7 +97,9 @@ export default class Challenge extends Vue {
     if (index > -1) {
       this.selectedNumbers.splice(index, 1) // 이미 선택된 경우, 선택 해제
     } else {
-      this.selectedNumbers.length === 6 ? alert('6개까지만 선택할 수 있습니다.') : this.selectedNumbers.push(number) // 선택되지 않은 경우, 선택
+      this.selectedNumbers.length === 6
+        ? alert('6개까지만 선택할 수 있습니다.')
+        : this.selectedNumbers.push(number) // 선택되지 않은 경우, 선택
     }
   }
 
@@ -110,7 +115,7 @@ export default class Challenge extends Vue {
       alert('숫자는 6개를 선택해주세요')
       return
     }
-    
+
     if (this.selectedIndex === null) {
       alert('소망도 선택해주세요')
       return
@@ -124,7 +129,6 @@ export default class Challenge extends Vue {
 
     const confirmed = confirm('선택하신 번호가 확실합니까?')
     if (confirmed) {
-
       const user = getLoggedUserInfo()
       if (user) {
         try {
@@ -139,7 +143,10 @@ export default class Challenge extends Vue {
             winningText: this.selectOptions[this.selectedIndex].text,
             type: 'challange',
           }
-          sessionStorage.setItem(`myChallenge-${this.week}`, JSON.stringify(data))
+          sessionStorage.setItem(
+            `myChallenge-${this.week}`,
+            JSON.stringify(data),
+          )
           Cookies.set('challenge', JSON.stringify(data), { expires: 14 })
 
           await addDoc(collection(db, 'manual'), data)
@@ -156,8 +163,14 @@ export default class Challenge extends Vue {
           alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요')
         }
       } else {
-        sessionStorage.setItem('challenge-number', [this.selectedNumbers.join(', ')].toString())
-        sessionStorage.setItem('chanllenge-winning', this.selectedIndex.toString())
+        sessionStorage.setItem(
+          'challenge-number',
+          [this.selectedNumbers.join(', ')].toString(),
+        )
+        sessionStorage.setItem(
+          'chanllenge-winning',
+          this.selectedIndex.toString(),
+        )
         sessionStorage.setItem('challenge-round', this.week)
 
         this.$router.replace(`/login?redirect=challenge?week=${this.week}`)
@@ -179,8 +192,8 @@ export default class Challenge extends Vue {
 
       if (storedNumbers) {
         this.selectedNumbers = storedNumbers
-          .split(',') 
-          .map(num => parseInt(num.trim(), 10))
+          .split(',')
+          .map((num) => parseInt(num.trim(), 10))
       }
 
       const storedWinning = sessionStorage.getItem('chanllenge-winning')
@@ -205,11 +218,11 @@ export default class Challenge extends Vue {
   font-size: 24px;
   font-weight: 700;
   line-height: 32px;
-  color: #ECEEF0;
+  color: #eceef0;
 }
 
 .week > span {
-  color: #4AFF81;
+  color: #4aff81;
 }
 
 h2 {
@@ -219,7 +232,7 @@ h2 {
   font-size: 18px;
   font-weight: 600;
   line-height: 21.48px;
-  color: #ECEEF0;
+  color: #eceef0;
 }
 
 .number-grid {
@@ -256,43 +269,42 @@ h2 {
   font-size: 13px;
   font-weight: 600;
   line-height: 16px;
-  color: #9C9EA0;
-
+  color: #9c9ea0;
 }
 
-.number-item.selected:nth-child(-n+10) > svg path,
-.number-item.selected:nth-child(-n+10) > span {
-  border-color: #FFBD00;
-  color: #FFBD00;
-  fill: #FFBD00;
+.number-item.selected:nth-child(-n + 10) > svg path,
+.number-item.selected:nth-child(-n + 10) > span {
+  border-color: #ffbd00;
+  color: #ffbd00;
+  fill: #ffbd00;
 }
 
-.number-item.selected:nth-child(n+11):nth-child(-n+20) > svg path,
-.number-item.selected:nth-child(n+11):nth-child(-n+20) > span {
-  border-color: #4790FF;
-  color: #4790FF;
-  fill: #4790FF;
+.number-item.selected:nth-child(n + 11):nth-child(-n + 20) > svg path,
+.number-item.selected:nth-child(n + 11):nth-child(-n + 20) > span {
+  border-color: #4790ff;
+  color: #4790ff;
+  fill: #4790ff;
 }
 
-.number-item.selected:nth-child(n+21):nth-child(-n+30) > svg path,
-.number-item.selected:nth-child(n+21):nth-child(-n+30) > span {
-  border-color: #E64D3D;
-  color: #E64D3D;
-  fill: #E64D3D;
+.number-item.selected:nth-child(n + 21):nth-child(-n + 30) > svg path,
+.number-item.selected:nth-child(n + 21):nth-child(-n + 30) > span {
+  border-color: #e64d3d;
+  color: #e64d3d;
+  fill: #e64d3d;
 }
 
-.number-item.selected:nth-child(n+31):nth-child(-n+40) > svg path,
-.number-item.selected:nth-child(n+31):nth-child(-n+40) > span {
-  border-color: #ECEEF0;
-  color: #ECEEF0;
-  fill: #ECEEF0;
+.number-item.selected:nth-child(n + 31):nth-child(-n + 40) > svg path,
+.number-item.selected:nth-child(n + 31):nth-child(-n + 40) > span {
+  border-color: #eceef0;
+  color: #eceef0;
+  fill: #eceef0;
 }
 
-.number-item.selected:nth-child(n+41):nth-child(-n+45) > svg path,
-.number-item.selected:nth-child(n+41):nth-child(-n+45) > span {
-  border-color: #2ECD70;
-  color: #2ECD70;
-  fill: #2ECD70;
+.number-item.selected:nth-child(n + 41):nth-child(-n + 45) > svg path,
+.number-item.selected:nth-child(n + 41):nth-child(-n + 45) > span {
+  border-color: #2ecd70;
+  color: #2ecd70;
+  fill: #2ecd70;
 }
 
 .hope .option-item {
@@ -328,18 +340,23 @@ h2 {
   margin-right: auto;
   max-width: calc(576px - 40px); /* 중앙 정렬을 보장하기 위해 최대 너비 설정 */
   padding: 20px;
-  background: linear-gradient(180deg, rgba(23, 23, 23, 0) 0%, #171717 15.46%, #171717 82.53%);
+  background: linear-gradient(
+    180deg,
+    rgba(23, 23, 23, 0) 0%,
+    #171717 15.46%,
+    #171717 82.53%
+  );
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 
 .floating > button {
   width: 100%;
   min-height: 52px;
-  background-color: #4AFF81;
+  background-color: #4aff81;
   padding: 8px 8px;
   border-radius: 24px;
   border-style: none;
-  color: #181D23;
+  color: #181d23;
   font-size: 15px;
   font-weight: 600;
   line-height: 18px;
