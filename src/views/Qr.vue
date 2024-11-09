@@ -1,6 +1,6 @@
 <template>
   <div class="qr">
-    <div class="text">QR코드로 간편하게<br />번호 당첨 확인하세요</div>
+    <div class="text">QR코드로 간편하게<br />로또당첨 확인하세요</div>
     <div class="qr__zone">
       <qrcode-stream @decode="onDecode" @init="onInit"></qrcode-stream>
     </div>

@@ -46,9 +46,7 @@
     </div>
 
     <div class="share">
-      <div class="title">
-        친구, 지인과 함께<br />행운번호 1등에 도전해보세요
-      </div>
+      <div class="title">친구, 지인과 함께<br />로또 1등에 도전해보세요</div>
       <div class="share-channel">
         <div class="round kakao" @click="shareKakao">
           <img src="@/assets/ic-system-kakao.svg" alt="kakao" />
@@ -173,8 +171,8 @@ export default class Home extends Vue {
     window.Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
-        title: '모두의 희망번호',
-        description: '친구, 지인과 함께 행운번호 1등에 도전해보세요.',
+        title: '모두의 희망로또',
+        description: '친구, 지인과 함께 로또 1등에 도전해보세요.',
         imageUrl:
           'https://firebasestorage.googleapis.com/v0/b/hitto-1b119.appspot.com/o/meta.png?alt=media&token=cd390b5c-4a74-4891-9671-a3db7a14260d',
         link: {
@@ -196,7 +194,7 @@ export default class Home extends Vue {
 
   shareSms() {
     const message =
-      '친구, 지인과 함께 행운번호 1등에 도전해보세요. 모두의 희망번호!: https://mohito.co.kr'
+      '친구, 지인과 함께 로또 1등에 도전해보세요. 모두의 희망로또!: https://mohito.co.kr'
     const phoneNumber = ''
     window.location.href = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`
   }
@@ -252,8 +250,8 @@ export default class Home extends Vue {
     if (typeof navigator !== 'undefined' && navigator.share) {
       navigator
         .share({
-          title: '모두의 희망번호',
-          text: '친구, 지인과 함께 행운번호 1등에 도전해보세요.',
+          title: '모두의 희망로또',
+          text: '친구, 지인과 함께 로또 1등에 도전해보세요.',
           url: 'https://mohito.co.kr',
         })
         .then(() => {

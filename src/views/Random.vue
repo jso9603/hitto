@@ -131,8 +131,8 @@ export default class Random extends Vue {
   private circleCenter = { x: 80, y: 80 } // canvas의 중앙
   private circleRadius = 80 // 원의 반지름 (로딩 바)
 
-  private messages: string[] = ['AI 통계기반', '행운번호를 생성하고 있어요']
-  private messages2 = ['행운번호를 생성했어요!', '맘에 드시나요?']
+  private messages: string[] = ['AI 통계기반', '로또 번호를 생성하고 있어요']
+  private messages2 = ['로또 번호를 생성했어요!', '맘에 드시나요?']
   private selectedMessage: string | null = null
   private showMessage: boolean = false
   private showMessage2: boolean = false
@@ -663,7 +663,7 @@ export default class Random extends Vue {
     // console.log('회차:', this.getLottoWeek('2024-09-12 13:00')) // 목
     // console.log('회차:', this.getLottoWeek('2024-09-13 13:00')) // 금요일
     // console.log('회차:', this.getLottoWeek('2024-09-14 17:00')) // 토요일 오후 5시, 1137회
-    // console.log('회차:', this.getLottoWeek('2024-09-14 18:30')) // 토요일 오후 6시 30분, 1138회
+    // console.log('회차:', this.getLottoWeek('2024-09-14 18:30')) // 토요일 오후 8시 30분, 1138회
     // console.log('회차:', this.getLottoWeek('2024-09-15 00:00')) // 일요일 자정, 1138회
 
     const t1 = dayjs('2002-12-07') // 번호 1회차 기준 날짜
@@ -672,29 +672,29 @@ export default class Random extends Vue {
     let diffWeeks = currentDate.diff(t1, 'week') // 기준 날짜와의 주차 차이
     let currentWeek = diffWeeks + 1 // 회차는 1회차부터 시작하므로 1을 더해줌
 
-    // 이번 주 토요일 오후 6시를 계산
-    let saturdaySixPM = currentDate
+    // 이번 주 토요일 오후 8시를 계산
+    let saturdayEightPM = currentDate
       .startOf('week')
       .add(6, 'day')
-      .hour(18)
+      .hour(20)
       .minute(0)
       .second(0)
 
     console.log('현재 날짜:', currentDate.format('YYYY-MM-DD HH:mm'))
     console.log(
-      '이번 주 토요일 오후 6시:',
-      saturdaySixPM.format('YYYY-MM-DD HH:mm'),
+      '이번 주 토요일 오후 8시:',
+      saturdayEightPM.format('YYYY-MM-DD HH:mm'),
     )
 
-    // 만약 현재 시간이 그 주의 토요일 오후 6시 이후라면 다음 회차로 설정
-    if (currentDate.day() === 0 || currentDate.isAfter(saturdaySixPM)) {
+    // 만약 현재 시간이 그 주의 토요일 오후 8시 이후라면 다음 회차로 설정
+    if (currentDate.day() === 0 || currentDate.isAfter(saturdayEightPM)) {
       currentWeek += 1
-      console.log('현재 시간이 토요일 오후 6시 이후입니다.')
+      console.log('현재 시간이 토요일 오후 8시 이후입니다.')
     } else if (currentDate.day() >= 1 && currentDate.day() <= 5) {
       // 월요일(1) ~ 금요일(5) 사이에는 다음 회차로 미리 더해줌 (1주가 안지나서 그런지 계속 -1되서 보여짐)
       currentWeek += 1
     } else {
-      console.log('현재 시간이 토요일 오후 6시 이전입니다.')
+      console.log('현재 시간이 토요일 오후 8시 이전입니다.')
     }
 
     return currentWeek

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="random__lotto">
-      <h1>행운번호 추첨기</h1>
+      <h1>로또 번호 추첨기</h1>
       <button @click="generateNumbers">번호 추첨</button>
       <li v-for="(numbers, index) in lottoNumbers" :key="index">
         {{ index + 1 }}회차: {{ numbers.join(', ') }}

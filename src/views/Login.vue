@@ -45,15 +45,15 @@ export default class Login extends Vue {
   private benefits = [
     {
       icon: 'ic-stefan-2d.svg',
-      text: '무료로 ai 행운번호를 생성해보세요',
+      text: '무료로 ai 로또번호를 생성해보세요',
     },
     {
       icon: 'ball.svg',
-      text: '매주 행운번호 1등을 맞춰 보세요',
+      text: '매주 로또번호 1등을 맞춰 보세요',
     },
     {
       icon: 'folder.png',
-      text: '행운번호를 보관하고 관리해 보세요',
+      text: '로또번호를 보관하고 관리해 보세요',
     },
   ]
 

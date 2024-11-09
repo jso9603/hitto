@@ -80,7 +80,7 @@
       <button @click="goClose" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
-      <div class="menu">나의 행운번호</div>
+      <div class="menu">나의 로또번호</div>
       <button class="share" @click="onSelectedRound">회차</button>
     </template>
 
@@ -88,7 +88,7 @@
       <button @click="goBack" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
-      <div class="menu">나의 행운번호</div>
+      <div class="menu">나의 로또번호</div>
       <button class="share" @click="onSelectedRound">회차</button>
     </template>
 
@@ -118,7 +118,7 @@
       <button @click="goBackChallenge" class="back">
         <img src="@/assets/ic-system-back-img.svg" />
       </button>
-      <div class="menu">행운번호 맞추기</div>
+      <div class="menu">로또 맞추기</div>
       <div class="empty"></div>
     </template>
     <template v-else-if="$route.path === '/terms'">
