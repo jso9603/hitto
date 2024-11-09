@@ -134,6 +134,13 @@ export default class Home extends Vue {
   }
 
   mounted() {
+    const urlParams = new URLSearchParams(window.location.search)
+    const source = urlParams.get('source')
+    if (source === 'app') {
+      // 앱(WebView)에서 접근한 경우 처리
+      this.$store.dispatch('updateApp', true)
+    }
+
     this.updateCountdown()
     setInterval(this.updateCountdown, 1000)
   }

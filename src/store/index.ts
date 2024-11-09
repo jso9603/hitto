@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    isApp: false,
     showCopyImage: false,
     user: {
       uid: null,
@@ -55,6 +56,9 @@ export default new Vuex.Store({
     setForttuneUser(state, userInfo) {
       state.fortuneUser = userInfo
     },
+    setApp(state, isApp) {
+      state.isApp = isApp
+    },
   },
   actions: {
     showCopyImage({ commit }) {
@@ -90,6 +94,9 @@ export default new Vuex.Store({
     updateFortuneUser({ commit }, userInfo) {
       commit('setForttuneUser', userInfo)
     },
+    updateApp({ commit }, isApp) {
+      commit('setApp', isApp)
+    },
   },
   getters: {
     menuName(state) {
@@ -102,6 +109,7 @@ export default new Vuex.Store({
     getSelectedSubCategory: (state) => state.selectedSubCategory,
     getAdsEndPoint: (state) => state.adsEndPoint,
     getFortuneUser: (state) => state.fortuneUser,
+    getIsApp: (state) => state.isApp,
   },
   plugins: [
     createPersistedState({

@@ -101,7 +101,9 @@ import LoginPopup from '@/components/LoginPopup.vue'
 import dayjs, { Dayjs } from 'dayjs'
 import Cookies from 'js-cookie'
 import { db } from '../../src/config/firebaseConfig'
-import { collection, addDoc } from 'firebase/firestore'
+import { collection, addDoc, query, where, getDocs } from 'firebase/firestore'
+
+import { User } from '../models/User'
 
 @Component({
   components: {
@@ -427,6 +429,10 @@ export default class Random extends Vue {
   // 컴포넌트가 파괴되기 전 애니메이션을 멈추기
   beforeDestroy() {
     cancelAnimationFrame(this.animationId)
+
+    // 컴포넌트가 파괴될 때 전역 함수 제거
+    delete (window as any).loginSuccess
+    delete (window as any).loginFailure
   }
 
   // iOS에서 100vh가 실제 뷰포트 높이와 정확히 일치하지 않는 경우가 있음
@@ -487,6 +493,45 @@ export default class Random extends Vue {
       : 'img-stefan-3d.png'
   }
 
+  loginSuccess(accessToken: string, email: string) {
+    this.saveUsers(email)
+  }
+
+  loginFailure(errorMessage: any) {
+    alert(errorMessage)
+  }
+
+  async saveUsers(email: string) {
+    try {
+      // 기존 이메일 확인
+      const q = query(collection(db, 'users'), where('email', '==', email))
+      const querySnapshot = await getDocs(q)
+      console.log('querySnapshot: ', querySnapshot)
+
+      if (querySnapshot.empty) {
+        const user = {
+          email,
+          uid: `uid_${Date.now()}`, // 고유한 uid 생성
+        }
+        await addDoc(collection(db, 'users'), user)
+
+        this.storeDispache(user)
+      } else {
+        const doc = querySnapshot.docs[0]
+        const userData = doc.data() as User
+
+        this.storeDispache(userData)
+      }
+    } catch (e) {
+      console.error('Error adding document: ', e)
+    }
+  }
+
+  storeDispache(user: User) {
+    Cookies.set('user', JSON.stringify(user), { expires: 30 })
+    this.saveLottoNumbers()
+  }
+
   mounted() {
     window.addEventListener('resize', this.setViewportHeight)
     window.addEventListener('orientationchange', this.setViewportHeight)
@@ -502,6 +547,14 @@ export default class Random extends Vue {
     this.incrementProgress() // 로딩바를 진행시키는 함수 호출
 
     this.selectRandomMessageWithDelay()
+
+    // eslint-disable-next-line no-extra-semi
+    ;(window as any).loginSuccess = (accessToken: string, email: string) => {
+      this.loginSuccess(accessToken, email)
+      return {
+        loginFailure: this.loginFailure,
+      }
+    }
   }
 
   // 처음 공
@@ -638,6 +691,7 @@ export default class Random extends Vue {
 
   private async onLogin() {
     const user = getLoggedUserInfo()
+    console.log('user:', user)
 
     try {
       sessionStorage.setItem('hope', '')
@@ -646,12 +700,24 @@ export default class Random extends Vue {
       if (user) {
         await this.saveLottoNumbers()
       } else {
-        this.$router.replace('/login?redirect=after-login')
+        console.log('isApp:', this.$store.state.isApp)
+        // 앱, 웹 구분
+        this.$store.state.isApp
+          ? this.webviewLogin()
+          : this.$router.replace('/login?redirect=after-login')
       }
     } catch (error) {
       console.error('Failed to parse user data:', error)
       alert('저장하는 데 오류가 발생했습니다. 잠시후 다시 시도해주세요')
       return
+    }
+  }
+
+  webviewLogin() {
+    console.log('웹뷰 로그인 요청')
+    if ((window as any).LoginChannel) {
+      // eslint-disable-next-line no-extra-semi
+      ;(window as any).LoginChannel.postMessage('Login Requested')
     }
   }
 
