@@ -305,6 +305,11 @@ export default class My extends Vue {
 
   storeDispache(user: User) {
     Cookies.set('user', JSON.stringify(user), { expires: 30 })
+
+    if (this.$store.state.isApp) {
+      // 앱일 경우
+      this.$forceUpdate()
+    }
   }
 
   loginSuccess(accessToken: string, email: string) {
