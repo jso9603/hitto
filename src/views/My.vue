@@ -308,7 +308,8 @@ export default class My extends Vue {
 
     if (this.$store.state.isApp) {
       // 앱일 경우
-      this.$forceUpdate()
+      this.user = user
+      this.nickname = this.generateNickname(user.uid)
     }
   }
 
