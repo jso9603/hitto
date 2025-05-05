@@ -4,11 +4,12 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <!-- maxium-scale, user-scalable은 확대/축소 차단 -->
+
   <meta name="theme-color" content="#242A3B">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="google-adsense-account" content="ca-pub-7548744760182744">
 
   <meta name="description" content="행운은 도전하는 자의 것, 스테판에게 행운의 번호를 받아보세요">
 
@@ -31,14 +32,13 @@
   <meta name="description" content="행운은 도전하는 자의 것, 스테판에게 행운의 번호를 받아보세요">
 
   <script src="//developers.kakao.com/sdk/js/kakao.js"></script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7548744760182744"
-    crossorigin="anonymous"></script>
 
   <!-- https://searchadvisor.naver.com/guide/markup-structure -->
   <link rel="canonical" href="https://mohito.co.kr/">
   <meta name="robots" content="index,follow">
   <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"> -->
+  <link rel="stylesheet" href="/fonts/pretendard.css">
   <!-- Google Tag Manager -->
   <script>(function (w, d, s, l, i) {
       w[l] = w[l] || []; w[l].push({
@@ -51,12 +51,18 @@
   <!-- End Google Tag Manager -->
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KPP1THC3QL"></script>
+  <!-- safari jsDelivr 오류로 인한 스크립트 import 수정 -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
+
     gtag('js', new Date());
 
-    gtag('config', 'G-KPP1THC3QL');
+    gtag('config', 'G-KPP1THC3QL', {
+      cookie_domain: 'mohito.co.kr',
+      cookie_flags: 'SameSite=None;Secure',
+      cookie_update: true
+    });
   </script>
   <title>모두의 희망로또</title>
 </head>
