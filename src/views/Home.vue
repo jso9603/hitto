@@ -42,10 +42,14 @@
         1등 당첨자들이 가장 많이 꾼꿈을 조합하여<br />이상적인 번호 생성을
         도와드려요.
       </div>
-      <img class="list" src="@/assets/ic-system-list.png" />
+      <img
+        class="list"
+        src="@/assets/ic-system-list.png"
+        :style="{ 'margin-bottom': initApp ? '90px' : '' }"
+      />
     </div>
 
-    <div class="share">
+    <div class="share" v-if="!initApp">
       <div class="title">친구, 지인과 함께<br />로또 1등에 도전해보세요</div>
       <div class="share-channel">
         <div class="round kakao" @click="shareKakao">
@@ -84,6 +88,7 @@ dayjs.extend(weekday)
 @Component
 export default class Home extends Vue {
   countdown: string = ''
+  initApp: boolean = false
 
   menus = [
     {
@@ -138,6 +143,7 @@ export default class Home extends Vue {
     const source = urlParams.get('source')
     if (source === 'app') {
       // 앱(WebView)에서 접근한 경우 처리
+      this.initApp = true
       this.$store.dispatch('updateApp', true)
     }
 
