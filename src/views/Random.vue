@@ -450,6 +450,26 @@ export default class Random extends Vue {
       this.showMessage2 = true
       this.generateHighNumbers(1)
     }, 3000)
+
+    // 📤 Flutter에 광고 요청 메시지 보내기 (앱 심사 끝나면 수정 필요)
+    // setTimeout(() => {
+    //   if ((window as any).flutter_inappwebview) {
+    //     // eslint-disable-next-line no-extra-semi
+    //     ;(window as any).flutter_inappwebview.callHandler('AdChannel', 'showAd')
+
+    //     // Flutter에서 광고 끝나면 호출할 콜백 등록
+    //     ;(window as any).flutterAdDone = () => {
+    //       this.showPage1 = false
+    //       this.showMessage2 = true
+    //       this.generateHighNumbers(1)
+    //     }
+    //   } else {
+    //     // 웹 환경 fallback
+    //     this.showPage1 = false
+    //     this.showMessage2 = true
+    //     this.generateHighNumbers(1)
+    //   }
+    // }, 3000)
   }
 
   private handleBackButton(): void {
@@ -524,6 +544,8 @@ export default class Random extends Vue {
       }
     } catch (e) {
       console.error('Error adding document: ', e)
+    } finally {
+      this.isLoading = false
     }
   }
 
@@ -548,12 +570,15 @@ export default class Random extends Vue {
 
     this.selectRandomMessageWithDelay()
 
-    // eslint-disable-next-line no-extra-semi
+    console.log('✅ mounted - loginSuccess 등록')
     ;(window as any).loginSuccess = (accessToken: string, email: string) => {
+      console.log('✅ loginSuccess called from Flutter', email)
       this.loginSuccess(accessToken, email)
-      return {
-        loginFailure: this.loginFailure,
-      }
+    }
+    ;(window as any).loginFailure = (error: any) => {
+      console.error('❌ loginFailure', error)
+      alert('로그인에 실패했습니다.')
+      this.isLoading = false // 로딩 멈춰야 함!
     }
   }
 
@@ -714,10 +739,19 @@ export default class Random extends Vue {
   }
 
   webviewLogin() {
-    console.log('웹뷰 로그인 요청')
-    if ((window as any).LoginChannel) {
-      // eslint-disable-next-line no-extra-semi
-      ;(window as any).LoginChannel.postMessage('Login Requested')
+    console.log('📤 [Vue] webviewLogin() 호출됨')
+
+    if ((window as any).flutter_inappwebview) {
+      console.log(
+        '📤 [Vue] flutter_inappwebview.callHandler("LoginChannel") 호출',
+      )
+      ;(window as any).flutter_inappwebview.callHandler(
+        'LoginChannel',
+        'Login Requested',
+      )
+    } else {
+      console.warn('⚠️ [Vue] flutter_inappwebview 없음 → 앱 아님')
+      this.$router.replace('/login?redirect=after-login')
     }
   }
 
