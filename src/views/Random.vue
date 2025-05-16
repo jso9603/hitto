@@ -446,30 +446,24 @@ export default class Random extends Vue {
     this.showMessage = true
 
     setTimeout(() => {
-      this.showPage1 = false
-      this.showMessage2 = true
-      this.generateHighNumbers(1)
+      // 📤 Flutter에 광고 요청 메시지 보내기
+      if ((window as any).flutter_inappwebview) {
+        // eslint-disable-next-line no-extra-semi
+        ;(window as any).flutter_inappwebview.callHandler('AdChannel', 'showAd')
+
+        // Flutter에서 광고 끝나면 호출할 콜백 등록
+        ;(window as any).flutterAdDone = () => {
+          this.showPage1 = false
+          this.showMessage2 = true
+          this.generateHighNumbers(1)
+        }
+      } else {
+        // 웹 환경 fallback
+        this.showPage1 = false
+        this.showMessage2 = true
+        this.generateHighNumbers(1)
+      }
     }, 3000)
-
-    // 📤 Flutter에 광고 요청 메시지 보내기 (앱 심사 끝나면 수정 필요)
-    // setTimeout(() => {
-    //   if ((window as any).flutter_inappwebview) {
-    //     // eslint-disable-next-line no-extra-semi
-    //     ;(window as any).flutter_inappwebview.callHandler('AdChannel', 'showAd')
-
-    //     // Flutter에서 광고 끝나면 호출할 콜백 등록
-    //     ;(window as any).flutterAdDone = () => {
-    //       this.showPage1 = false
-    //       this.showMessage2 = true
-    //       this.generateHighNumbers(1)
-    //     }
-    //   } else {
-    //     // 웹 환경 fallback
-    //     this.showPage1 = false
-    //     this.showMessage2 = true
-    //     this.generateHighNumbers(1)
-    //   }
-    // }, 3000)
   }
 
   private handleBackButton(): void {
