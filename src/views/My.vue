@@ -76,16 +76,6 @@
         <img src="@/assets/ic-system-arrow-right.svg" />
       </div>
     </div>
-
-    <!-- <div class="coopang-disclamer">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div> -->
-
-    <ins
-      class="adsbygoogle"
-      style="display: inline-block; width: 335px; height: 60px"
-      data-ad-client="ca-pub-7548744760182744"
-      data-ad-slot="7638100912"
-    >
-    </ins>
   </div>
 </template>
 
@@ -255,28 +245,6 @@ export default class My extends Vue {
     }
   }
 
-  loadAdSense() {
-    // 이미 스크립트가 로드된 경우, 광고를 초기화
-    if (window.adsbygoogle && window.adsbygoogle.length) {
-      // eslint-disable-next-line no-extra-semi
-      ;(window.adsbygoogle = window.adsbygoogle || []).push({})
-    } else {
-      // Google AdSense 스크립트를 동적으로 삽입
-      const script = document.createElement('script')
-      script.async = true
-      script.src =
-        'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
-      script.setAttribute('crossorigin', 'anonymous')
-      document.head.appendChild(script)
-
-      // 스크립트가 로드된 후 광고 초기화
-      script.onload = () => {
-        // eslint-disable-next-line no-extra-semi
-        ;(window.adsbygoogle = window.adsbygoogle || []).push({})
-      }
-    }
-  }
-
   async saveUsers(email: string) {
     try {
       // 기존 이메일 확인
@@ -328,12 +296,6 @@ export default class My extends Vue {
       return {
         loginFailure: this.loginFailure,
       }
-    }
-
-    try {
-      this.loadAdSense()
-    } catch (e) {
-      console.error('AdSense error:', e)
     }
 
     this.$nextTick(() => {

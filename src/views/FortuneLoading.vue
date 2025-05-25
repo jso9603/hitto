@@ -404,13 +404,25 @@ export default class FortuneLoading extends Vue {
 
     this.startTextFlip()
 
-    this.getFortune()
-
     const fortuneUserName = this.$route.params.fortuneName
     if (fortuneUserName) {
       this.fortuneUserName = fortuneUserName
       Cookies.set('fortuneName', this.fortuneUserName, { expires: 1 })
     }
+
+    // 광고 호출 및 콜백 등록
+    setTimeout(() => {
+      if ((window as any).flutter_inappwebview) {
+        // eslint-disable-next-line no-extra-semi
+        ;(window as any).flutter_inappwebview.callHandler('AdChannel', 'showAd')
+        ;(window as any).flutterAdDone = () => {
+          this.getFortune()
+        }
+      } else {
+        // 웹 fallback 처리
+        this.getFortune()
+      }
+    }, 3000)
   }
 }
 </script>

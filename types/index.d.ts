@@ -3,7 +3,6 @@ export {}
 declare global {
   interface Window {
     Kakao: any
-    adsbygoogle: any
     LoginChannel: any
   }
 
