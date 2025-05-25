@@ -223,9 +223,14 @@ export default class My extends Vue {
 
   webviewLogin() {
     console.log('웹뷰 로그인 요청')
-    if ((window as any).LoginChannel) {
-      // eslint-disable-next-line no-extra-semi
-      ;(window as any).LoginChannel.postMessage('Login Requested')
+    if ((window as any).flutter_inappwebview) {
+      console.log(
+        '📤 [Vue] flutter_inappwebview.callHandler("LoginChannel") 호출',
+      )
+      ;(window as any).flutter_inappwebview.callHandler(
+        'LoginChannel',
+        'Login Requested',
+      )
     }
   }
 
