@@ -571,7 +571,7 @@ export default class Random extends Vue {
     }
     ;(window as any).loginFailure = (error: any) => {
       console.error('❌ loginFailure', error)
-      alert('로그인에 실패했습니다.')
+      alert('행운번호를 저장하려면 카카오 로그인으로 시작해주세요.')
       this.isLoading = false // 로딩 멈춰야 함!
     }
   }

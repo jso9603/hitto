@@ -17,7 +17,6 @@
         $route.path === '/category' ||
         $route.path === '/category2' ||
         $route.path === '/category3' ||
-        $route.path === '/random' ||
         $route.path === '/result' ||
         $route.path === '/manual' ||
         $route.path === '/fortuneInfo' ||
@@ -49,7 +48,13 @@
       </button>
     </template>
 
-    <template v-else-if="$route.path === '/qr' || $route.path === '/login'">
+    <template
+      v-else-if="
+        $route.path === '/qr' ||
+        $route.path === '/login' ||
+        $route.path === '/random'
+      "
+    >
       <div class="empty"></div>
       <img
         src="@/assets/ic-system-logo.svg"
