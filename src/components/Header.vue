@@ -40,6 +40,14 @@
       </button>
     </template>
 
+    <template v-else-if="$route.path === '/random'">
+      <div class="empty"></div>
+      <div class="menu">{{ menuName }}</div>
+      <button @click="goBackHope" class="close">
+        <img src="@/assets/ic-system-close-img.svg" />
+      </button>
+    </template>
+
     <template v-else-if="$route.path === '/chatGPT'">
       <div class="empty"></div>
       <div class="empty"></div>
@@ -48,13 +56,7 @@
       </button>
     </template>
 
-    <template
-      v-else-if="
-        $route.path === '/qr' ||
-        $route.path === '/login' ||
-        $route.path === '/random'
-      "
-    >
+    <template v-else-if="$route.path === '/qr' || $route.path === '/login'">
       <div class="empty"></div>
       <img
         src="@/assets/ic-system-logo.svg"

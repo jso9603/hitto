@@ -415,8 +415,21 @@ export default class FortuneLoading extends Vue {
       if ((window as any).flutter_inappwebview) {
         // eslint-disable-next-line no-extra-semi
         ;(window as any).flutter_inappwebview.callHandler('AdChannel', 'showAd')
-        ;(window as any).flutterAdDone = () => {
-          this.getFortune()
+
+        // 광고 완료 콜백
+        if (!(window as any).flutterAdDone) {
+          // eslint-disable-next-line no-extra-semi
+          ;(window as any).flutterAdDone = () => {
+            this.getFortune()
+          }
+        }
+
+        // 광고 실패 콜백
+        if (!(window as any).flutterAdFailed) {
+          // eslint-disable-next-line no-extra-semi
+          ;(window as any).flutterAdFailed = () => {
+            alert('광고가 준비되지 않았습니다. 잠시 후 다시 시도해주세요.')
+          }
         }
       } else {
         // 웹 fallback 처리
