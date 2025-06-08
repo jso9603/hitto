@@ -428,7 +428,8 @@ export default class FortuneLoading extends Vue {
         if (!(window as any).flutterAdFailed) {
           // eslint-disable-next-line no-extra-semi
           ;(window as any).flutterAdFailed = () => {
-            alert('광고가 준비되지 않았습니다. 잠시 후 다시 시도해주세요.')
+            console.warn('[광고 실패] 광고가 준비되지 않았습니다.')
+            this.getFortune()
           }
         }
       } else {
